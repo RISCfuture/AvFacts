@@ -1,0 +1,78 @@
+$avfacts-orange: rgb(210, 100, 82);
+$avfacts-blue: rgb(23, 24, 57);
+$avfacts-white: rgb(243, 234, 242);
+
+$dark-gray: #414854;
+$light-gray: #bbc1cc;
+
+$text-color: black;
+$error-color: #a00;
+$banner-background-color: $avfacts-blue;
+$background-color: rgb(244, 244, 244);
+$placeholder-color: $light-gray;
+
+$small-break: 480px;
+$medium-break: 768px;
+$large-break: 960px;
+
+$banner-layer: 9999;
+
+@mixin responsive-small {
+    @media all and (max-width: $small-break - 1px) {
+        @content;
+    }
+}
+
+@mixin responsive-medium {
+    @media all and (min-width: $small-break) and (max-width: $medium-break - 1px) {
+        @content;
+    }
+}
+
+@mixin responsive-large {
+    @media all and (min-width: $medium-break) and (max-width: $large-break - 1px) {
+        @content;
+    }
+}
+
+@mixin responsive-huge {
+    @media all and (min-width: $large-break) {
+        @content;
+    }
+}
+
+@mixin responsive-mobile {
+    @include responsive-small { @content; }
+    @include responsive-medium { @content; }
+}
+
+@mixin responsive-desktop {
+    @include responsive-large { @content; }
+    @include responsive-huge { @content; }
+}
+
+@mixin button($color, $text-dark: false) {
+    border: none;
+    box-shadow: inset 0 39px 0 -24px lighten($color, 5%);
+    background-color: $color;
+
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 5px 10px;
+    font-family: "Libre Franklin", sans-serif;
+
+    @if ($text-dark) {
+        color: black;
+    }
+    @else {
+        color: $background-color;
+        text-shadow: 0 1px 0 black;
+    }
+
+    &:active {
+        box-shadow: inset 0 39px 0 -24px $color;
+        background-color: lighten($color, 5%);
+    }
+}

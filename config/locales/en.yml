@@ -1,33 +1,61 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        episode:
+          attributes:
+            title:
+              blank: Please give this episode a title.
+              too_long: Please shorten your title to 255 characters or fewer.
+            author:
+              too_long: Please shorten the author name to 255 characters or fewer.
+            subtitle:
+              too_long: Please shorten the subtitle to 255 characters or fewer.
+            summary:
+              too_long: Please shorten the summary to 255 characters or fewer.
+            description:
+              blank: Please write a short description of this episode.
+              too_long: Please shorten your description to 4,000 characters or fewer.
+            published_at:
+              invalid_datetime: This doesn’t seem to be a valid date and time.
+            audio:
+              blank: Don’t forget to upload an audio file for your episode.
+              format: This doesn’t seem to be an audio file format I recognize. Try AIFF?
+              too_big: This audio file is too big. The maximum size is 1 GB.
+            image:
+              blank: You need to include an image with your episode.
+              format: This doesn’t seem to be an image file format I recognize. Try PNG?
+              too_small: This image is too small. The minimum dimensions are 1400×1400 pixels.
+              too_big: This image is too big. The maximum size is 100 MB.
+  errors:
+    messages:
+      accepted: must be accepted
+      blank: can’t be blank
+      confirmation: doesn’t match confirmation
+      empty: can’t be empty
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: reserved
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      inclusion: not acceptable
+      incorrect_type: incorrect type
+      invalid: invalid
+      invalid_email: not a valid email address
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      not_a_number: not a number
+      not_an_integer: not an integer
+      odd: must be odd
+      taken: already taken
+      too_long: must be %{count} characters or shorter
+      too_short: must be %{count} characters or longer
+      wrong_length: must be %{count} characters long
+      invalid_date: not a valid date
+      invalid_time: not a valid time
+      invalid_datetime: not a valid date and time
+      is_at: must be at %{restriction}
+      before: must be before %{restriction}
+      on_or_before: must be on or before %{restriction}
+      after: must be after %{restriction}
+      on_or_after: must be on or after %{restriction}

@@ -1,0 +1,15 @@
+doctype html
+html lang=I18n.locale
+  head
+    meta charset="utf-8"
+    meta name="description" content="AvFacts is a podcast about general aviation, commercial aviation, and military aviation."
+    meta name="author" content="Tim Morgan"
+    = csrf_meta_tags
+
+    title AvFacts: A podcast about all things aviation
+
+    = stylesheet_pack_tag 'application'
+
+  body
+    = yield
+    = javascript_pack_tag 'application'

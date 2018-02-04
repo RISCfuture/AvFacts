@@ -1,0 +1,163 @@
+@import "./vars";
+
+$label-margin: 5px;
+$field-border-radius: 2px;
+
+@mixin text-field {
+    appearance: none;
+    border: 1px solid $light-gray;
+    font-family: "Libre Franklin", sans-serif;
+    padding: 5px;
+    border-radius: $field-border-radius;
+
+    &:focus {
+        outline: none;
+        border-color: lighten($avfacts-blue, 50%);
+    }
+
+    &.invalid {
+        border-color: $error-color;
+    }
+}
+
+label {
+    display: block;
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: bold;
+    margin-bottom: $label-margin;
+}
+
+label.checkbox-label {
+    input {
+        display: inline;
+        vertical-align: middle;
+        margin-bottom: $label-margin/2;
+        margin-right: 5px;
+    }
+}
+
+input, select, textarea {
+    display: block;
+}
+
+input[type=text], input[type=password] {
+    @include text-field;
+}
+
+input[type=text], input[type=password], input[type=file] {
+    margin-bottom: 10px;
+}
+
+.field-error-pair {
+    margin-bottom: 10px;
+
+    &>input, &>textarea {
+        margin-bottom: 0;
+    }
+}
+
+textarea {
+    @include text-field;
+    margin-bottom: 10px;
+}
+
+input[type=submit] {
+    appearance: none;
+    @include button($avfacts-blue);
+}
+
+input[type=file] {
+    padding: 2px;
+
+    &::-webkit-file-upload-button {
+        appearance: none;
+        @include button($avfacts-white, $text-dark: true);
+    }
+
+    &.invalid {
+        border: 1px solid $error-color;
+        border-radius: $field-border-radius;
+    }
+}
+
+label, input[type=text], input[type=password], input[type=file], textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+$field-pair-margin: 40px;
+
+fieldset, .fieldset {
+    padding: 0;
+    border: 0;
+    margin: 0 0 20px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+
+    & > * {
+        flex: 0 0 calc(50% - #{$field-pair-margin} / 2);
+    }
+
+    @include responsive-mobile {
+        flex-flow: column nowrap;
+    }
+}
+
+.form-actions {
+    display: flex;
+    flex-flow: row nowrap;
+
+    @include responsive-desktop {
+        margin-top: 40px;
+    }
+
+    .left {
+        flex: 1 1 auto;
+    }
+
+    .right {
+        flex: 1 1 auto;
+        text-align: right;
+    }
+
+    @include responsive-mobile {
+        flex-flow: column nowrap;
+
+        .right {
+            text-align: left;
+        }
+    }
+}
+
+.file-pair {
+    input[type=file] {
+        margin-bottom: 0;
+    }
+
+    p {
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 11px;
+        color: $dark-gray;
+        margin-top: 2px;
+        margin-bottom: 20px;
+    }
+}
+
+ul.errors {
+    margin: 0;
+    padding: 0;
+
+    li {
+        margin: 5px 0 0;
+        border: 0;
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 12px;
+        list-style: none;
+        color: $error-color;
+    }
+}
+
+::placeholder {
+    color: $placeholder-color;
+}

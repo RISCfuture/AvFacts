@@ -1,41 +1,82 @@
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
-end
+ruby '2.5.0'
 
+# FRAMEWORK
+gem 'rails', '5.2.0.beta2'
+gem 'configoro'
+gem 'bootsnap'
+gem 'sidekiq'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.4'
-# Use postgresql as the database for Active Record
-gem 'pg', '~> 0.18'
-# Use Puma as the app server
-gem 'puma', '~> 3.7'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+# MODELS
+gem 'pg', '< 1.0'
+gem 'validates_timeliness'
+gem 'mini_magick'
+gem 'streamio-ffmpeg'
+gem 'bcrypt'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+# CONTROLLERS
+gem 'responders'
 
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-end
+# VIEWS
+# HTML
+gem 'slim-rails'
+# JS
+gem 'webpacker', github: 'rails/webpacker'
+# JSON
+gem 'jbuilder'
+# XML
+gem 'builder'
+
+# OTHER
+gem 'nokogiri'
 
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'puma'
+  gem 'listen'
+  
+  # DEVELOPMENT
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  
+  # DEPLOYMENT
+  gem 'capistrano', require: nil
+  gem 'capistrano-rvm', require: nil
+  gem 'capistrano-rails', require: nil
+  gem 'capistrano-bundler', require: nil
+  gem 'capistrano-passenger', require: nil
+  gem 'capistrano-sidekiq', require: nil
+  gem 'capistrano-nvm', require: nil
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+group :test do
+  # SPECS
+  gem 'rspec-rails'
+  gem 'rails-controller-testing'
+  
+  # ISOLATION
+  gem 'database_cleaner'
+  gem 'timecop'
+  gem 'webmock'
+  gem 'fakefs', require: 'fakefs/safe'
+  
+  # FACTORIES
+  gem 'factory_bot_rails'
+  gem 'ffaker'
+end
+
+group :production do
+  # CACHE
+  gem 'redis-rails'
+  gem 'redis-rack'
+  gem 'rack-cache', require: 'rack/cache'
+  
+  # PAPERCLIP
+  gem 'aws-sdk-s3'
+end
+
+group :doc do
+  gem 'redcarpet'
+  gem 'yard', require: nil
+end

@@ -1,5 +1,33 @@
 {
   "name": "avfacts",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "@panter/vue-i18next": "^0.9.1",
+    "@rails/webpacker": "^3.2.1",
+    "axios": "^0.17.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-minify": "^0.2.0",
+    "i18next": "^10.3.0",
+    "js-yaml-loader": "^0.1.0",
+    "lodash": "^4.17.4",
+    "luxon": "^0.4.0",
+    "marked": "^0.3.12",
+    "moment": "^2.20.1",
+    "moment-duration-format": "^2.2.1",
+    "normalize.css": "^7.0.0",
+    "numeral": "^2.0.6",
+    "precss": "^3.1.0",
+    "simplemde": "^1.11.2",
+    "vue": "^2.5.13",
+    "vue-datetime": "^1.0.0-beta.2",
+    "vue-loader": "^14.1.1",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.13",
+    "vuex": "^3.0.1",
+    "weekstart": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "webpack-dev-server": "^2.11.1"
+  }
 }
