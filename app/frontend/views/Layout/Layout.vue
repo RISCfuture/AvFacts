@@ -1,6 +1,9 @@
 <template>
   <div>
-    <banner />
+    <header>
+      <banner />
+      <links />
+    </header>
 
     <div class="container content-view">
       <router-view />
@@ -12,25 +15,38 @@
 
 <script>
   import Banner from './Banner.vue'
+  import Links from './Links.vue'
   import Footer from './Footer.vue'
 
   export default {
-    components: {Banner, FooterView: Footer}
+    components: {Links, Banner, FooterView: Footer}
   }
 </script>
 
 <style lang="scss" scoped>
-  @media only screen and (min-width: 960px) {
+  @import "../../styles/vars";
+
+  @include responsive-desktop {
     header {
       position: fixed;
       left: 0;
       top: 0;
       width: 100%;
-      z-index: 1;
+      z-index: $banner-layer;
     }
 
     .content-view {
-      margin-top: 140px;
+      margin-top: 180px;
+    }
+  }
+
+  @include responsive-mobile {
+    header {
+      margin-bottom: 40px;
+    }
+
+    header p {
+      display: none;
     }
   }
 </style>

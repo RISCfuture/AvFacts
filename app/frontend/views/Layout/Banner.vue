@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <div class="parent">
     <div class="container">
       <router-link :to="{name: 'episodes_list'}">
         <img :src="bannerImage"
@@ -8,7 +8,7 @@
       <div class="spacer" />
       <p>an aviation podcast by <router-link :to="{name: 'about'}">Tim Morgan</router-link></p>
     </div>
-  </header>
+  </div>
 </template>
 
 <script>
@@ -26,10 +26,8 @@
 <style scoped lang="scss">
   @import "../../styles/vars";
 
-  header {
+  .parent {
     background-color: $banner-background-color;
-    margin-bottom: 40px;
-    z-index: $banner-layer;
 
     .container {
       display: flex;
