@@ -11,6 +11,7 @@ xml.rss('xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd',
 
     xml.title channel.title
     xml.description channel.description
+    xml.itunes :summary, channel.summary
     xml.itunes :subtitle, channel.subtitle
 
     xml.itunes :owner do
