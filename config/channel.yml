@@ -16,4 +16,5 @@ owner:
   email: avfacts@timothymorgan.info
 author: Tim Morgan
 explicit: false
-itunes_category: "Games & Hobbies"
+itunes_category:
+  "Games & Hobbies": Aviation

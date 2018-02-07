@@ -32,4 +32,48 @@ RSpec.describe EpisodesHelper, type: :helper do
       expect(helper.duration_string(14000)).to eql("3:53:20")
     end
   end
+
+  describe '#category_tags' do
+    before(:each) { @xml = Builder::XmlMarkup.new }
+
+    it "should render a single category" do
+      helper.category_tags @xml, "A Category"
+      expect(@xml.target!).to eql(<<~XML.gsub(/\s*\n\s*/, ''))
+        <itunes:category text="A Category"/>
+      XML
+    end
+
+    it "should render multiple categories" do
+      helper.category_tags @xml, %w[c1 c2]
+      expect(@xml.target!).to eql(<<~XML.gsub(/\s*\n\s*/, ''))
+        <itunes:category text="c1"/>
+        <itunes:category text="c2"/>
+      XML
+    end
+
+    it "should render categories and subcategories" do
+      helper.category_tags @xml, 'c1' => 'sc1', 'c2' => 'sc2'
+      expect(@xml.target!).to eql(<<~XML.gsub(/\s*\n\s*/, ''))
+        <itunes:category text="c1">
+          <itunes:category text="sc1"/>
+        </itunes:category>
+        <itunes:category text="c2">
+          <itunes:category text="sc2"/>
+        </itunes:category>
+      XML
+    end
+
+    it "should render categories with multiple subcategories" do
+      helper.category_tags @xml, 'c1' => 'sc1', 'c2' => %w[sc2 sc3]
+      expect(@xml.target!).to eql(<<~XML.gsub(/\s*\n\s*/, ''))
+        <itunes:category text="c1">
+          <itunes:category text="sc1"/>
+        </itunes:category>
+        <itunes:category text="c2">
+          <itunes:category text="sc2"/>
+          <itunes:category text="sc3"/>
+        </itunes:category>
+      XML
+    end
+  end
 end

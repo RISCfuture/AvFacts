@@ -46,6 +46,33 @@ module EpisodesHelper
 
   end
 
+  # Constructs nested `<itunes:category>` tags for the given category and
+  # subcategory settings as found in the `config/channel.yml` file. The tags are
+  # given to the `xml` object, not returned.
+  #
+  # @param [Builder] xml An XML object being used to render the current
+  #   template.
+  # @param [String, Array<String>, Hash<String, String>, Hash<String, Array>] categories
+  #   The iTunes category or categories for this podcast. For subcategories, a
+  #   hash of category to one or more subcategories is used.
+
+  def category_tags(xml, categories)
+    case categories
+      when String
+        xml.itunes :category, text: categories
+      when Array
+        categories.each { |c| category_tags xml, c }
+      when OpenStruct
+        category_tags xml, categories.to_h
+      when Hash
+        categories.each do |parent, subcategories|
+          xml.itunes(:category, text: parent) do
+            category_tags xml, subcategories
+          end
+        end
+    end
+  end
+
   private
 
   def recursive_openstruct(hsh)

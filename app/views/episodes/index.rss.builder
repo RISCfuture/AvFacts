@@ -27,8 +27,8 @@ xml.rss('xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd',
     xml.language channel.language
     xml.copyright channel.copyright
     xml.webMaster channel.webmaster
-    xml.explicit(channel.explicit ? 'yes' : 'no')
-    xml.itunes :category, channel.itunes_category
+    xml.itunes :explicit, (channel.explicit ? 'yes' : 'no')
+    category_tags(xml, channel.itunes_category)
 
     xml.itunes :image, href: asset_pack_url('packs/logo.png')
     xml.image do
