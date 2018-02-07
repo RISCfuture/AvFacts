@@ -46,7 +46,7 @@
           <smart-field type="file" field="image" />
           <p v-if="episode.image">{{episode.image.size |
             bytes}} &middot;
-            {{episode.image.width}}&times;{{episode.image.height}}</p>
+            <span :class="{'too-small': imageTooSmall}">{{episode.image.width}}&times;{{episode.image.height}}</span></p>
           <p v-else>&nbsp;</p>
         </div>
       </div>
@@ -61,16 +61,14 @@
       </div>
     </div>
 
-    <label for="episode_description">Summary</label>
+    <label for="episode_summary">Summary</label>
     <smart-field type="text" field="summary" :maxlength="255" />
 
-    <label for="episode_description">Description</label>
-    <div id="episode-description-container">
-      <smart-field type="textarea" field="description" :required="true" />
-    </div>
+    <label for="episode_description" class="below-textarea">Description</label>
+    <smart-field type="textarea" field="description" :required="true" />
 
-    <label for="episode_script">Script</label>
-    <smart-field type="markdown" field="script" ref="episodeScript" />
+    <label for="episode_script" class="below-textarea">Script</label>
+    <smart-field type="markdown" field="script" />
 
     <div class="form-actions">
       <div class="left"></div>
@@ -91,6 +89,8 @@
   import SmartField from 'components/SmartForm/SmartField'
   import SmartFormBus from 'components/SmartForm/SmartFormBus'
   import Spinner from 'images/spinner.svg'
+
+  const ITUNES_MIN_IMAGE_SIZE = 1400
 
   export default {
     props: ['episode'],
@@ -114,6 +114,10 @@
           return `/episodes/${this.episode.number}.json`
         else
           return `/episodes.json`
+      },
+
+      imageTooSmall() {
+        return this.episode.image && (this.episode.image.width < ITUNES_MIN_IMAGE_SIZE || this.episode.image.height < ITUNES_MIN_IMAGE_SIZE)
       }
     },
 
@@ -171,5 +175,13 @@
     z-index: $banner-layer - 1;
 
     img { flex: 0 0 auto; }
+  }
+
+  .too-small {
+    color: $error-color;
+  }
+
+  label.below-textarea {
+    margin-top: 20px;
   }
 </style>

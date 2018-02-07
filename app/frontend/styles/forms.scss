@@ -131,7 +131,7 @@ fieldset, .fieldset {
 }
 
 .file-pair {
-    input[type=file] {
+    input[type=file], .field-error-pair {
         margin-bottom: 0;
     }
 
