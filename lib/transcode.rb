@@ -60,6 +60,24 @@ class Transcode
     service.url key, expires_in: expires_in, disposition: disposition, filename: filename, content_type: content_type
   end
 
+  # Returns the public, unsigned URL for the transcoded variant, as hosted by
+  # the content delivery network. If no content delivery network is configured,
+  # returns the {#service_url}.
+  #
+  # @params options Options to pass to {#service_url} if no CDN is configured.
+  # @return [String] The public, unsigned URL for the transcoded variant as
+  #   hosted by the content delivery network.
+
+  def public_cdn_url(**options)
+    url = URI.parse(service.public_url(key))
+    if AvFacts::Configuration.storage.cloudfront_domain
+      url.host = AvFacts::Configuration.storage.cloudfront_domain
+    end
+    return url.to_s
+  rescue NotImplementedError
+    service_url **options
+  end
+
   # Downloads or streams the data for the transcoded variant.
   #
   # @overload download
