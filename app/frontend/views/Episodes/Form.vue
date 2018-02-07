@@ -83,6 +83,7 @@
 
 <script>
   import _ from 'lodash'
+  import {mapActions} from 'vuex'
 
   import Channel from 'channel.yml'
 
@@ -117,6 +118,8 @@
     },
 
     methods: {
+      ...mapActions(['loadEpisodes']),
+
       refreshScratch() {
         this.scratchEpisode = _.pick(this.episode,
             ['title', 'subtitle', 'author', 'published_at', 'explicit',
@@ -127,7 +130,10 @@
     mounted() {
       this.refreshScratch()
       SmartFormBus.$on('submit', () => this.saving = true)
-      SmartFormBus.$on('complete', () => this.saving = false)
+      SmartFormBus.$on('complete', () => {
+        this.saving = false
+        this.loadEpisodes({restart: false})
+      })
     },
 
     watch: {
