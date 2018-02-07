@@ -8,7 +8,10 @@
   </div>
 
   <div v-else-if="episode" class="container">
-    <h1>#{{episode.number | integer}}: {{episode.title}}</h1>
+    <h1>
+      #{{episode.number | integer}}: {{episode.title}}
+      <router-link :to="{name: 'episodes_edit', params: {id: episode.number}}">Back to Edit</router-link>
+    </h1>
     <div class="script" v-html="renderedScript" />
   </div>
 

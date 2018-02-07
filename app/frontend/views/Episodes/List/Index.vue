@@ -90,12 +90,6 @@
     }
   }
 
-  h1 a {
-    font-size: 14px;
-    font-weight: normal;
-    letter-spacing: -1px;
-  }
-
   @include responsive-small {
     .title-search {
       flex-flow: column nowrap;
