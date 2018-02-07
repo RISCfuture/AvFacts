@@ -9,18 +9,21 @@
       <p class="published-at">{{episode.published_at | date}}</p>
       <p>{{episode.description}}</p>
 
-      <div v-if="!playOpen">
-        <a v-if="audioProcessed" href="#" @click.prevent="play" class="play-button">Play</a>
+      <div v-if="!playOpen" class="actions">
+        <div class="left-actions">
+          <a v-if="audioProcessed" href="#" @click.prevent="play" class="play-button">Play</a>
+          <span class="duration" v-if="episode.duration">{{episode.duration | duration}}</span>
+        </div>
 
-        <router-link :to="{name: 'episodes_edit', params: {id: episode.number}}"
-                     class="other-button"
-                     v-if="isAuthenticated">Edit</router-link>
+        <div class="right-actions">
+          <router-link :to="{name: 'episodes_script', params: {id: episode.number}}"
+                       class="other-button"
+                       v-if="isAuthenticated && episode['script?']">Perform</router-link>
+          <router-link :to="{name: 'episodes_edit', params: {id: episode.number}}"
+                       class="other-button"
+                       v-if="isAuthenticated">Edit</router-link>
+        </div>
 
-        <router-link :to="{name: 'episodes_script', params: {id: episode.number}}"
-                     class="other-button"
-                     v-if="isAuthenticated && episode['script?']">Record</router-link>
-
-        <span class="duration" v-if="episode.duration">{{episode.duration | duration}}</span>
       </div>
 
       <audio controls v-if="audioProcessed && playOpen" autoplay>
@@ -96,6 +99,17 @@
       audio {
         margin-top: 5px;
       }
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-flow: row wrap;
+
+    .left-actions { flex: 1 1 auto; }
+    .right-actions {
+      flex: 1 1 auto;
+      text-align: right;
     }
   }
 
