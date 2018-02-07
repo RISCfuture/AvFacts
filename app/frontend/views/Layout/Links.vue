@@ -8,6 +8,9 @@
         <a href="https://itunes.apple.com/us/podcast/avfacts-aviation-knowledge-without-limits/id1271248926">iTunes</a>
       </li>
       <li>
+        <a href="http://stitcher.com/s?fid=169506&refid=stpr">Stitcher</a>
+      </li>
+      <li>
         <a href="/episodes.rss">RSS</a>
       </li>
     </ul>
