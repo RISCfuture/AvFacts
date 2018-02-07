@@ -51,10 +51,10 @@ xml.rss('xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd',
         xml.itunes :summary, episode.description
         xml.description episode.description
 
-        xml.enclosure url_for(episode.mp3), type: episode.mp3.content_type, length: 0 #episode.mp3.byte_size
-        xml.enclosure url_for(episode.aac), type: episode.aac.content_type, length: 0 #episode.aac.byte_size
+        xml.enclosure url: polymorphic_url(episode.mp3, only_path: false), type: episode.mp3.content_type, length: episode.mp3.byte_size
+        xml.enclosure url: polymorphic_url(episode.aac, only_path: false), type: episode.aac.content_type, length: episode.aac.byte_size
 
-        xml.itunes :image, href: url_for(episode.itunes_image)
+        xml.itunes :image, href: polymorphic_url(episode.itunes_image, only_path: false)
         if episode.audio.metadata[:duration]
           xml.itunes :duration, duration_string(episode.audio.metadata[:duration])
         end
