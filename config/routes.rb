@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  constraints(->(req) { req.format == :json }) do
+  constraints(->(req) { req.format == :json || req.format == :rss }) do
     resources :episodes, only: %i[index show create update destroy]
     resource :session, only: %i[show create destroy]
   end
