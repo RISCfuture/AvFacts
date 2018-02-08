@@ -184,12 +184,13 @@ module AddRangeQueriesToDiskController
 end
 
 Rails.application.config.to_prepare do
+  require 'active_storage/service/disk_service'
+  require 'active_storage/service/s3_service'
+
   ActiveStorage::Blob.prepend AddTranscodingToActiveStorage
 
   ActiveStorage::Service.prepend AddStreamingMethodsToService::Base
-  require 'active_storage/service/disk_service'
   ActiveStorage::Service::DiskService.prepend AddStreamingMethodsToService::Disk
-  require 'active_storage/service/s3_service'
   ActiveStorage::Service::S3Service.prepend AddStreamingMethodsToService::S3
 
   ActiveStorage::DiskController.prepend AddRangeQueriesToDiskController
