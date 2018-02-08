@@ -91,7 +91,7 @@ class EpisodesController < ApplicationController
   #
   # * `GET /episode/:id.json`
   # * `GET /episode/:id.mp3`
-  # * `GET /episode/:id.aac`
+  # * `GET /episode/:id.m4a`
   #
   # Path Parameters
   # ---------------
@@ -108,13 +108,13 @@ class EpisodesController < ApplicationController
 
       format.mp3 do
         return head(:not_found) unless @episode.processed?
-        
+
         response.headers['Content-Length'] = @episode.mp3.byte_size
         self.response_body                 = streaming_content(@episode.mp3)
         response.status                    = 200
       end
 
-      format.aac do
+      format.m4a do
         return head(:not_found) unless @episode.processed?
 
         response.headers['Content-Length'] = @episode.aac.byte_size

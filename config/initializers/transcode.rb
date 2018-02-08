@@ -64,7 +64,7 @@ module AddStreamingMethodsToService
       range  = range.first..object.content_length if range.last == -1
       buffer = String.new
 
-      instrument :streaming_download, key do
+      instrument :streaming_download, key: key do
         object = object_for(key)
 
         chunk_size = 5.megabytes
@@ -91,7 +91,7 @@ module AddStreamingMethodsToService
       range  = range.first..byte_size(key) if range.last == -1
       buffer = String.new
 
-      instrument :streaming_download, key do
+      instrument :streaming_download, key: key do
         chunk_size = 1.megabyte
         offset     = range.first
 
