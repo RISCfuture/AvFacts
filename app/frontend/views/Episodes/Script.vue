@@ -12,6 +12,8 @@
       #{{episode.number | integer}}: {{episode.title}}
       <router-link :to="{name: 'episodes_edit', params: {id: episode.number}}">Back to Edit</router-link>
     </h1>
+    <p id="running-time">Estimated running time: {{estimatedRunningTime | duration}}</p>
+
     <div class="script" v-html="renderedScript" />
   </div>
 
@@ -49,7 +51,12 @@
     computed: {
       ...mapGetters(['episode', 'isAuthenticated', 'episodesLoading']),
 
-      renderedScript() { return marked(this.episode.script) }
+      renderedScript() { return marked(this.episode.script) },
+
+      estimatedRunningTime() {
+        const wordCount = this.episode.script.split(/\s+/).length
+        return Math.round(0.3462*wordCount + 80.8)
+      }
     },
 
     methods: {
@@ -77,6 +84,11 @@
       margin-left: auto;
       margin-right: auto;
     }
+  }
+
+  #running-time {
+    color: $light-gray;
+    font-size: 12px;
   }
 
   .script {
