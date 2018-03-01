@@ -134,9 +134,9 @@
     mounted() {
       this.refreshScratch()
       SmartFormBus.$on('submit', () => this.saving = true)
-      SmartFormBus.$on('complete', () => {
+      SmartFormBus.$on('success', () => {
         this.saving = false
-        this.loadEpisodes({restart: false})
+        this.loadEpisodes({restart: true})
       })
     },
 

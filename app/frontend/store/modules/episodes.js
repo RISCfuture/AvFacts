@@ -65,6 +65,7 @@ export default {
 
   actions: {
     loadEpisodes({commit, state}, {restart} = {}) {
+      if (state.episodesLoading) return Promise.resolve(false)
       if (!restart && state.episodesLoaded) return Promise.resolve(false)
 
       const loadNextPage = function(url, resolve, reject) {
@@ -91,6 +92,7 @@ export default {
     },
 
     loadEpisode({commit, state}, number, {force} = {}) {
+      if (state.episodeLoading) return Promise.resolve(false)
       const episode = _.find(state.episodes, e => e.number === number)
       if (episode && !episode.partial && !force) return Promise.resolve(false)
 
