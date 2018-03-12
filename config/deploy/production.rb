@@ -1,3 +1,3 @@
 server 'www.timothymorgan.info',
-       user:  'www-data',
+       user:  'deploy',
        roles: %w[app db web]
