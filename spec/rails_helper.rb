@@ -78,6 +78,11 @@ RSpec.configure do |config|
 
   # WebMock
   WebMock.disable_net_connect!
+
+  # Active Storage
+  config.after :suite do
+    FileUtils.rm_r Rails.root.join('tmp', 'storage')
+  end
 end
 
 def login_as_admin
