@@ -2,6 +2,7 @@ const path = require('path')
 
 const { environment } = require('@rails/webpacker')
 const vue =  require('./loaders/vue')
+
 environment.loaders.append('vue', vue)
 
 const yaml =  require('./loaders/yaml')
