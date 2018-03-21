@@ -145,6 +145,9 @@ class Episode < ApplicationRecord
       audio.analyze
       mp3.processed
       aac.processed
+
+      self.mp3_size = mp3.byte_size
+      self.aac_size = aac.byte_size
     end
 
     if image.attachment

@@ -82,9 +82,12 @@ RSpec.describe Episode, type: :model do
     it "should preprocess the episode and image data" do
       episode = FactoryBot.create(:episode)
       episode.preprocess!
+      episode.reload
       expect(episode.mp3).to be_processed
       expect(episode.aac).to be_processed
       expect(episode.thumbnail_image.send(:processed?)).to eql(true)
+      expect(episode.mp3_size).to eql(33_271)
+      expect(episode.aac_size).to eql(22_088)
     end
 
     it "should set processed and advance published_at if the episode is ready" do

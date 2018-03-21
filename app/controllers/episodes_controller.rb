@@ -109,7 +109,7 @@ class EpisodesController < ApplicationController
       format.mp3 do
         return head(:not_found) unless @episode.processed?
 
-        response.headers['Content-Length'] = @episode.mp3.byte_size
+        response.headers['Content-Length'] = @episode.mp3_size
         self.response_body                 = streaming_content(@episode.mp3)
         response.status                    = 200
       end
@@ -117,7 +117,7 @@ class EpisodesController < ApplicationController
       format.m4a do
         return head(:not_found) unless @episode.processed?
 
-        response.headers['Content-Length'] = @episode.aac.byte_size
+        response.headers['Content-Length'] = @episode.aac_size
         self.response_body                 = streaming_content(@episode.aac)
         response.status                    = 200
       end

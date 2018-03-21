@@ -11,13 +11,13 @@ json.array!(@episodes) do |episode|
     json.mp3 do
       json.url episode.mp3.public_cdn_url
       json.content_type episode.mp3.content_type
-      json.byte_size episode.mp3.byte_size
+      json.byte_size episode.mp3_size
     end if episode.processed?
 
     json.aac do
       json.url episode.aac.public_cdn_url
       json.content_type episode.aac.content_type
-      json.byte_size episode.aac.byte_size
+      json.byte_size episode.aac_size
     end if episode.processed?
   end
 end
