@@ -12,7 +12,7 @@
       <div v-if="!playOpen" class="actions">
         <div class="left-actions">
           <a v-if="audioProcessed" href="#" @click.prevent="play" class="play-button">Play</a>
-          <span class="duration" v-if="episode.duration">{{episode.duration | duration}}</span>
+          <span v-if="audioProcessed" class="duration">{{episode.audio.duration | duration}}</span>
         </div>
 
         <div class="right-actions">
@@ -23,7 +23,6 @@
                        class="other-button"
                        v-if="isAuthenticated">Edit</router-link>
         </div>
-
       </div>
 
       <audio controls v-if="audioProcessed && playOpen" autoplay>
@@ -66,7 +65,7 @@
   .episode {
     display: flex;
     flex-flow: row nowrap;
-    align-items: top;
+    align-items: flex-start;
 
     &:not(:last-child) {
       margin-bottom: 50px;
