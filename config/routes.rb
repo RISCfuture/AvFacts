@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   end
 
   # back-end routes handled by rails
-  constraints(->(req) { req.format == :json || req.format == :rss }) do
+  constraints(->(req) { req.format != '*/*' && !req.format.html? }) do
     resources :episodes, only: %i[index show create update destroy]
     resource :session, only: %i[show create destroy]
   end

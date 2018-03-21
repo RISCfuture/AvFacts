@@ -3,6 +3,8 @@
 # readers, and requests for podcast MP3 files.
 
 class EpisodesController < ApplicationController
+  include Streaming
+
   before_action :find_episode, except: %i[index create]
   before_action :admin_required, except: %i[index show]
 
@@ -108,18 +110,14 @@ class EpisodesController < ApplicationController
 
       format.mp3 do
         return head(:not_found) unless @episode.processed?
-
-        response.headers['Content-Length'] = @episode.mp3_size
-        self.response_body                 = streaming_content(@episode.mp3)
-        response.status                    = 200
+        redirect_to @episode.mp3.public_cdn_url
+        #stream @episode.mp3.public_cdn_url
       end
 
       format.m4a do
         return head(:not_found) unless @episode.processed?
-
-        response.headers['Content-Length'] = @episode.aac_size
-        self.response_body                 = streaming_content(@episode.aac)
-        response.status                    = 200
+        redirect_to @episode.aac.public_cdn_url
+        #stream @episode.aac.public_cdn_url
       end
     end
   end
@@ -200,11 +198,5 @@ class EpisodesController < ApplicationController
     params.require(:episode).permit(:number, :title, :author, :description,
                                     :script, :published_at, :explicit, :audio,
                                     :image, :summary, :subtitle, :blocked)
-  end
-
-  def streaming_content(blob)
-    Enumerator.new do |yielder|
-      blob.download { |chunk| yielder << chunk }
-    end
   end
 end

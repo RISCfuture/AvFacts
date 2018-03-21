@@ -83,10 +83,9 @@ RSpec.describe EpisodesController, type: :controller do
 
     %w[mp3 aac].each do |format|
       context "[#{format.upcase}]" do
-        it "should stream" do
+        it "should redirect to the audio file" do
           get :show, params: {id: @episode.to_param, format: format}
-          expect(response.status).to eql(200)
-          expect(response.body).not_to be_empty
+          expect(response.headers['Location']).to match(/^http:\/\/test\.host\/rails\/active_storage\/disk\/.+audio\.#{format}$/)
         end
 
         it "should 404 if the audio hasn't been added yet" do
