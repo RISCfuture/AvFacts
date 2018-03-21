@@ -31,15 +31,16 @@ gem 'builder'
 
 # OTHER
 gem 'nokogiri'
+gem 'json'
 
 group :development do
   gem 'puma'
   gem 'listen'
-  
+
   # DEVELOPMENT
   gem 'better_errors'
   gem 'binding_of_caller'
-  
+
   # DEPLOYMENT
   gem 'capistrano', require: nil
   gem 'capistrano-rvm', require: nil
@@ -54,13 +55,13 @@ group :test do
   # SPECS
   gem 'rspec-rails'
   gem 'rails-controller-testing'
-  
+
   # ISOLATION
   gem 'database_cleaner'
   gem 'timecop'
   gem 'webmock'
   gem 'fakefs', require: 'fakefs/safe'
-  
+
   # FACTORIES
   gem 'factory_bot_rails'
   gem 'ffaker'
@@ -71,7 +72,7 @@ group :production do
   gem 'redis-rails'
   gem 'redis-rack'
   gem 'rack-cache', require: 'rack/cache'
-  
+
   # PAPERCLIP
   gem 'aws-sdk-s3'
 end

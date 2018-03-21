@@ -78,6 +78,9 @@ class Episode < ApplicationRecord
 
   scope :published, -> { where 'episodes.published_at <= ? AND episodes.processed IS TRUE', Time.current }
 
+  extend SetNilIfBlank
+  set_nil_if_blank :subtitle, :summary, :author
+
   # @return [true, false] Whether or not the episode should be public on the
   #   website and RSS feed.
 

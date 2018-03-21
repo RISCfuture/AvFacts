@@ -45,10 +45,9 @@ xml.rss('xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd',
 
         xml.title full_title(episode)
         xml.itunes :title, episode.title
-        xml.subtitle(episode.subtitle) if episode.subtitle
-        xml.itunes :subtitle, truncate(episode.description, length: 50, omission: "…") #TODO better subtitle?
+        xml.itunes(:subtitle, episode.subtitle) if episode.subtitle?
         xml.itunes :author, (episode.author || channel.author)
-        xml.itunes :summary, episode.description
+        xml.itunes :summary, (episode.summary || truncate(episode.description, length: 100, omission: "…"))
         xml.description episode.description
 
         xml.enclosure url: episode.mp3.public_cdn_url, type: episode.mp3.content_type, length: episode.mp3.byte_size
