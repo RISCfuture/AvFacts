@@ -1,12 +1,10 @@
 test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
-  host: test.host
 
 local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
-  host: "localhost:5000"
 
 amazon:
   service: S3
