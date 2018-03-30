@@ -75,7 +75,16 @@ class Transcode
     end
     return url.to_s
   rescue NotImplementedError
-    service_url **options
+    # convert the path into a URL, if it's a path
+    url = service_url(**options)
+    if url.start_with?('/')
+      url, query = url.split('?')
+      defaults   = ApplicationController.renderer.defaults
+      klass      = defaults[:https] ? URI::HTTPS : URI::HTTP
+      uri        = klass.build(host: defaults[:http_host], port: defaults[:port], path: url, query: query)
+      url        = uri.to_s
+    end
+    return url
   end
 
   # Downloads or streams the data for the transcoded variant.

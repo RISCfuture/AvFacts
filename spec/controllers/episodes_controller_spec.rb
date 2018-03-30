@@ -83,9 +83,15 @@ RSpec.describe EpisodesController, type: :controller do
 
     %w[mp3 aac].each do |format|
       context "[#{format.upcase}]" do
-        it "should redirect to the audio file" do
+        before :each do
+          stub_request(:get, /^http:\/\/test\.host\/rails\/active_storage\/disk/).
+              to_return(status: 200, body: "this is not a very well-formatted audio file")
+        end
+
+        it "should stream" do
           get :show, params: {id: @episode.to_param, format: format}
-          expect(response.headers['Location']).to match(/^http:\/\/test\.host\/rails\/active_storage\/disk\/.+audio\.#{format}$/)
+          expect(response.status).to eql(200)
+          expect(response.body).to eql("this is not a very well-formatted audio file")
         end
 
         it "should 404 if the audio hasn't been added yet" do

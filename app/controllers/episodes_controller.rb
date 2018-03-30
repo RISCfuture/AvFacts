@@ -110,14 +110,14 @@ class EpisodesController < ApplicationController
 
       format.mp3 do
         return head(:not_found) unless @episode.processed?
-        redirect_to @episode.mp3.public_cdn_url
-        #stream @episode.mp3.public_cdn_url
+        #redirect_to @episode.mp3.public_cdn_url
+        stream @episode.mp3.public_cdn_url
       end
 
       format.m4a do
         return head(:not_found) unless @episode.processed?
-        redirect_to @episode.aac.public_cdn_url
-        #stream @episode.aac.public_cdn_url
+        #redirect_to @episode.aac.public_cdn_url
+        stream @episode.aac.public_cdn_url
       end
     end
   end
