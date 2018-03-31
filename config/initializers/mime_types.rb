@@ -2,4 +2,3 @@
 
 # Add new mime types for use in respond_to blocks:
 Mime::Type.register 'audio/aiff', :aif
-Mime::Type.register 'audio/aac', :m4a

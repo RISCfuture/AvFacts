@@ -10,7 +10,7 @@ class EpisodesController < ApplicationController
 
   respond_to :json
   respond_to :rss, only: :index
-  respond_to :mp3, only: :show
+  respond_to :mp3, :m4a, only: :show
 
   # **JSON**: This action renders a list of podcasts for the front-end
   # `/episodes` view. Only published, not-blocked episodes are included unless
