@@ -28,7 +28,6 @@ module Streaming
       end
 
       http.request(outbound_request) do |outbound_response|
-        p outbound_response
         response.status = outbound_response.code.presence&.to_i
         PASS_THROUGH_RESPONSE_HEADERS.each do |header|
           response.headers[header] = outbound_response[header]
