@@ -40,15 +40,6 @@ group :development do
   # DEVELOPMENT
   gem 'better_errors'
   gem 'binding_of_caller'
-
-  # DEPLOYMENT
-  gem 'capistrano', require: nil
-  gem 'capistrano-rvm', require: nil
-  gem 'capistrano-rails', require: nil
-  gem 'capistrano-bundler', require: nil
-  gem 'capistrano-passenger', require: nil
-  gem 'capistrano-sidekiq', require: nil
-  gem 'capistrano-nvm', require: nil
 end
 
 group :test do
