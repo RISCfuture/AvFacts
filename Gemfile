@@ -10,7 +10,7 @@ gem 'bootsnap'
 gem 'sidekiq'
 
 # MODELS
-gem 'pg', '< 1.0'
+gem 'pg'
 gem 'validates_timeliness'
 gem 'mini_magick'
 gem 'streamio-ffmpeg'

@@ -155,7 +155,7 @@ GEM
     nio4r (2.3.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
-    pg (0.21.0)
+    pg (1.0.0)
     public_suffix (3.0.2)
     puma (3.11.3)
     rack (2.0.4)
@@ -309,7 +309,7 @@ DEPENDENCIES
   listen
   mini_magick
   nokogiri
-  pg (< 1.0)
+  pg
   puma
   rack-cache
   rails (= 5.2.0.rc2)
