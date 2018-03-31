@@ -39,10 +39,9 @@
     methods: {
       ...mapActions(['loadEpisode', 'loadSession']),
 
-      refresh() {
-        this.loadSession({skipIfAlreadyLoaded: true}).then(() => {
-          this.loadEpisode(this.$route.params.id, {restart: true})
-        })
+      async refresh() {
+        await this.loadSession({skipIfAlreadyLoaded: true})
+        this.loadEpisode(this.$route.params.id, {restart: true})
       }
     },
 

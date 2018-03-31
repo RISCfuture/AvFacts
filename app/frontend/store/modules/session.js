@@ -43,17 +43,18 @@ export default {
       if (skipIfAlreadyLoaded && state.sessionUsername && state.sessionToken)
         return Promise.resolve(false)
 
-      return new Promise((resolve, reject) => {
-        axios.get('/session.json').then(({data}) => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          let {data} = await axios.get('/session.json')
           if (data.username && data.token)
             commit('AUTHENTICATE_SESSION', data)
           else
             commit('CLEAR_SESSION')
           resolve(true)
-        }).catch(error => {
+        } catch (error) {
           commit('SET_SESSION_ERROR', {error})
           reject(error)
-        })
+        }
       })
     },
 
@@ -62,9 +63,10 @@ export default {
     },
 
     login({commit}, fields) {
-      return new Promise((resolve, reject) => {
+      return new Promise(async (resolve, reject) => {
         commit('START_AUTHENTICATION')
-        axios.post('/session.json', fields).then(({data, status}) => {
+        try {
+          let {data, status} = await axios.post('/session.json', fields)
           if (status === 200) {
             commit('AUTHENTICATE_SESSION', data)
             resolve(true)
@@ -72,21 +74,22 @@ export default {
             commit('CLEAR_SESSION')
             resolve(false)
           }
-        }).catch(error => {
+        } catch (error) {
           commit('SET_SESSION_ERROR', {error})
           reject(error)
-        })
+        }
       })
     },
 
     logout({commit}) {
-      return new Promise((resolve, reject) => {
-        axios.delete('/session.json')
-             .then(() => {
-               commit('CLEAR_SESSION')
-               resolve()
-             })
-             .catch(error => reject(error))
+      return new Promise(async (resolve, reject) => {
+        try {
+          await axios.delete('/session.json')
+          commit('CLEAR_SESSION')
+          resolve()
+        } catch (error) {
+          reject(error)
+        }
       })
     }
   }

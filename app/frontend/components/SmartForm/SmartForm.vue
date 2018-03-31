@@ -40,17 +40,18 @@
     },
 
     methods: {
-      save() {
+      async save() {
         SmartFormBus.$emit('submit')
-        axios[this.method](this.url, this.formData).then(response => {
+        try {
+          let response = await axios[this.method](this.url, this.formData)
           SmartFormBus.$emit('complete')
           SmartFormBus.$emit('success', response)
-        }).catch(error => {
+        } catch (error) {
           SmartFormBus.$emit('complete')
           SmartFormBus.$emit('error', error)
           if (error.response.status === 422)
             this.errors = error.response.data.errors
-        })
+        }
       }
     },
 

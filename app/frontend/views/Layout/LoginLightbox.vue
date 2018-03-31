@@ -58,12 +58,10 @@
     methods: {
       ...mapActions(['hideLoginLightbox', 'login', 'resetSessionError', 'loadEpisodes']),
 
-      submitCredentials() {
-        this.login({username: this.username, password: this.password})
-            .then(() => {
-              this.hideLoginLightbox()
-              this.loadEpisodes({restart: true})
-            })
+      async submitCredentials() {
+        await this.login({username: this.username, password: this.password})
+        this.hideLoginLightbox()
+        this.loadEpisodes({restart: true})
       }
     },
 

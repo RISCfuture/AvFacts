@@ -68,8 +68,9 @@ export default {
       if (state.episodesLoading) return Promise.resolve(false)
       if (!restart && state.episodesLoaded) return Promise.resolve(false)
 
-      const loadNextPage = function(url, resolve, reject) {
-        axios.get(url).then(({data: page, headers}) => {
+      const loadNextPage = async function(url, resolve, reject) {
+        try {
+          let {data: page, headers} = await axios.get(url)
           commit('APPEND_EPISODES', {page})
 
           if (headers['x-next-page'])
@@ -77,10 +78,10 @@ export default {
           else
             commit('FINISH_EPISODES')
           resolve(true)
-        }).catch(error => {
+        } catch (error) {
           commit('SET_EPISODES_ERROR', {error})
           reject(error)
-        })
+        }
       }
 
       return new Promise((resolve, reject) => {
@@ -96,15 +97,17 @@ export default {
       const episode = _.find(state.episodes, e => e.number === number)
       if (episode && !episode.partial && !force) return Promise.resolve(false)
 
-      return new Promise((resolve, reject) => {
+      return new Promise(async (resolve, reject) => {
         commit('START_EPISODE')
-        axios.get(`/episodes/${number}.json`).then(({data: episodeDetail}) => {
+        try {
+          let {data: episodeDetail} = await axios.get(
+              `/episodes/${number}.json`)
           commit('SET_EPISODE', {episode: episodeDetail})
           resolve(episodeDetail)
-        }).catch(error => {
+        } catch (error) {
           commit('SET_EPISODES_ERROR', {error})
           reject(error)
-        })
+        }
       })
     },
 
