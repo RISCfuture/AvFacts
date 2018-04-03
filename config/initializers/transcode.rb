@@ -139,9 +139,13 @@ module AddRangeQueriesToDiskController
         response.headers['Content-Range'] = "bytes #{range.first}-#{range.last == -1 ? size : range.last}/#{size}"
         response.status = :partial_content unless data.bytesize == size
 
-        send_data data,
-                  disposition:  params[:disposition],
-                  content_type: params[:content_type]
+        if request.head?
+          response.body = ''
+        else
+          send_data data,
+                    disposition:  params[:disposition],
+                    content_type: params[:content_type]
+        end
       else
         size = disk_service.byte_size(key)
         response.headers['Content-Length'] = size.to_s
