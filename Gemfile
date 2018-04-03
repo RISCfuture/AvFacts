@@ -61,8 +61,7 @@ end
 group :production do
   # CACHE
   gem 'redis-rails'
-  gem 'redis-rack'
-  gem 'rack-cache', require: 'rack/cache'
+  gem 'redis-rack-cache'
 
   # PAPERCLIP
   gem 'aws-sdk-s3'

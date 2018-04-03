@@ -185,6 +185,9 @@ GEM
     redis-rack (2.0.4)
       rack (>= 1.5, < 3)
       redis-store (>= 1.2, < 2)
+    redis-rack-cache (2.0.2)
+      rack-cache (>= 1.6, < 2)
+      redis-store (>= 1.2, < 2)
     redis-rails (5.0.2)
       redis-actionpack (>= 5.0, < 6)
       redis-activesupport (>= 5.0, < 6)
@@ -275,11 +278,10 @@ DEPENDENCIES
   nokogiri
   pg
   puma
-  rack-cache
   rails (= 5.2.0.rc2)
   rails-controller-testing
   redcarpet
-  redis-rack
+  redis-rack-cache
   redis-rails
   responders
   rspec-rails
