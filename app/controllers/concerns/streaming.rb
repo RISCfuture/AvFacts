@@ -6,6 +6,12 @@
 # the response received from the remote location.
 
 module Streaming
+  extend ActiveSupport::Concern
+
+  included do
+    include ActionController::Live
+  end
+
   protected
 
   PASS_THROUGH_REQUEST_HEADERS  = %w[Accept Range]
@@ -33,8 +39,10 @@ module Streaming
           response.headers[header] = outbound_response[header]
         end
 
-        self.response_body = outbound_response.read_body
+        outbound_response.read_body { |chunk| response.stream.write chunk }
       end
     end
+  ensure
+    response.stream.close
   end
 end
