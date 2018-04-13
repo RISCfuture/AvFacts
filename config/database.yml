@@ -1,19 +1,16 @@
 # PostgreSQL. Versions 9.1 and up are supported.
 
-common: &common
+shared:
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
   username: avfacts
 
 development:
-  <<: *common
   database: avfacts_development
 
 test:
-  <<: *common
   database: avfacts_test
 
 production:
-  <<: *common
   database: avfacts_production

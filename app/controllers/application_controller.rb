@@ -3,7 +3,7 @@
 # Abstract superclass for all controllers in AvFacts.
 
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  before_action :set_storage_host
 
   protected
 
@@ -33,5 +33,12 @@ class ApplicationController < ActionController::Base
 
   def admin?
     return session[:user_id].present?
+  end
+
+  private
+
+  def set_storage_host
+    # really only needed for DiskService in dev/test
+    ActiveStorage::Current.host = request.base_url
   end
 end
