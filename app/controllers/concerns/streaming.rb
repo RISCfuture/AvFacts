@@ -28,7 +28,7 @@ module Streaming
     Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
       request_class = request.head? ? Net::HTTP::Head : Net::HTTP::Get
 
-      outbound_request = request_class.new(uri.path)
+      outbound_request = request_class.new(uri.request_uri)
       PASS_THROUGH_REQUEST_HEADERS.each do |header|
         outbound_request[header] = request.headers[header]
       end
