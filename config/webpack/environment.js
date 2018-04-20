@@ -1,6 +1,7 @@
 const path = require('path')
 
 const { environment } = require('@rails/webpacker')
+const erb =  require('./loaders/erb')
 const vue =  require('./loaders/vue')
 
 const yaml =  require('./loaders/yaml')
@@ -14,4 +15,6 @@ environment.config.merge({
 })
 
 environment.loaders.append('vue', vue)
+environment.loaders.append('erb', erb)
+
 module.exports = environment
