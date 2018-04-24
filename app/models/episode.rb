@@ -137,8 +137,13 @@ class Episode < ApplicationRecord
   #
   # * `published_at` date is advanced if it's in the past
   # * `processed` field is set to true
+  #
+  # @param [true, false] include_delay If `true`, waits 10 seconds after
+  #   processing/transcoding the image and audio data, to ensure that S3 and the
+  #   CDN servers have a beat to make the data available before subscribers
+  #   start downloading the podcast.
 
-  def preprocess!
+  def preprocess!(include_delay: false)
     was_not_ready = !ready?
 
     if audio.attachment
@@ -155,6 +160,8 @@ class Episode < ApplicationRecord
       thumbnail_image.processed if thumbnail_image.kind_of?(ActiveStorage::Variant)
       itunes_image.processed if itunes_image.kind_of?(ActiveStorage::Variant)
     end
+
+    sleep(10) if include_delay
 
     if was_not_ready && ready?
       self.published_at = Time.current if published_at.past?
