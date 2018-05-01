@@ -14,8 +14,8 @@ module Streaming
 
   protected
 
-  PASS_THROUGH_REQUEST_HEADERS  = %w[Accept Range]
-  PASS_THROUGH_RESPONSE_HEADERS = %w[Content-Type Content-Length Range Accept-Range]
+  PASS_THROUGH_REQUEST_HEADERS  = %w[Accept Range User-Agent Accept-Language X-Playback-Session-ID Accept-Encoding]
+  PASS_THROUGH_RESPONSE_HEADERS = %w[Content-Type Content-Length Content-Range Accept-Ranges]
   private_constant :PASS_THROUGH_REQUEST_HEADERS, :PASS_THROUGH_RESPONSE_HEADERS
 
   # Streams data to the client from a given URL. Request method, request
@@ -36,7 +36,7 @@ module Streaming
       http.request(outbound_request) do |outbound_response|
         response.status = outbound_response.code.presence&.to_i
         PASS_THROUGH_RESPONSE_HEADERS.each do |header|
-          response.headers[header] = outbound_response[header]
+          response.headers[header] = outbound_response[header] if outbound_response[header].present?
         end
 
         outbound_response.read_body { |chunk| response.stream.write chunk }
