@@ -55,7 +55,7 @@
 
       estimatedRunningTime() {
         const wordCount = this.episode.script.split(/\s+/).length
-        return Math.round(0.3462*wordCount + 80.8)
+        return Math.round(0.3472*wordCount + 69.6)
       }
     },
 
