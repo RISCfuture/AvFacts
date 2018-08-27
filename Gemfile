@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.5.1'
 
 # FRAMEWORK
-gem 'rails', '5.2.0'
+gem 'rails', '5.2.1'
 gem 'configoro'
 gem 'bootsnap'
 gem 'sidekiq'
