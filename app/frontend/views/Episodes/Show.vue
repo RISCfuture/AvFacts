@@ -41,7 +41,6 @@
 
 <script>
   import {mapActions, mapGetters} from 'vuex'
-  import _ from 'lodash'
 
   import Error404 from 'views/error/404'
   import Spinner from 'images/spinner.svg'
@@ -65,10 +64,20 @@
     methods: {
       ...mapActions(['loadEpisode']),
 
+      checkSlug() {
+        if (!this.episode) return
+        if (this.$route.params.slug !== this.episode.slug) {
+          this.$router.replace({name: 'episodes_show', params: {id: this.episode.number, slug: this.episode.slug}})
+        }
+      },
+
       play() { this.playOpen = true },
     },
 
-    mounted() { this.loadEpisode({number: this.$route.params.id}) }
+    mounted() {
+      this.loadEpisode({number: this.$route.params.id})
+          .then(() => this.checkSlug())
+    }
   }
 </script>
 

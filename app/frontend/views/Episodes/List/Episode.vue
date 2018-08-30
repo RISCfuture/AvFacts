@@ -9,7 +9,8 @@
 
       <p class="published-at">
         {{episode.published_at | date}}
-        <router-link :to="{name: 'episodes_show', params: {id: episode.number}}" v-if="audioProcessed">
+        <router-link :to="{name: 'episodes_show', params: {id: episode.number, slug: episode.slug}}"
+                     v-if="audioProcessed">
           <img :src="permalinkImage" />
         </router-link>
       </p>

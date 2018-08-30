@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     get 'episodes/:id' => 'home#index'
     get 'episodes/:id/edit' => 'home#index'
     get 'episodes/:id/script' => 'home#index'
+    get 'episodes/:id/:slug' => 'home#index'
     get 'about' => 'home#index'
   end
 end

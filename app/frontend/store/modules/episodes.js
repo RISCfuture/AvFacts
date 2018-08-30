@@ -1,5 +1,6 @@
 import Axios from 'axios'
 import _ from 'lodash'
+import slugify from 'slugify'
 
 export default {
   state: {
@@ -29,7 +30,7 @@ export default {
     },
 
     APPEND_EPISODES(state, {page}) {
-      page.forEach(e => e.partial = true)
+      page.forEach(e => e.slug = slugify(e.title))
       state.episodes = state.episodes.concat(page)
     },
 

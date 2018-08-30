@@ -13,9 +13,10 @@ export default [
     path: '/', component: Layout, children: [
       {path: '', component: EpisodesList, name: 'episodes_list'},
       {path: '/upload', component: EpisodesNew, name: 'episodes_new'},
-      {path: '/episodes/:id', component: EpisodesShow, name: 'episodes_show'},
+      {path: '/episodes/:id', component: EpisodesShow},
       {path: '/episodes/:id/edit', component: EpisodesEdit, name: 'episodes_edit'},
       {path: '/episodes/:id/script', component: EpisodesScript, name: 'episodes_script'},
+      {path: '/episodes/:id/:slug', component: EpisodesShow, name: 'episodes_show'},
       {path: '/about', component: About, name: 'about'},
     ]
   },

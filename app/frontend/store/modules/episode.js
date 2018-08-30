@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import slugify from 'slugify'
 
 export default {
   state: {
@@ -19,6 +20,7 @@ export default {
     },
 
     SET_EPISODE(state, {episode}) {
+      episode.slug = slugify(episode.title)
       state.episode = episode
       state.episodeLoading = false
     },
