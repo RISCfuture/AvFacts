@@ -12,44 +12,54 @@ RSpec.describe EpisodesController, type: :controller do
       @draft       = FactoryBot.create(:episode, audio: nil)
     end
 
-    it "should render the index template" do
-      get :index, params: {format: 'json'}
-      expect(response.status).to eql(200)
-      expect(response).to render_template('index')
+    context '[JSON]' do
+      render_views
+
+      it "should list episodes in order filtering unpublished episodes" do
+        get :index, params: {format: 'json'}
+        expect(response.status).to eql(200)
+        json = JSON.parse(response.body)
+        expect(json.map { |j| j['number'] }).
+            to eql(@episodes.map(&:number).sort.reverse)
+      end
+
+      it "should accept a 'before' parameter" do
+        get :index, params: {before: '3', format: 'json'}
+        json = JSON.parse(response.body)
+        expect(json.map { |j| j['number'] }).
+            to eql(@episodes.map(&:number).sort.reverse[-2..-1])
+      end
+
+      it "should not withhold blocked episodes for JSON requests from admins" do
+        login_as_admin
+        get :index, params: {format: 'json'}
+        json = JSON.parse(response.body)
+        expect(json.map { |j| j['number'] }).
+            to include(@blocked.number)
+      end
+
+      it "should not withhold unpublished episodes for JSON requests from admins" do
+        login_as_admin
+        get :index, params: {format: 'json'}
+        json = JSON.parse(response.body)
+        expect(json.map { |j| j['number'] }).
+            to include(@unpublished.number, @draft.number)
+      end
     end
 
-    it "should list episodes in order filtering unpublished episodes" do
-      get :index, params: {format: 'json'}
-      expect(assigns(:episodes).to_a).to eql(@episodes.sort_by(&:number).reverse)
-    end
+    context '[RSS]' do
+      render_views
 
-    it "should accept a 'before' parameter" do
-      get :index, params: {before: '3', format: 'json'}
-      expect(assigns(:episodes).to_a).to eql(@episodes.sort_by(&:number).reverse[-2..-1])
-    end
+      it "should render the RSS feed" do
+        get :index, params: {format: 'rss'}
+        expect(response.status).to eql(200)
+        expect(response).to render_template('index')
+      end
 
-    it "should render the RSS feed" do
-      get :index, params: {format: 'rss'}
-      expect(response.status).to eql(200)
-      expect(response).to render_template('index')
-    end
-
-    it "should not withhold blocked episodes for RSS" do
-      get :index, params: {format: 'rss'}
-      expect(assigns(:episodes)).to include(@blocked)
-    end
-
-    it "should not withhold blocked episodes for JSON requests from admins" do
-      login_as_admin
-      get :index, params: {format: 'json'}
-      expect(assigns(:episodes)).to include(@blocked)
-    end
-
-    it "should not withhold unpublished episodes for JSON requests from admins" do
-      login_as_admin
-      get :index, params: {format: 'json'}
-      expect(assigns(:episodes)).to include(@unpublished)
-      expect(assigns(:episodes)).to include(@draft)
+      it "should not withhold blocked episodes for RSS" do
+        get :index, params: {format: 'rss'}
+        expect(assigns(:episodes)).to include(@blocked)
+      end
     end
   end
 
