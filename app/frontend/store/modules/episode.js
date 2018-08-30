@@ -1,4 +1,4 @@
-import axios from 'axios'
+import Axios from 'axios'
 
 export default {
   state: {
@@ -39,7 +39,7 @@ export default {
         commit('START_EPISODE')
 
         try {
-          let {data: episode} = await axios.get(`/episodes/${number}.json`)
+          let {data: episode} = await Axios.get(`/episodes/${number}.json`)
           commit('SET_EPISODE', {episode})
           resolve(true)
         } catch (error) {

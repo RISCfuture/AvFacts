@@ -1,4 +1,4 @@
-import axios from 'axios'
+import Axios from 'axios'
 import _ from 'lodash'
 
 export default {
@@ -63,7 +63,7 @@ export default {
         if (_.isEmpty(state.episodes)) commit('START_EPISODES')
 
         try {
-          let {data: page, headers} = await axios.get(state.nextURL)
+          let {data: page, headers} = await Axios.get(state.nextURL)
           commit('APPEND_EPISODES', {page})
           commit('SET_NEXT_PAGE_URL', {url: headers['x-next-page']})
           commit('FINISH_EPISODES')

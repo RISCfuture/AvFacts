@@ -1,4 +1,4 @@
-import axios from 'axios'
+import Axios from 'axios'
 
 export default {
   state: {
@@ -45,7 +45,7 @@ export default {
 
       return new Promise(async (resolve, reject) => {
         try {
-          let {data} = await axios.get('/session.json')
+          let {data} = await Axios.get('/session.json')
           if (data.username && data.token)
             commit('AUTHENTICATE_SESSION', data)
           else
@@ -66,7 +66,7 @@ export default {
       return new Promise(async (resolve, reject) => {
         commit('START_AUTHENTICATION')
         try {
-          let {data, status} = await axios.post('/session.json', fields)
+          let {data, status} = await Axios.post('/session.json', fields)
           if (status === 200) {
             commit('AUTHENTICATE_SESSION', data)
             resolve(true)
@@ -84,7 +84,7 @@ export default {
     logout({commit}) {
       return new Promise(async (resolve, reject) => {
         try {
-          await axios.delete('/session.json')
+          await Axios.delete('/session.json')
           commit('CLEAR_SESSION')
           resolve()
         } catch (error) {

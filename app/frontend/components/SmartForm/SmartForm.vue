@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import Axios from 'axios'
 
   import SmartFormBus from './SmartFormBus'
 
@@ -43,7 +43,7 @@
       async save() {
         SmartFormBus.$emit('submit')
         try {
-          let response = await axios.request({method: this.method, url: this.url, data: this.formData})
+          let response = await Axios.request({method: this.method, url: this.url, data: this.formData})
           SmartFormBus.$emit('complete')
           SmartFormBus.$emit('success', response)
         } catch (error) {
