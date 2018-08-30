@@ -1,5 +1,5 @@
 json.call @episode, :id, :number, :title, :subtitle, :summary, :author,
-          :description, :published_at, :explicit, :blocked
+          :description, :published_at, :explicit, :blocked, :credits
 
 json.script(@episode.script) if admin?
 

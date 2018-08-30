@@ -204,7 +204,8 @@ class EpisodesController < ApplicationController
 
   def episode_params
     params.require(:episode).permit(:number, :title, :author, :description,
-                                    :script, :published_at, :explicit, :audio,
-                                    :image, :summary, :subtitle, :blocked)
+                                    :credits, :script, :published_at, :explicit,
+                                    :audio, :image, :summary, :subtitle,
+                                    :blocked)
   end
 end

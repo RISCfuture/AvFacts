@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_03_21_031708) do
+ActiveRecord::Schema.define(version: 2018_08_30_221109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2018_03_21_031708) do
     t.datetime "updated_at", null: false
     t.bigint "mp3_size"
     t.bigint "aac_size"
+    t.text "credits"
     t.index ["fulltext_search"], name: "episodes_fulltext_search", using: :gin
     t.index ["number"], name: "episodes_number_unique", unique: true
     t.index ["published_at", "number"], name: "episodes_index_action"

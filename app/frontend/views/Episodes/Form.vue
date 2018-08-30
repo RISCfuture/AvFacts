@@ -65,7 +65,10 @@
     <smart-field type="text" field="summary" :maxlength="255" />
 
     <label for="episode_description" class="below-textarea">Description</label>
-    <smart-field type="textarea" field="description" :required="true" />
+    <smart-field type="textarea" field="description" :required="true" :maxlength="4000" />
+
+    <label for="episode_credits" class="below-textarea">Credits</label>
+    <smart-field type="textarea" field="credits" :maxlength="1000" />
 
     <label for="episode_script" class="below-textarea">Script</label>
     <smart-field type="markdown" field="script" />
@@ -127,7 +130,7 @@
       refreshScratch() {
         this.scratchEpisode = _.pick(this.episode,
             ['title', 'subtitle', 'author', 'published_at', 'explicit',
-             'blocked', 'summary', 'description', 'script'])
+             'blocked', 'summary', 'description', 'script', 'credits'])
       }
     },
 

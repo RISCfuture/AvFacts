@@ -94,6 +94,10 @@ RSpec.describe EpisodesController, type: :controller do
         @draft       = FactoryBot.create(:episode, audio: nil)
 
         [*@episodes, @unpublished, @blocked].each(&:preprocess!)
+
+        @included_episodes = [*@episodes, @blocked]
+
+        @included_episodes.max_by(&:number).update_attribute :credits, "Some\ncredits"
       end
 
       render_views
@@ -101,12 +105,16 @@ RSpec.describe EpisodesController, type: :controller do
       it "should render the RSS feed" do
         get :index, params: {format: 'rss'}
         expect(response.status).to eql(200)
-        expect(response).to render_template('index')
-      end
+        xml = Nokogiri::XML(response.body)
 
-      it "should not withhold blocked episodes for RSS" do
-        get :index, params: {format: 'rss'}
-        expect(assigns(:episodes)).to include(@blocked)
+        items = xml.xpath('//rss/channel/item')
+        expect(items.map { |i| i.xpath('title').first.content }).
+            to eql(@included_episodes.sort_by(&:number).reverse.map { |e| "##{e.number}: #{e.title}"})
+        expect(items.first.xpath('description').first.content).to end_with(<<~EOS.chomp)
+
+          Some
+          credits
+        EOS
       end
     end
   end

@@ -29,19 +29,20 @@ require 'transcode'
 # Properties
 # ----------
 #
-# |                |                                                                                                                    |
-# |:---------------|:-------------------------------------------------------------------------------------------------------------------|
-# | `number`       | The episode number, sequentially incrementing from 1.                                                              |
-# | `title`        | The name of the episode.                                                                                           |
-# | `subtitle`     | A short subtitle to appear below the title in iTunes.                                                              |
-# | `summary`      | A one or two sentence summary of the episode.                                                                      |
-# | `description`  | A longer paragraphical description of the episode.                                                                 |
-# | `author`       | The episode author. (Defaults to the channel author in `config/channel.yml`).                                      |
-# | `script`       | The original episode script, in Markdown format. Not published to the website or feed but used in fulltext search. |
-# | `published_at` | The date after which the episode will appear on the website and feed.                                              |
-# | `explicit`     | If `true`, the episode is marked in iTunes as having explicit content.                                             |
-# | `blocked`      | If `true`, the episode is removed from iTunes.                                                                     |
-# | `processed`    | If `true`, all required assets have been included and the episode is ready for publication.                        |
+# |                |                                                                                                                     |
+# |:---------------|:--------------------------------------------------------------------------------------------------------------------|
+# | `number`       | The episode number, sequentially incrementing from 1.                                                               |
+# | `title`        | The name of the episode.                                                                                            |
+# | `subtitle`     | A short subtitle to appear below the title in iTunes.                                                               |
+# | `summary`      | A one or two sentence summary of the episode.                                                                       |
+# | `description`  | A longer paragraphical description of the episode.                                                                  |
+# | `credits`      | A freeform textual field where voice and production credits are listed, if other people contributed to the episode. |
+# | `author`       | The episode author. (Defaults to the channel author in `config/channel.yml`).                                       |
+# | `script`       | The original episode script, in Markdown format. Not published to the website or feed but used in fulltext search.  |
+# | `published_at` | The date after which the episode will appear on the website and feed.                                               |
+# | `explicit`     | If `true`, the episode is marked in iTunes as having explicit content.                                              |
+# | `blocked`      | If `true`, the episode is removed from iTunes.                                                                      |
+# | `processed`    | If `true`, all required assets have been included and the episode is ready for publication.                         |
 
 class Episode < ApplicationRecord
 
@@ -65,6 +66,9 @@ class Episode < ApplicationRecord
   validates :description,
             presence: true,
             length:   {maximum: 4000}
+  validates :credits,
+            length: {maximum: 1000},
+            allow_nil: true
   validates :published_at,
             presence:   {strict: true},
             timeliness: {type: :datetime}
@@ -79,7 +83,7 @@ class Episode < ApplicationRecord
   scope :published, -> { where 'episodes.published_at <= ? AND episodes.processed IS TRUE', Time.current }
 
   extend SetNilIfBlank
-  set_nil_if_blank :subtitle, :summary, :author
+  set_nil_if_blank :subtitle, :summary, :author, :credits
 
   # @return [true, false] Whether or not the episode should be public on the
   #   website and RSS feed.

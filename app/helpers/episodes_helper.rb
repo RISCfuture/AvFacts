@@ -27,6 +27,17 @@ module EpisodesHelper
     "##{number_with_delimiter episode.number}: #{episode.title}"
   end
 
+  # @param [Episode] episode The episode.
+  # @return [String] The description with the credits appended.
+
+  def full_description(episode)
+    result = episode.description.dup
+    if episode.credits?
+      result << "\n\n" << episode.credits
+    end
+    return result
+  end
+
   # Given a duration in seconds, returns a colon-separated formatted duration.
   # For example, 350 seconds becomes "0:05:50".
   #

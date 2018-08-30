@@ -26,6 +26,8 @@
            class="play-button">Play</a>
         <span class="duration">{{episode.audio.duration | duration}}</span>
       </div>
+
+      <p id="credits" v-if="episode.credits">{{episode.credits}}</p>
     </div>
 
     <div v-else>
@@ -131,6 +133,12 @@
 
   a.play-button {
     @include button($avfacts-blue);
+  }
+
+  #credits {
+    margin-top: 20px;
+    white-space: pre-wrap;
+    font-size: 12px;
   }
 
   @include responsive-small {
