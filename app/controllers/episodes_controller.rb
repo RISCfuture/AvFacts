@@ -160,8 +160,7 @@ class EpisodesController < ApplicationController
   # Path Parameters
   # ---------------
   #
-  # |      |
-  #   |
+  # |      |                                       |
   # |:-----|:--------------------------------------|
   # | `id` | The Episode number (not database ID). |
   #
