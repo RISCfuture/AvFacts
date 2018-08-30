@@ -74,7 +74,7 @@ export default {
           commit('APPEND_EPISODES', {page})
 
           if (headers['x-next-page'])
-            loadNextPage(headers['x-next-page'], resolve, reject)
+            await loadNextPage(headers['x-next-page'], resolve, reject)
           else
             commit('FINISH_EPISODES')
           resolve(true)
@@ -87,7 +87,7 @@ export default {
       return new Promise((resolve, reject) => {
         commit('RESET_EPISODES')
         commit('START_EPISODES')
-        loadNextPage(`/episodes.json?filter=${state.episodesFilter || ''}`,
+        return loadNextPage(`/episodes.json?filter=${state.episodesFilter || ''}`,
             resolve, reject)
       })
     },
