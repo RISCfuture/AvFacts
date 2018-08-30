@@ -103,11 +103,11 @@ class EpisodesController < ApplicationController
   # | `id` | The Episode number (not database ID). |
 
   def show
-    respond_with @episode do |format|
-      format.json do
-        return unauthorized_response unless admin?
-      end
+    if !@episode.processed? && !admin?
+      raise ActiveRecord::RecordNotFound
+    end
 
+    respond_with @episode do |format|
       format.mp3 do
         return head(:not_found) unless @episode.processed?
         #redirect_to @episode.mp3.public_cdn_url

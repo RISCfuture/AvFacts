@@ -37,6 +37,10 @@
       sharing aviation knowledge on Quora, and this podcast is another medium
       in which to do so.
     </p>
+
+    <p class="small">Parts of this website are created by Role Play and Noun
+      Project, and released under the Creative Commons Attribution 3.0
+      International (CC BY 3.0) license.</p>
   </div>
 </template>
 
@@ -63,6 +67,11 @@
     display: block;
     width: 300px;
     margin: 40px auto;
+  }
+
+  p.small {
+    font-size: 12px;
+    margin-top: 40px;
   }
 
   @include responsive-desktop {

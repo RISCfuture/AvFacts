@@ -6,7 +6,13 @@
     </div>
     <div class="player">
       <h1>#{{episode.number | integer}}: {{episode.title}}</h1>
-      <p class="published-at">{{episode.published_at | date}}</p>
+
+      <p class="published-at">
+        {{episode.published_at | date}}
+        <router-link :to="{name: 'episodes_show', params: {id: episode.number}}" v-if="audioProcessed">
+          <img :src="permalinkImage" />
+        </router-link>
+      </p>
       <p>{{episode.description}}</p>
 
       <div v-if="!playOpen" class="actions">
@@ -37,6 +43,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import PermalinkImage from 'images/permalink.svg'
 
   export default {
     props: ['episode'],
@@ -50,7 +57,8 @@
     computed: {
       ...mapGetters(['isAuthenticated']),
 
-      audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac }
+      audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac },
+      permalinkImage() { return PermalinkImage }
     },
 
     methods: {
@@ -116,6 +124,12 @@
     font-family: "Libre Franklin", sans-serif;
     margin-top: 5px;
     color: $dark-gray;
+
+    img {
+      width: 10px;
+      height: 10px;
+      margin-left: 3px;
+    }
   }
 
   span.duration {

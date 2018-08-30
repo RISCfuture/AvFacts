@@ -68,6 +68,12 @@
 
     h1 {
       flex: 0 0 auto;
+
+      a {
+        font-size: 14px;
+        font-weight: normal;
+        letter-spacing: -1px;
+      }
     }
 
     .spacer {

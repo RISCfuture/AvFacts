@@ -4,17 +4,13 @@ import _ from 'lodash'
 export default {
   state: {
     episodes: [],
-    episode: null,
     episodesLoading: false,
-    episodeLoading: false,
-    episodesLoaded: false,
     episodesError: false,
     episodesFilter: null
   },
 
   getters: {
     episodes: state => state.episodesLoaded ? state.episodes : [],
-    episode: state => state.episode,
     episodesError: state => state.episodesError,
     episodesLoading: state => state.episodesLoading || state.episodeLoading,
     episodesLoaded: state => state.episodesLoaded,
@@ -30,10 +26,6 @@ export default {
 
     START_EPISODES(state) {
       state.episodesLoading = true
-    },
-
-    START_EPISODE(state) {
-      state.episodeLoading = true
     },
 
     APPEND_EPISODES(state, {page}) {
@@ -55,11 +47,6 @@ export default {
 
     SET_FILTER(state, {filter}) {
       state.episodesFilter = filter
-    },
-
-    SET_EPISODE(state, {episode}) {
-      state.episode = episode
-      state.episodeLoading = false
     }
   },
 
@@ -91,23 +78,6 @@ export default {
             resolve, reject)
       })
     },
-
-    loadEpisode({commit, state}, number, {force} = {}) {
-      if (state.episodeLoading) return Promise.resolve(false)
-      const episode = _.find(state.episodes, e => e.number === number)
-      if (episode && !episode.partial && !force) return Promise.resolve(false)
-
-      return new Promise(async (resolve, reject) => {
-        commit('START_EPISODE')
-        try {
-          let {data: episodeDetail} = await axios.get(
-              `/episodes/${number}.json`)
-          commit('SET_EPISODE', {episode: episodeDetail})
-          resolve(episodeDetail)
-        } catch (error) {
-          commit('SET_EPISODES_ERROR', {error})
-          reject(error)
-        }
       })
     },
 

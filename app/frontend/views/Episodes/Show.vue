@@ -1,30 +1,37 @@
 <template>
-  <div v-if="episodesLoading">
+  <div v-if="episodeLoading">
     <img :src="spinnerURL" class="spinner" />
   </div>
 
   <div v-else-if="episode">
-    <h1>#{{episode.number | integer}}: {{episode.title}}</h1>
-    <p class="published-at">{{episode.published_at | date}}</p>
+    <div v-if="audioProcessed">
+      <h1>#{{episode.number | integer}}: {{episode.title}}</h1>
+      <p class="published-at">{{episode.published_at | date}}</p>
 
-    <div class="summary">
-      <img class="image" :src="episode.image.preview_url" />
-      <p>{{episode.description}}</p>
+      <div class="summary">
+        <img class="image" :src="episode.image.preview_url" />
+        <p>{{episode.description}}</p>
+      </div>
+
+      <audio controls v-if="playOpen" autoplay>
+        <source :src="episode.audio.aac.url"
+                :type="episode.audio.aac.content_type" />
+        <source :src="episode.audio.mp3.url"
+                :type="episode.audio.mp3.content_type" />
+      </audio>
+
+      <div v-else class="actions">
+        <a href="#"
+           @click.prevent="play"
+           class="play-button">Play</a>
+        <span class="duration">{{episode.audio.duration | duration}}</span>
+      </div>
     </div>
 
-    <div v-if="audioProcessed && !playOpen" class="actions">
-      <a href="#"
-         @click.prevent="play"
-         class="play-button">Play</a>
-      <span class="duration">{{episode.audio.duration | duration}}</span>
+    <div v-else>
+      <h1>Not Yet Released</h1>
+      <p class="error">This episode hasn’t been released yet.</p>
     </div>
-
-    <audio controls v-if="audioProcessed && playOpen" autoplay>
-      <source :src="episode.audio.aac.url"
-              :type="episode.audio.aac.content_type" />
-      <source :src="episode.audio.mp3.url"
-              :type="episode.audio.mp3.content_type" />
-    </audio>
   </div>
 
   <div v-else>
@@ -50,23 +57,18 @@
     components: {Error404},
 
     computed: {
-      ...mapGetters(['episodes', 'episodesLoading']),
-
-      episode() {
-        if (this.episodesLoading) return null
-        return _.find(this.episodes, e => e.number.toString() === this.$route.params.id)
-      },
+      ...mapGetters(['episode', 'episodeLoading']),
 
       audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac }
     },
 
     methods: {
-      ...mapActions(['loadEpisodes']),
+      ...mapActions(['loadEpisode']),
 
       play() { this.playOpen = true },
     },
 
-    mounted() { this.loadEpisodes() }
+    mounted() { this.loadEpisode({number: this.$route.params.id}) }
   }
 </script>
 

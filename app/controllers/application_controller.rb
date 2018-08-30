@@ -4,6 +4,7 @@
 
 class ApplicationController < ActionController::Base
   before_action :set_storage_host
+  helper_method :admin?
 
   protected
 

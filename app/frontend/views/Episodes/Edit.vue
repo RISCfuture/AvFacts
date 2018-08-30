@@ -3,7 +3,7 @@
     <error-404 />
   </div>
 
-  <div v-else-if="episodesLoading">
+  <div v-else-if="episodeLoading">
     <img :src="spinnerURL" class="spinner" />
   </div>
 
@@ -34,14 +34,14 @@
 
     components: {Error404, EpisodeForm},
 
-    computed: mapGetters(['episode', 'isAuthenticated', 'episodesLoading']),
+    computed: mapGetters(['episode', 'isAuthenticated', 'episodeLoading']),
 
     methods: {
       ...mapActions(['loadEpisode', 'loadSession']),
 
       async refresh() {
         await this.loadSession({skipIfAlreadyLoaded: true})
-        this.loadEpisode(this.$route.params.id, {restart: true})
+        this.loadEpisode({number: this.$route.params.id})
       }
     },
 

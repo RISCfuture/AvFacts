@@ -3,7 +3,7 @@
     <error-404 />
   </div>
 
-  <div v-else-if="episodesLoading">
+  <div v-else-if="episodeLoading">
     <img :src="spinnerURL" class="spinner" />
   </div>
 
@@ -49,7 +49,7 @@
     },
 
     computed: {
-      ...mapGetters(['episode', 'isAuthenticated', 'episodesLoading']),
+      ...mapGetters(['episode', 'isAuthenticated', 'episodeLoading']),
 
       renderedScript() { return marked(this.episode.script) },
 
@@ -64,7 +64,7 @@
 
       async refresh() {
         await this.loadSession({skipIfAlreadyLoaded: true})
-        this.loadEpisode(this.$route.params.id, {restart: true})
+        this.loadEpisode({number: this.$route.params.id})
       }
     },
 
@@ -76,6 +76,12 @@
 
 <style scoped lang="scss">
   @import "../../styles/vars";
+
+  h1 a {
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: -1px;
+  }
 
   @include responsive-desktop {
     .container {

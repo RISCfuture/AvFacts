@@ -1,5 +1,7 @@
 json.call @episode, :id, :number, :title, :subtitle, :summary, :author,
-          :description, :published_at, :script, :explicit, :blocked
+          :description, :published_at, :explicit, :blocked
+
+json.script(@episode.script) if admin?
 
 json.image do
   json.preview_url url_for(@episode.thumbnail_image)
