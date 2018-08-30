@@ -5,23 +5,23 @@ export default {
   state: {
     episodes: [],
     episodesLoading: false,
-    episodesError: false,
-    episodesFilter: null
+    episodesError: null,
+    episodesFilter: null,
+    nextURL: `/episodes.json`
   },
 
   getters: {
-    episodes: state => state.episodesLoaded ? state.episodes : [],
+    episodes: state => state.episodesLoading ? [] : state.episodes,
     episodesError: state => state.episodesError,
-    episodesLoading: state => state.episodesLoading || state.episodeLoading,
-    episodesLoaded: state => state.episodesLoaded,
+    episodesLoading: state => state.episodesLoading || state.episodeLoading
   },
 
   mutations: {
     RESET_EPISODES(state) {
       state.episodes = []
       state.episodesLoading = false
-      state.episodesLoaded = false
       state.episodesError = null
+      state.nextURL = `/episodes.json?filter=${state.episodesFilter || ''}`
     },
 
     START_EPISODES(state) {
@@ -34,50 +34,44 @@ export default {
     },
 
     FINISH_EPISODES(state) {
-      state.episodesLoaded = true
       state.episodesLoading = false
     },
 
     SET_EPISODES_ERROR(state, {error}) {
       state.episodes = []
-      state.episodesLoaded = true
       state.episodesLoading = false
       state.episodesError = error
+      state.nextURL = `/episodes.json?filter=${state.episodesFilter || ''}`
     },
 
     SET_FILTER(state, {filter}) {
       state.episodesFilter = filter
+      state.nextURL = `/episodes.json?filter=${state.episodesFilter || ''}`
+    },
+
+    SET_NEXT_PAGE_URL(state, {url}) {
+      state.nextURL = url
     }
   },
 
   actions: {
     loadEpisodes({commit, state}, {restart} = {}) {
-      if (state.episodesLoading) return Promise.resolve(false)
-      if (!restart && state.episodesLoaded) return Promise.resolve(false)
+      return new Promise(async (resolve, reject) => {
+        if (restart) commit('RESET_EPISODES')
+        if (!state.nextURL) return resolve(false)
 
-      const loadNextPage = async function(url, resolve, reject) {
+        if (_.isEmpty(state.episodes)) commit('START_EPISODES')
+
         try {
-          let {data: page, headers} = await axios.get(url)
+          let {data: page, headers} = await axios.get(state.nextURL)
           commit('APPEND_EPISODES', {page})
-
-          if (headers['x-next-page'])
-            await loadNextPage(headers['x-next-page'], resolve, reject)
-          else
-            commit('FINISH_EPISODES')
+          commit('SET_NEXT_PAGE_URL', {url: headers['x-next-page']})
+          commit('FINISH_EPISODES')
           resolve(true)
         } catch (error) {
           commit('SET_EPISODES_ERROR', {error})
           reject(error)
         }
-      }
-
-      return new Promise((resolve, reject) => {
-        commit('RESET_EPISODES')
-        commit('START_EPISODES')
-        return loadNextPage(`/episodes.json?filter=${state.episodesFilter || ''}`,
-            resolve, reject)
-      })
-    },
       })
     },
 

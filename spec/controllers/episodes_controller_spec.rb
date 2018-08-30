@@ -2,52 +2,100 @@ require 'rails_helper'
 
 RSpec.describe EpisodesController, type: :controller do
   describe '#index' do
-    before :each do
-      @episodes = 5.times.map { |i| FactoryBot.create :episode, number: i + 100, processed: true }
-      @episodes.shuffle.each_with_index { |e, i| e.update_attribute :number, i + 1 }
-
-      # red herrings
-      @unpublished = FactoryBot.create(:episode, processed: true, published_at: 1.day.from_now)
-      @blocked     = FactoryBot.create(:episode, processed: true, blocked: true)
-      @draft       = FactoryBot.create(:episode, audio: nil)
-    end
-
     context '[JSON]' do
       render_views
 
-      it "should list episodes in order filtering unpublished episodes" do
-        get :index, params: {format: 'json'}
-        expect(response.status).to eql(200)
-        json = JSON.parse(response.body)
-        expect(json.map { |j| j['number'] }).
-            to eql(@episodes.map(&:number).sort.reverse)
+      context '[filtering]' do
+        before :each do
+          @episodes = 5.times.map { |i| FactoryBot.create :episode, number: i + 100, processed: true }
+          @episodes.shuffle.each_with_index { |e, i| e.update_attribute :number, i + 1 }
+
+          # red herrings
+          @unpublished = FactoryBot.create(:episode, processed: true, published_at: 1.day.from_now)
+          @blocked     = FactoryBot.create(:episode, processed: true, blocked: true)
+          @draft       = FactoryBot.create(:episode, audio: nil)
+        end
+
+        it "should list episodes in order filtering unpublished episodes" do
+          get :index, params: {format: 'json'}
+          expect(response.status).to eql(200)
+          json = JSON.parse(response.body)
+          expect(json.map { |j| j['number'] }).
+              to eql(@episodes.map(&:number).sort.reverse)
+        end
+
+        it "should not withhold blocked episodes for JSON requests from admins" do
+          login_as_admin
+          get :index, params: {format: 'json'}
+          json = JSON.parse(response.body)
+          expect(json.map { |j| j['number'] }).
+              to include(@blocked.number)
+        end
+
+        it "should not withhold unpublished episodes for JSON requests from admins" do
+          login_as_admin
+          get :index, params: {format: 'json'}
+          json = JSON.parse(response.body)
+          expect(json.map { |j| j['number'] }).
+              to include(@unpublished.number, @draft.number)
+        end
       end
 
-      it "should accept a 'before' parameter" do
-        get :index, params: {before: '3', format: 'json'}
-        json = JSON.parse(response.body)
-        expect(json.map { |j| j['number'] }).
-            to eql(@episodes.map(&:number).sort.reverse[-2..-1])
+      context '[pagination]' do
+        before :each do
+          @episodes = 15.times.map { |i| FactoryBot.create :episode, number: i + 100, processed: true }
+          @episodes.shuffle.each_with_index { |e, i| e.update_attribute :number, i + 1 }
+        end
+
+        it "should paginate" do
+          get :index, params: {format: 'json'}
+          expect(response.headers['X-Next-Page']).to eql('http://test.host/episodes.json?before=6')
+          json = JSON.parse(response.body)
+          expect(json.map { |j| j['number'] }).
+              to eql(@episodes.map(&:number).sort.reverse[0, 10])
+
+          get :index, params: {format: 'json', before: '6'}
+          expect(response.headers['X-Next-Page']).to be_nil
+          json = JSON.parse(response.body)
+          expect(json.map { |j| j['number'] }).
+              to eql(@episodes.map(&:number).sort.reverse[10, 10])
+        end
+
+        it "should accept a 'before' parameter" do
+          get :index, params: {before: '3', format: 'json'}
+          json = JSON.parse(response.body)
+          expect(json.map { |j| j['number'] }).
+              to eql(@episodes.map(&:number).sort.reverse[-2..-1])
+        end
       end
 
-      it "should not withhold blocked episodes for JSON requests from admins" do
-        login_as_admin
-        get :index, params: {format: 'json'}
-        json = JSON.parse(response.body)
-        expect(json.map { |j| j['number'] }).
-            to include(@blocked.number)
-      end
+      context '[searching]' do
+        before :each do
+          @included = FactoryBot.create_list(:episode, 3, script: "SearchTerm #{FFaker::HipsterIpsum.sentence}", processed: true)
+          @no_match = FactoryBot.create(:episode, script: FFaker::HipsterIpsum.sentence, processed: true)
+        end
 
-      it "should not withhold unpublished episodes for JSON requests from admins" do
-        login_as_admin
-        get :index, params: {format: 'json'}
-        json = JSON.parse(response.body)
-        expect(json.map { |j| j['number'] }).
-            to include(@unpublished.number, @draft.number)
+        it "should accept a search query" do
+          get :index, params: {filter: 'SearchTerm', format: 'json'}
+          json = JSON.parse(response.body).map { |j| j['number'] }
+          expect(json).to match_array(@included.map(&:number))
+        end
       end
     end
 
     context '[RSS]' do
+      before :each do
+        @episodes = 3.times.map { |i| FactoryBot.create :episode, number: i + 100 }
+        @episodes.shuffle.each_with_index { |e, i| e.update_attribute :number, i + 1 }
+
+        # red herrings
+        @unpublished = FactoryBot.create(:episode, processed: true, published_at: 1.day.from_now)
+        @blocked     = FactoryBot.create(:episode, processed: true, blocked: true)
+        @draft       = FactoryBot.create(:episode, audio: nil)
+
+        [*@episodes, @unpublished, @blocked].each(&:preprocess!)
+      end
+
       render_views
 
       it "should render the RSS feed" do

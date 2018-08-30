@@ -61,10 +61,6 @@ class EpisodesController < ApplicationController
           where('fulltext_search @@ query')
     end
 
-    @last_page = @episodes.empty? || @episodes.pluck(:number).include?(Episode.minimum(:number))
-    unless @last_page
-      response.headers['X-Next-Page'] = episodes_url(before: @episodes.minimum(:number), filter: params[:filter].presence, format: params[:format])
-    end
 
     if params[:filter].present?
       @episodes = @episodes.order('search_rank DESC')
@@ -72,7 +68,20 @@ class EpisodesController < ApplicationController
       @episodes = @episodes.order(number: :desc)
     end
 
-    @episodes = @episodes.with_attached_audio.with_attached_image.limit(50)
+    @episodes = @episodes.with_attached_audio.with_attached_image
+    @episodes = case request.format
+                  when 'json'
+                    @episodes.limit(10)
+                  else
+                    @episodes.limit(50)
+                end
+
+    if params[:filter].blank?
+      @last_page = @episodes.empty? || @episodes.pluck(:number).include?(Episode.minimum(:number))
+      unless @last_page
+        response.headers['X-Next-Page'] = episodes_url(before: @episodes.last.number, filter: params[:filter].presence, format: params[:format])
+      end
+    end
 
     respond_with :episodes do |format|
       format.rss do

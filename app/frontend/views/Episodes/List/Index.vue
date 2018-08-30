@@ -9,13 +9,13 @@
       <input type="search" placeholder="Find an episode" v-model.trim="filter" @keyup="updateFilter" />
     </div>
 
-    <template v-if="episodesLoaded">
+    <div v-infinite-scroll="loadEpisodes" infinite-scroll-disabled="episodesLoading">
       <episode v-for="episode in episodes"
                :key="episode.number"
                :episode="episode" />
 
       <p class="no-episodes" v-if="episodes.length === 0">No episodes yet.</p>
-    </template>
+    </div>
 
     <img :src="spinnerURL" v-if="episodesLoading" class="spinner" />
 
@@ -41,7 +41,7 @@
 
     components: {Episode},
 
-    computed: mapGetters(['episodes', 'episodesLoading', 'episodesLoaded', 'episodesError', 'isAuthenticated']),
+    computed: mapGetters(['episodes', 'episodesLoading', 'episodesError', 'isAuthenticated']),
 
     methods: {
         ...mapActions(['loadEpisodes', 'setFilter']),
