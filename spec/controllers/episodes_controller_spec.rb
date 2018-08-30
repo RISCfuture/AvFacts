@@ -120,29 +120,32 @@ RSpec.describe EpisodesController, type: :controller do
   end
 
   describe '#show' do
-    before :each do
-      @episode = FactoryBot.create(:episode)
-      @episode.preprocess!
+    let(:processed_episode) do
+      episode = FactoryBot.create(:episode, script: "Hello, world!")
+      episode.preprocess!
+      episode
     end
+    let(:unprocessed_episode) { FactoryBot.create(:episode) }
+    let(:draft_episode) { FactoryBot.create :episode, audio: nil, image: nil }
 
     context '[JSON]' do
-      it "should 401 when unauthenticated" do
-        get :show, params: {id: @episode.to_param, format: 'json'}
-        expect(response.status).to eql(401)
+      render_views
+
+      it "should render the show template" do
+        get :show, params: {id: processed_episode.to_param, format: 'json'}
+        expect(response.status).to eql(200)
+        json = JSON.parse(response.body)
+        expect(json['number']).to eql(processed_episode.number)
+        expect(json).not_to include('script')
       end
 
       context '[logged in]' do
         before(:each) { login_as_admin }
 
-        it "should render the show template" do
-          get :show, params: {id: @episode.to_param, format: 'json'}
-          expect(response.status).to eql(200)
-          expect(response).to render_template('show')
-        end
-
-        it "should show an episode" do
-          get :show, params: {id: @episode.to_param, format: 'json'}
-          expect(assigns(:episode)).to eql(@episode)
+        it "should include the script" do
+          get :show, params: {id: processed_episode.to_param, format: 'json'}
+          json = JSON.parse(response.body)
+          expect(json['script']).to eql("Hello, world!")
         end
       end
     end
@@ -155,22 +158,19 @@ RSpec.describe EpisodesController, type: :controller do
         end
 
         it "should stream" do
-          get :show, params: {id: @episode.to_param, format: format}
+          get :show, params: {id: processed_episode.to_param, format: format}
           expect(response.status).to eql(200)
           expect(response.body).to eql("this is not a very well-formatted audio file")
         end
 
         it "should 404 if the audio hasn't been added yet" do
-          episode = FactoryBot.create(:episode, audio: nil)
-          get :show, params: {id: episode.to_param, format: format}
+          get :show, params: {id: draft_episode.to_param, format: format}
           expect(response.status).to eql(404)
           expect(response.body).to be_empty
         end
 
         it "should 404 if the audio hasn't been processed yet" do
-          episode = FactoryBot.create(:episode)
-          allow(episode.aac).to receive(:processed?).and_return(false)
-          get :show, params: {id: episode.to_param, format: format}
+          get :show, params: {id: unprocessed_episode.to_param, format: format}
           expect(response.status).to eql(404)
           expect(response.body).to be_empty
         end
