@@ -11,7 +11,7 @@
         {{episode.published_at | date}}
         <router-link :to="{name: 'episodes_show', params: {id: episode.number, slug: episode.slug}}"
                      v-if="audioProcessed">
-          <Permalink class="permalink-image" :size="10" />
+          <permalink class="permalink-image" :size="10" />
         </router-link>
       </p>
 
