@@ -10,11 +10,18 @@
   <div v-else-if="episode" class="container">
     <h1>
       #{{episode.number | integer}}: {{episode.title}}
-      <router-link :to="{name: 'episodes_edit', params: {id: episode.number}}">Back to Edit</router-link>
+      <router-link :to="{name: 'episodes_edit', params: {id: episode.number}}">
+        Back to Edit
+      </router-link>
     </h1>
-    <p id="running-time">Estimated running time: {{estimatedRunningTime | duration}}</p>
 
-    <div class="script" v-html="renderedScript" />
+    <template v-if="episode.script">
+      <p id="running-time">Estimated running time: {{estimatedRunningTime | duration}}</p>
+      <div class="script" v-html="renderedScript" />
+    </template>
+    <div class="script" v-else>
+      <p><em>This episode does not have a script.</em></p>
+    </div>
   </div>
 
   <div v-else>
