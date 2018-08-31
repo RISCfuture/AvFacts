@@ -28,8 +28,17 @@
   @import "../../styles/vars";
 
   footer {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+
+    padding: 5px 20px;
+    width: 100%;
+    box-sizing: border-box;
+
+    background-color: white;
+
     display: flex;
     flex-flow: row nowrap;
     align-items: flex-start;
@@ -49,8 +58,6 @@
 
   @include responsive-mobile {
     footer {
-      padding-top: 20px;
-      padding-bottom: 20px;
       flex-flow: column nowrap;
     }
   }
