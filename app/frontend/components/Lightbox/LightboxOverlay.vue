@@ -19,12 +19,17 @@
 </script>
 
 <style scoped lang="scss">
+  @import "../../styles/vars";
+
   .overlay {
     position: fixed;
     left: 0;
     top: 0;
+    z-index: $lightbox-layer - 1;
+
     width: 100vw;
     height: 100vh;
+
     background-color: rgba(0, 0, 0, 0.5);
   }
 </style>

@@ -51,11 +51,14 @@
     position: fixed;
     left: 50%;
     top: 50%;
+    z-index: $lightbox-layer;
+
     display: table;
     border-radius: 10px;
     box-shadow: 1px 1px 15px 0 rgba(0, 0, 0, 0.5);
+    background-color: $background-color;
+
     padding: 20px;
     box-sizing: border-box;
-    background-color: $background-color;
   }
 </style>

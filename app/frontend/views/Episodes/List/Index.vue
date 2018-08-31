@@ -17,7 +17,7 @@
       <p class="no-episodes" v-if="episodes.length === 0">No episodes yet.</p>
     </div>
 
-    <img :src="spinnerURL" v-if="episodesLoading" class="spinner" />
+    <page-loading v-if="episodesLoading" />
 
     <p v-if="episodesError" class="error">Sorry, but an error occurred when
       trying to load podcast episodes. Please try again later.</p>
@@ -28,18 +28,17 @@
   import {mapActions, mapGetters} from 'vuex'
 
   import Episode from './Episode.vue'
-  import Spinner from 'images/spinner.svg'
+  import PageLoading from 'components/PageLoading.vue'
 
   export default {
     data() {
       return {
         filter: null,
-        filterTimeout: null,
-        spinnerURL: Spinner
+        filterTimeout: null
       }
     },
 
-    components: {Episode},
+    components: {Episode, PageLoading},
 
     computed: mapGetters(['episodes', 'episodesLoading', 'episodesError', 'isAuthenticated']),
 
@@ -117,12 +116,6 @@
         margin-bottom: 20px;
       }
     }
-  }
-
-  img.spinner {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   p.no-episodes {

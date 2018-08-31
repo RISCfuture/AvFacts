@@ -1,7 +1,5 @@
 <template>
-  <div v-if="episodeLoading">
-    <img :src="spinnerURL" class="spinner" />
-  </div>
+  <page-loading v-if="episodeLoading" />
 
   <div v-else-if="episode">
     <div v-if="audioProcessed">
@@ -32,19 +30,12 @@
 <script>
   import {mapActions, mapGetters} from 'vuex'
 
-  import Spinner from 'images/spinner.svg'
+  import PageLoading from 'components/PageLoading.vue'
   import Error404 from 'views/error/404'
   import EpisodeActions from 'components/EpisodeActions.vue'
 
   export default {
-    data() {
-      return {
-        spinnerURL: Spinner,
-        playOpen: false
-      }
-    },
-
-    components: {Error404, EpisodeActions},
+    components: {Error404, EpisodeActions, PageLoading},
 
     computed: {
       ...mapGetters(['episode', 'episodeLoading']),
@@ -74,12 +65,6 @@
 
 <style scoped lang="scss">
   @import "../../styles/vars";
-
-  img.spinner {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
 
   h1 {
     margin-bottom: 0;

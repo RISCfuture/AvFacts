@@ -31,7 +31,7 @@
     position: fixed;
     left: 0;
     bottom: 0;
-    z-index: 100;
+    z-index: $footer-layer;
 
     padding: 5px 20px;
     width: 100%;

@@ -1,10 +1,8 @@
 <template>
-  <div v-if="!isAuthenticated">
-    <error-404 />
-  </div>
+  <page-loading v-if="episodeLoading" />
 
-  <div v-else-if="episodeLoading">
-    <img :src="spinnerURL" class="spinner" />
+  <div v-else-if="!isAuthenticated">
+    <error-404 />
   </div>
 
   <div v-else-if="episode" class="container">
@@ -34,7 +32,7 @@
   import {mapActions, mapGetters} from 'vuex'
 
   import Error404 from 'views/error/404'
-  import Spinner from 'images/spinner.svg'
+  import PageLoading from 'components/PageLoading.vue'
 
   marked.setOptions({
     gfm: true,
@@ -47,13 +45,7 @@
   })
 
   export default {
-    components: {Error404},
-
-    data() {
-      return {
-        spinnerURL: Spinner
-      }
-    },
+    components: {Error404, PageLoading},
 
     computed: {
       ...mapGetters(['episode', 'isAuthenticated', 'episodeLoading']),
@@ -110,11 +102,5 @@
   .script, .script p {
     font-size: 24px;
     line-height: 32px;
-  }
-
-  img.spinner {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 </style>

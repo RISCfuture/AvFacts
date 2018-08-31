@@ -15,7 +15,9 @@ $small-break: 480px;
 $medium-break: 768px;
 $large-break: 960px;
 
-$banner-layer: 9999;
+$banner-layer: 100;
+$footer-layer: 200;
+$lightbox-layer: 300;
 
 @mixin responsive-small {
     @media all and (max-width: $small-break - 1px) {

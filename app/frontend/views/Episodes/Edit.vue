@@ -3,9 +3,7 @@
     <error-404 />
   </div>
 
-  <div v-else-if="episodeLoading">
-    <img :src="spinnerURL" class="spinner" />
-  </div>
+  <page-loading v-else-if="episodeLoading" />
 
   <div v-else-if="episode">
     <h1>#{{episode.number | integer}}: {{episode.title}}</h1>
@@ -21,18 +19,12 @@
   import {mapActions, mapGetters} from 'vuex'
 
   import Error404 from 'views/error/404'
-  import Spinner from 'images/spinner.svg'
+  import PageLoading from 'components/PageLoading.vue'
   import EpisodeForm from './Form'
   import SmartFormBus from 'components/SmartForm/SmartFormBus'
 
   export default {
-    data() {
-      return {
-        spinnerURL: Spinner
-      }
-    },
-
-    components: {Error404, EpisodeForm},
+    components: {Error404, EpisodeForm, PageLoading},
 
     computed: mapGetters(['episode', 'isAuthenticated', 'episodeLoading']),
 
@@ -51,11 +43,3 @@
     }
   }
 </script>
-
-<style scoped lang="scss">
-  img.spinner {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-</style>

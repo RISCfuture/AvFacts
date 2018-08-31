@@ -4,9 +4,7 @@
               :object="scratchEpisode"
               objectName="episode">
 
-    <div class="saving-spinner" v-if="saving">
-      <img :src="spinnerURL" v-if="saving" />
-    </div>
+    <page-loading v-if="saving" />
 
     <div class="fieldset">
       <div class="field-pair">
@@ -91,7 +89,7 @@
   import SmartForm from 'components/SmartForm/SmartForm'
   import SmartField from 'components/SmartForm/SmartField'
   import SmartFormBus from 'components/SmartForm/SmartFormBus'
-  import Spinner from 'images/spinner.svg'
+  import PageLoading from 'components/PageLoading.vue'
 
   const ITUNES_MIN_IMAGE_SIZE = 1400
 
@@ -102,12 +100,11 @@
       return {
         scratchEpisode: {},
         channel: Channel,
-        spinnerURL: Spinner,
         saving: false
       }
     },
 
-    components: {SmartForm, SmartField},
+    components: {SmartForm, SmartField, PageLoading},
 
     computed: {
       method() { return (this.episode.number ? 'patch' : 'post') },
@@ -162,22 +159,6 @@
 
   form {
     position: relative;
-  }
-
-  .saving-spinner {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: center;
-    z-index: $banner-layer - 1;
-
-    img { flex: 0 0 auto; }
   }
 
   .too-small {
