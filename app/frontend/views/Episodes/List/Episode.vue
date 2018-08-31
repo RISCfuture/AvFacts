@@ -11,7 +11,7 @@
         {{episode.published_at | date}}
         <router-link :to="{name: 'episodes_show', params: {id: episode.number, slug: episode.slug}}"
                      v-if="audioProcessed">
-          <img :src="permalinkImage" />
+          <Permalink class="permalink-image" :size="10" />
         </router-link>
       </p>
 
@@ -24,14 +24,13 @@
 
 <script>
   import EpisodeActions from 'components/EpisodeActions.vue'
-  import PermalinkImage from 'images/permalink.svg'
+  import Permalink from 'images/Permalink.vue'
 
   export default {
     props: ['episode'],
-    components: {EpisodeActions},
+    components: {EpisodeActions, Permalink},
 
     computed: {
-      permalinkImage() { return PermalinkImage },
       audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac }
     }
   }
@@ -80,9 +79,7 @@
     margin-top: 5px;
     color: $dark-gray;
 
-    img {
-      width: 10px;
-      height: 10px;
+    .permalink-image {
       margin-left: 3px;
     }
   }

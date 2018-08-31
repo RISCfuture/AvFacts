@@ -11,7 +11,7 @@
   <div v-else class="actions">
     <div class="left-actions">
       <a v-if="audioProcessed" href="#" @click.prevent="play" class="play-button">
-        <img :src="playImage" />
+        <play :height="16" />
       </a>
       <span v-if="audioProcessed" class="duration">{{episode.audio.duration | duration}}</span>
     </div>
@@ -29,7 +29,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import PlayImage from 'images/play.svg'
+  import Play from 'images/Play.vue'
 
   export default {
     props: ['episode'],
@@ -40,11 +40,11 @@
       }
     },
 
+    components: {Play},
+
     computed: {
       ...mapGetters(['isAuthenticated']),
-
       audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac },
-      playImage() { return PlayImage }
     },
 
     methods: {
@@ -84,10 +84,6 @@
     padding: 4px 0;
 
     @include responsive-desktop { min-width: 30px; }
-
-    img {
-      height: 16px;
-    }
   }
 
   a.other-button {
