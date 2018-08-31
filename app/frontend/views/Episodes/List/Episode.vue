@@ -14,56 +14,25 @@
           <img :src="permalinkImage" />
         </router-link>
       </p>
+
       <p>{{episode.description}}</p>
 
-      <div v-if="!playOpen" class="actions">
-        <div class="left-actions">
-          <a v-if="audioProcessed" href="#" @click.prevent="play" class="play-button">Play</a>
-          <span v-if="audioProcessed" class="duration">{{episode.audio.duration | duration}}</span>
-        </div>
-
-        <div class="right-actions">
-          <router-link :to="{name: 'episodes_script', params: {id: episode.number}}"
-                       class="other-button"
-                       v-if="isAuthenticated && episode['script?']">Perform</router-link>
-          <router-link :to="{name: 'episodes_edit', params: {id: episode.number}}"
-                       class="other-button"
-                       v-if="isAuthenticated">Edit</router-link>
-        </div>
-      </div>
-
-      <audio controls v-if="audioProcessed && playOpen" autoplay>
-        <source :src="episode.audio.aac.url"
-                :type="episode.audio.aac.content_type" />
-        <source :src="episode.audio.mp3.url"
-                :type="episode.audio.mp3.content_type" />
-      </audio>
+      <episode-actions :episode="episode" />
     </div>
   </div>
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
+  import EpisodeActions from 'components/EpisodeActions.vue'
   import PermalinkImage from 'images/permalink.svg'
 
   export default {
     props: ['episode'],
-
-    data() {
-      return {
-        playOpen: false
-      }
-    },
+    components: {EpisodeActions},
 
     computed: {
-      ...mapGetters(['isAuthenticated']),
-
-      audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac },
-      permalinkImage() { return PermalinkImage }
-    },
-
-    methods: {
-      play() { this.playOpen = true }
+      permalinkImage() { return PermalinkImage },
+      audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac }
     }
   }
 </script>
@@ -103,21 +72,6 @@
         font-size: 11px;
         line-height: 15px;
       }
-
-      audio {
-        margin-top: 5px;
-      }
-    }
-  }
-
-  .actions {
-    display: flex;
-    flex-flow: row wrap;
-
-    .left-actions { flex: 1 1 auto; }
-    .right-actions {
-      flex: 1 1 auto;
-      text-align: right;
     }
   }
 
@@ -131,21 +85,6 @@
       height: 10px;
       margin-left: 3px;
     }
-  }
-
-  span.duration {
-    font-family: "Libre Franklin", sans-serif;
-    font-size: 12px;
-    color: $light-gray;
-    margin-left: 0.5em;
-  }
-
-  a.play-button {
-    @include button($avfacts-blue);
-  }
-
-  a.other-button {
-    @include button($avfacts-white, $text-dark: true);
   }
 
   @include responsive-small {

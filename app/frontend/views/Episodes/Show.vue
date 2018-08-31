@@ -13,19 +13,7 @@
         <p>{{episode.description}}</p>
       </div>
 
-      <audio controls v-if="playOpen" autoplay>
-        <source :src="episode.audio.aac.url"
-                :type="episode.audio.aac.content_type" />
-        <source :src="episode.audio.mp3.url"
-                :type="episode.audio.mp3.content_type" />
-      </audio>
-
-      <div v-else class="actions">
-        <a href="#"
-           @click.prevent="play"
-           class="play-button">Play</a>
-        <span class="duration">{{episode.audio.duration | duration}}</span>
-      </div>
+      <episode-actions :episode="episode" />
 
       <p id="credits" v-if="episode.credits">{{episode.credits}}</p>
     </div>
@@ -44,8 +32,9 @@
 <script>
   import {mapActions, mapGetters} from 'vuex'
 
-  import Error404 from 'views/error/404'
   import Spinner from 'images/spinner.svg'
+  import Error404 from 'views/error/404'
+  import EpisodeActions from 'components/EpisodeActions.vue'
 
   export default {
     data() {
@@ -55,7 +44,7 @@
       }
     },
 
-    components: {Error404},
+    components: {Error404, EpisodeActions},
 
     computed: {
       ...mapGetters(['episode', 'episodeLoading']),
@@ -122,17 +111,6 @@
       flex: 1 1 auto;
       margin: 0;
     }
-  }
-
-  span.duration {
-    font-family: "Libre Franklin", sans-serif;
-    font-size: 12px;
-    color: $light-gray;
-    margin-left: 0.5em;
-  }
-
-  a.play-button {
-    @include button($avfacts-blue);
   }
 
   #credits {

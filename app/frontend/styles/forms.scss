@@ -64,6 +64,8 @@ textarea {
 input[type=submit] {
     appearance: none;
     @include button($avfacts-blue);
+
+    @include responsive-desktop { min-width: 100px; }
 }
 
 input[type=file] {

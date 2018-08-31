@@ -53,14 +53,14 @@ $banner-layer: 9999;
 
 @mixin button($color, $text-dark: false) {
     border: none;
-    box-shadow: inset 0 39px 0 -24px lighten($color, 5%);
     background-color: $color;
 
     border-radius: 5px;
     display: inline-block;
     cursor: pointer;
     text-decoration: none;
-    padding: 5px 10px;
+    text-align: center;
+    padding: 5px 10px 4px;
     font-family: "Libre Franklin", sans-serif;
 
     @if ($text-dark) {
@@ -70,6 +70,8 @@ $banner-layer: 9999;
         color: $background-color;
         text-shadow: 0 1px 0 black;
     }
+
+    @include responsive-desktop { min-width: 50px; }
 
     &:active {
         box-shadow: inset 0 39px 0 -24px $color;

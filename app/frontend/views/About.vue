@@ -38,9 +38,9 @@
       in which to do so.
     </p>
 
-    <p class="small">Parts of this website are created by Role Play and Noun
-      Project, and released under the Creative Commons Attribution 3.0
-      International (CC BY 3.0) license.</p>
+    <p class="small">Parts of this website were created by Role Play and Andi
+      Nur Abdillah, from The Noun Project, and released under the Creative
+      Commons Attribution 3.0 International (CC BY 3.0) license.</p>
   </div>
 </template>
 
