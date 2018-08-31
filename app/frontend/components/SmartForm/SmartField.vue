@@ -27,6 +27,7 @@
               :zone="timezone"
               :phrases="{ok: 'OK', cancel: 'Cancel'}"
               :auto="true"
+              :format="datetimeFormat"
               @focus="onFocus()"
               @blur="onBlur()"
               @change="onChange()" />
@@ -71,6 +72,7 @@
 
 <script>
   import SimpleMDE from 'simplemde'
+  import {DateTime} from 'luxon'
 
   import SmartFormBus from './SmartFormBus'
 
@@ -97,6 +99,7 @@
       id() { return `${this.$parent.objectName}_${this.field}` },
       errors() { return this.$parent.errors[this.field] || [] },
       invalid() { return this.errors.length > 0 },
+      datetimeFormat() { return DateTime.DATETIME_FULL },
 
       commonAttributes() {
         return {
