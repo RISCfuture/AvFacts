@@ -17,7 +17,7 @@ class Transcode::Encoding
   attr_reader :options
 
   # @private
-  def self.wrap(descriptor, options = nil)
+  def self.wrap(descriptor, options=nil)
     case descriptor
       when self
         descriptor
@@ -26,13 +26,13 @@ class Transcode::Encoding
       when String
         new descriptor, options
       else
-        raise ArgumentError, "Can't wrap #{descriptor.class.to_s}"
+        raise ArgumentError, "Can't wrap #{descriptor.class}"
     end
   end
 
   # @private
   def self.decode(key)
-    new *ActiveStorage.verifier.verify(key, purpose: :encoding)
+    new(*ActiveStorage.verifier.verify(key, purpose: :encoding))
   end
 
   # @private
@@ -41,7 +41,7 @@ class Transcode::Encoding
   end
 
   # @private
-  def initialize(format, options = nil)
+  def initialize(format, options=nil)
     format.kind_of?(String) or raise ArgumentError, "expect string format, got #{format.class}"
 
     @format  = format

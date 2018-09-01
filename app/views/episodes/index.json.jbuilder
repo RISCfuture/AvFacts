@@ -4,7 +4,7 @@ json.array!(@episodes) do |episode|
 
   json.image do
     json.preview_url url_for(episode.thumbnail_image)
-  end if episode.thumbnail_image && episode.thumbnail_image.send(:processed?)
+  end if episode.thumbnail_image&.send(:processed?)
 
   json.audio do
     json.duration episode.audio.metadata[:duration]

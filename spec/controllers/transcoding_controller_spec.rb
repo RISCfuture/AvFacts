@@ -19,7 +19,7 @@ RSpec.describe TranscodingController, type: :controller do
       pending "find_signed apparently raises RecordNotFound instead of returning nil"
       blob = ActiveStorage.verifier.generate('hello', purpose: :blob_id)
       get :show, params: {signed_blob_id: blob, encoding_key: 'world', filename: 'foo.txt'}
-      expect(response.status).to eql(404)
+      expect(response.status).to be(404)
     end
   end
 end

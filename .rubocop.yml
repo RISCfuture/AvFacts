@@ -1,0 +1,9 @@
+inherit_from: ~/.rubocop.yml
+
+AllCops:
+  Exclude:
+  - db/migrate/1_create_active_storage_tables.active_storage.rb
+
+Naming/AccessorMethodName:
+  Exclude:
+  - app/models/concerns/set_nil_if_blank.rb

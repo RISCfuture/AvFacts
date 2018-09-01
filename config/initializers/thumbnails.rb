@@ -11,7 +11,7 @@ module AddThumbnailToBlob
   # @return [ActiveStorage::Variant] An image variant with the appropriate
   #   scaling and cropping applied.
 
-  def thumbnail(new_width, new_height = new_width)
+  def thumbnail(new_width, new_height=new_width)
     width  = metadata['width']
     height = metadata['height']
 
@@ -19,8 +19,10 @@ module AddThumbnailToBlob
     height_scale_factor = new_height.to_f / height
 
     unless width_scale_factor > 1 || height_scale_factor > 1
-      scale_width, scale_height = new_width, new_height
-      crop_x, crop_y            = 0, 0
+      scale_width  = new_width
+      scale_height = new_height
+      crop_x       = 0
+      crop_y       = 0
 
       if width_scale_factor > height_scale_factor
         scale_height = (height * width_scale_factor).to_i

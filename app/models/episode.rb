@@ -67,7 +67,7 @@ class Episode < ApplicationRecord
             presence: true,
             length:   {maximum: 4000}
   validates :credits,
-            length: {maximum: 1000},
+            length:    {maximum: 1000},
             allow_nil: true
   validates :published_at,
             presence:   {strict: true},

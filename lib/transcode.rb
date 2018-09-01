@@ -29,7 +29,8 @@ class Transcode
   # @private
   def initialize(blob, *encoding_or_encoding_key)
     blob.kind_of?(ActiveStorage::Blob) or raise ArgumentError, "expected ActiveStorage::Blob, got #{blob.class}"
-    @blob, @encoding = blob, Encoding.wrap(*encoding_or_encoding_key)
+    @blob = blob
+    @encoding = Encoding.wrap(*encoding_or_encoding_key)
   end
 
   # Runs the transcode operation and returns this instance.

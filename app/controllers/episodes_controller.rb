@@ -61,12 +61,11 @@ class EpisodesController < ApplicationController
           where('fulltext_search @@ query')
     end
 
-
-    if params[:filter].present?
-      @episodes = @episodes.order('search_rank DESC')
-    else
-      @episodes = @episodes.order(number: :desc)
-    end
+    @episodes = if params[:filter].present?
+                  @episodes.order('search_rank DESC')
+                else
+                  @episodes.order(number: :desc)
+                end
 
     @episodes = @episodes.with_attached_audio.with_attached_image
     @episodes = case request.format
@@ -187,7 +186,6 @@ class EpisodesController < ApplicationController
   # |      |                                       |
   # |:-----|:--------------------------------------|
   # | `id` | The Episode number (not database ID). |
-
 
   def destroy
     @episode.destroy

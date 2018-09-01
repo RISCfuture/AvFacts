@@ -15,7 +15,7 @@ RSpec.describe SessionsController, type: :controller do
       session[:token]   = @token
 
       get :show, params: {format: 'json'}
-      expect(response.status).to eql(200)
+      expect(response.status).to be(200)
       expect(JSON.parse(response.body)).
           to eql('username' => @user.username,
                  'token'    => @token)
@@ -23,7 +23,7 @@ RSpec.describe SessionsController, type: :controller do
 
     it "should return empty JSON if there is no session" do
       get :show, params: {format: 'json'}
-      expect(response.status).to eql(200)
+      expect(response.status).to be(200)
       expect(JSON.parse(response.body)).
           to eql('username' => nil,
                  'token'    => nil)
@@ -38,7 +38,7 @@ RSpec.describe SessionsController, type: :controller do
 
     it "should log a user in and set the token" do
       post :create, params: {username: @user.username, password: @password, format: 'json'}
-      expect(response.status).to eql(200)
+      expect(response.status).to be(200)
       json = JSON.parse(response.body)
       expect(json['username']).to eql(@user.username)
       expect(json['token']).not_to be_nil
@@ -46,12 +46,12 @@ RSpec.describe SessionsController, type: :controller do
 
     it "should 401 if the username is incorrect" do
       post :create, params: {username: 'not-found', password: @password, format: 'json'}
-      expect(response.status).to eql(401)
+      expect(response.status).to be(401)
     end
 
     it "should 401 if the password is incorrect" do
       post :create, params: {username: @user.username, password: 'incorrect', format: 'json'}
-      expect(response.status).to eql(401)
+      expect(response.status).to be(401)
     end
   end
 
@@ -61,7 +61,7 @@ RSpec.describe SessionsController, type: :controller do
       session[:token] = 'token123'
 
       delete :destroy, params: {format: 'json'}
-      expect(response.status).to eql(200)
+      expect(response.status).to be(200)
       expect(session[:user_id]).to be_nil
       expect(session[:token]).to be_nil
     end

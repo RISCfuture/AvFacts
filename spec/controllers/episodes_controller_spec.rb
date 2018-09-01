@@ -7,7 +7,7 @@ RSpec.describe EpisodesController, type: :controller do
 
       context '[filtering]' do
         before :each do
-          @episodes = 5.times.map { |i| FactoryBot.create :episode, number: i + 100, processed: true }
+          @episodes = Array.new(5) { |i| FactoryBot.create :episode, number: i + 100, processed: true }
           @episodes.shuffle.each_with_index { |e, i| e.update_attribute :number, i + 1 }
 
           # red herrings
@@ -18,7 +18,7 @@ RSpec.describe EpisodesController, type: :controller do
 
         it "should list episodes in order filtering unpublished episodes" do
           get :index, params: {format: 'json'}
-          expect(response.status).to eql(200)
+          expect(response.status).to be(200)
           json = JSON.parse(response.body)
           expect(json.map { |j| j['number'] }).
               to eql(@episodes.map(&:number).sort.reverse)
@@ -43,7 +43,7 @@ RSpec.describe EpisodesController, type: :controller do
 
       context '[pagination]' do
         before :each do
-          @episodes = 15.times.map { |i| FactoryBot.create :episode, number: i + 100, processed: true }
+          @episodes = Array.new(15) { |i| FactoryBot.create :episode, number: i + 100, processed: true }
           @episodes.shuffle.each_with_index { |e, i| e.update_attribute :number, i + 1 }
         end
 
@@ -85,7 +85,7 @@ RSpec.describe EpisodesController, type: :controller do
 
     context '[RSS]' do
       before :each do
-        @episodes = 3.times.map { |i| FactoryBot.create :episode, number: i + 100 }
+        @episodes = Array.new(3) { |i| FactoryBot.create :episode, number: i + 100 }
         @episodes.shuffle.each_with_index { |e, i| e.update_attribute :number, i + 1 }
 
         # red herrings
@@ -104,12 +104,12 @@ RSpec.describe EpisodesController, type: :controller do
 
       it "should render the RSS feed" do
         get :index, params: {format: 'rss'}
-        expect(response.status).to eql(200)
+        expect(response.status).to be(200)
         xml = Nokogiri::XML(response.body)
 
         items = xml.xpath('//rss/channel/item')
         expect(items.map { |i| i.xpath('title').first.content }).
-            to eql(@included_episodes.sort_by(&:number).reverse.map { |e| "##{e.number}: #{e.title}"})
+            to eql(@included_episodes.sort_by(&:number).reverse.map { |e| "##{e.number}: #{e.title}" })
         expect(items.first.xpath('description').first.content).to end_with(<<~EOS.chomp)
 
           Some
@@ -133,7 +133,7 @@ RSpec.describe EpisodesController, type: :controller do
 
       it "should render the show template" do
         get :show, params: {id: processed_episode.to_param, format: 'json'}
-        expect(response.status).to eql(200)
+        expect(response.status).to be(200)
         json = JSON.parse(response.body)
         expect(json['number']).to eql(processed_episode.number)
         expect(json).not_to include('script')
@@ -159,19 +159,19 @@ RSpec.describe EpisodesController, type: :controller do
 
         it "should stream" do
           get :show, params: {id: processed_episode.to_param, format: format}
-          expect(response.status).to eql(200)
+          expect(response.status).to be(200)
           expect(response.body).to eql("this is not a very well-formatted audio file")
         end
 
         it "should 404 if the audio hasn't been added yet" do
           get :show, params: {id: draft_episode.to_param, format: format}
-          expect(response.status).to eql(404)
+          expect(response.status).to be(404)
           expect(response.body).to be_empty
         end
 
         it "should 404 if the audio hasn't been processed yet" do
           get :show, params: {id: unprocessed_episode.to_param, format: format}
-          expect(response.status).to eql(404)
+          expect(response.status).to be(404)
           expect(response.body).to be_empty
         end
       end
@@ -189,19 +189,19 @@ RSpec.describe EpisodesController, type: :controller do
     it "should require admin" do
       session[:user_id] = nil
       post :create, params: {episode: @episode_params, format: 'json'}
-      expect(response.status).to eql(401)
+      expect(response.status).to be(401)
     end
 
     it "should make an episode" do
       post :create, params: {episode: @episode_params, format: 'json'}
-      expect(response.status).to eql(201)
-      expect(Episode.count).to eql(1)
+      expect(response.status).to be(201)
+      expect(Episode.count).to be(1)
       expect(Episode.first.title).to eql(@episode_params[:title])
     end
 
     it "should handle validation errors" do
       post :create, params: {episode: @episode_params.merge(title: " "), format: 'json'}
-      expect(response.status).to eql(422)
+      expect(response.status).to be(422)
     end
   end
 
@@ -214,18 +214,18 @@ RSpec.describe EpisodesController, type: :controller do
     it "should require admin" do
       session[:user_id] = nil
       patch :update, params: {id: @episode.to_param, episode: {title: "New Title"}, format: 'json'}
-      expect(response.status).to eql(401)
+      expect(response.status).to be(401)
     end
 
     it "should update an episode" do
       patch :update, params: {id: @episode.to_param, episode: {title: "New Title"}, format: 'json'}
-      expect(response.status).to eql(204)
+      expect(response.status).to be(204)
       expect(@episode.reload.title).to eql("New Title")
     end
 
     it "should handle validation errors" do
       patch :update, params: {id: @episode.to_param, episode: {title: " "}, format: 'json'}
-      expect(response.status).to eql(422)
+      expect(response.status).to be(422)
     end
   end
 
@@ -238,12 +238,12 @@ RSpec.describe EpisodesController, type: :controller do
     it "should require admin" do
       session[:user_id] = nil
       delete :destroy, params: {id: @episode.to_param, format: 'json'}
-      expect(response.status).to eql(401)
+      expect(response.status).to be(401)
     end
 
     it "should delete an episode" do
       delete :destroy, params: {id: @episode.to_param, format: 'json'}
-      expect(response.status).to eql(204)
+      expect(response.status).to be(204)
       expect { @episode.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end

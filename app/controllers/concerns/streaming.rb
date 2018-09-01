@@ -14,8 +14,8 @@ module Streaming
 
   protected
 
-  PASS_THROUGH_REQUEST_HEADERS  = %w[Accept Range User-Agent Accept-Language X-Playback-Session-ID Accept-Encoding]
-  PASS_THROUGH_RESPONSE_HEADERS = %w[Content-Type Content-Length Content-Range Accept-Ranges]
+  PASS_THROUGH_REQUEST_HEADERS  = %w[Accept Range User-Agent Accept-Language X-Playback-Session-ID Accept-Encoding].freeze
+  PASS_THROUGH_RESPONSE_HEADERS = %w[Content-Type Content-Length Content-Range Accept-Ranges].freeze
   private_constant :PASS_THROUGH_REQUEST_HEADERS, :PASS_THROUGH_RESPONSE_HEADERS
 
   # Streams data to the client from a given URL. Request method, request

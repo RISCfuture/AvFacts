@@ -4,17 +4,17 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.5.1'
 
 # FRAMEWORK
-gem 'rails', '5.2.1'
-gem 'configoro'
 gem 'bootsnap'
+gem 'configoro'
+gem 'rails', '5.2.1'
 gem 'sidekiq'
 
 # MODELS
-gem 'pg'
-gem 'validates_timeliness'
-gem 'mini_magick'
-gem 'streamio-ffmpeg'
 gem 'bcrypt'
+gem 'mini_magick'
+gem 'pg'
+gem 'streamio-ffmpeg'
+gem 'validates_timeliness'
 
 # CONTROLLERS
 gem 'responders'
@@ -30,12 +30,12 @@ gem 'jbuilder'
 gem 'builder'
 
 # OTHER
-gem 'nokogiri'
 gem 'json'
+gem 'nokogiri'
 
 group :development do
-  gem 'puma'
   gem 'listen'
+  gem 'puma'
 
   # DEVELOPMENT
   gem 'better_errors'
@@ -44,14 +44,14 @@ end
 
 group :test do
   # SPECS
-  gem 'rspec-rails'
   gem 'rails-controller-testing'
+  gem 'rspec-rails'
 
   # ISOLATION
   gem 'database_cleaner'
+  gem 'fakefs', require: 'fakefs/safe'
   gem 'timecop'
   gem 'webmock'
-  gem 'fakefs', require: 'fakefs/safe'
 
   # FACTORIES
   gem 'factory_bot_rails'
@@ -60,8 +60,8 @@ end
 
 group :production do
   # CACHE
-  gem 'redis-rails'
   gem 'redis-rack-cache'
+  gem 'redis-rails'
 
   # PAPERCLIP
   gem 'aws-sdk-s3'

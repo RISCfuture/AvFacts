@@ -25,12 +25,12 @@ rss.xpath('/rss/channel/item').reverse_each do |item|
 
   if script_md
     script_md = script_md.each_line.map(&:strip).join("\n")
-    script_md.gsub! /\[.+\]\{\.Apple-converted-space\}/m, ' '
-    while script_md.gsub! /\[(.*?)\]\{.\w+?\}/m, "\\1"
+    script_md.gsub!(/\[.+\]\{\.Apple-converted-space\}/m, ' ')
+    while script_md.gsub!(/\[(.*?)\]\{.\w+?\}/m, "\\1")
       # do the thing
     end
-    script_md.gsub! /^\s*\\\s*$/, ''
-    script_md.gsub! /\n{3,}/m, "\n\n"
+    script_md.gsub!(/^\s*\\\s*$/, '')
+    script_md.gsub!(/\n{3,}/m, "\n\n")
     script_md.chomp!
   end
 
@@ -51,7 +51,7 @@ rss.xpath('/rss/channel/item').reverse_each do |item|
                          filename:     'Artwork.png'
   else
     artwork_url = item.xpath('itunes:image').first.attributes['href'].content
-    episode.image.attach io:           open(artwork_url),
+    episode.image.attach io:           URI.parse(artwork_url).open,
                          content_type: 'image/jpeg',
                          filename:     File.basename(artwork_url)
   end

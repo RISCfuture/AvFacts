@@ -4,13 +4,13 @@ RSpec.describe Episode, type: :model do
   context 'number' do
     it "should start at 1" do
       Episode.destroy_all
-      expect(FactoryBot.create(:episode).number).to eql(1)
+      expect(FactoryBot.create(:episode).number).to be(1)
     end
 
     it "should increment" do
       Episode.destroy_all
       FactoryBot.create :episode, number: 3
-      expect(FactoryBot.create(:episode).number).to eql(4)
+      expect(FactoryBot.create(:episode).number).to be(4)
     end
   end
 
@@ -85,9 +85,9 @@ RSpec.describe Episode, type: :model do
       episode.reload
       expect(episode.mp3).to be_processed
       expect(episode.aac).to be_processed
-      expect(episode.thumbnail_image.send(:processed?)).to eql(true)
-      expect(episode.mp3_size).to eql(33_271)
-      expect(episode.aac_size).to eql(22_088)
+      expect(episode.thumbnail_image.send(:processed?)).to be(true)
+      expect(episode.mp3_size).to be(33_271)
+      expect(episode.aac_size).to be(22_088)
     end
 
     it "should set processed and advance published_at if the episode is ready" do
@@ -118,7 +118,7 @@ RSpec.describe Episode, type: :model do
       episode = FactoryBot.create(:episode)
       expect(episode.mp3).to be_processed
       expect(episode.aac).to be_processed
-      expect(episode.thumbnail_image.send(:processed?)).to eql(true)
+      expect(episode.thumbnail_image.send(:processed?)).to be(true)
     end
   end
 end

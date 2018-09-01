@@ -50,7 +50,7 @@ module AddStreamingMethodsToService
     #   @yieldparam [String] chunk A sequential chunk of data. Guaranteed not to
     #     extend before the start of, or after the end of, the given range.
 
-    def download_part(key, range)
+    def download_part(_key, _range)
       raise NotImplementedError
     end
   end
@@ -62,7 +62,7 @@ module AddStreamingMethodsToService
 
     def download_part(key, range)
       range  = range.first..object.content_length if range.last == -1
-      buffer = String.new
+      buffer = +''
 
       instrument :streaming_download, key: key do
         object = object_for(key)
@@ -89,7 +89,7 @@ module AddStreamingMethodsToService
 
     def download_part(key, range)
       range  = range.first..byte_size(key) if range.last == -1
-      buffer = String.new
+      buffer = +''
 
       instrument :streaming_download, key: key do
         chunk_size = 1.megabyte
@@ -131,12 +131,12 @@ module AddRangeQueriesToDiskController
         raise BadRangeError if units != 'bytes' || rest.any?
 
         size = disk_service.byte_size(key)
-        raise BadRangeError if range.first < 0 || range.last > size
+        raise BadRangeError if range.first.negative? || range.last > size
 
         data = disk_service.download_part(key, range)
 
         response.headers['Content-Length'] = data.bytesize.to_s
-        response.headers['Content-Range'] = "bytes #{range.first}-#{range.last == -1 ? size : range.last}/#{size}"
+        response.headers['Content-Range'] = "bytes #{range.first}-#{(range.last == -1) ? size : range.last}/#{size}"
         response.status = :partial_content unless data.bytesize == size
 
         if request.head?

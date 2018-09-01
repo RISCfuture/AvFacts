@@ -9,7 +9,7 @@ module ServicePublicURL
     # @param [String] key The object key (path where it is stored).
     # @return [String] The public URL.
 
-    def public_url(key)
+    def public_url(_key)
       raise NotImplementedError
     end
   end

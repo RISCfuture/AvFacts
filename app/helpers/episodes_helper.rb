@@ -14,7 +14,7 @@ module EpisodesHelper
   #   as the RSS feed's publication date.
 
   def publication_date
-    @pubdate ||= Episode.published.order(published_at: :desc).first.published_at
+    @publication_date ||= Episode.published.order(published_at: :desc).first.published_at
   end
 
   # Returns the full formatted title of the episode used in the episode list
@@ -54,7 +54,6 @@ module EpisodesHelper
         minutes.to_s.rjust(2, '0'),
         seconds.to_s.rjust(2, '0')
     ].join(':')
-
   end
 
   # Constructs nested `<itunes:category>` tags for the given category and
@@ -87,14 +86,13 @@ module EpisodesHelper
   private
 
   def recursive_openstruct(hsh)
-    OpenStruct.new(hsh.inject({}) do |converted, (k, v)|
+    OpenStruct.new(hsh.each_with_object({}) do |(k, v), converted|
       converted[k] = case v
                        when Hash
                          recursive_openstruct(v)
                        else
                          v
                      end
-      converted
     end)
   end
 end
