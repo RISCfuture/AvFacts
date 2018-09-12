@@ -1,5 +1,5 @@
 <template>
-  <footer class="container">
+  <footer class="container" ref="footer">
     <p class="copyright">
       AvFacts and this website are copyright ©2017–{{year}} Tim Morgan. All
       rights reserved.
@@ -20,7 +20,12 @@
       year() { return new Date().getFullYear() }
     },
 
-    methods: mapActions(['showLoginLightbox', 'logout'])
+    methods: mapActions(['showLoginLightbox', 'logout']),
+
+    mounted() {
+      const height = this.$refs.footer.offsetHeight
+      document.getElementsByTagName('body')[0].style = `padding-bottom: ${height + 20}px`
+    }
   }
 </script>
 

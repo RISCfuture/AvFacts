@@ -79,10 +79,9 @@
     display: inline-block;
     vertical-align: middle;
     box-sizing: border-box;
-    width: 20px;
+    width: 30px;
     height: 24px;
     padding: 4px 0;
-
     @include responsive-desktop { min-width: 30px; }
   }
 
