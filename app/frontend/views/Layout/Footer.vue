@@ -12,12 +12,13 @@
 </template>
 
 <script>
+  import moment from 'moment'
   import {mapGetters, mapActions} from 'vuex'
 
   export default {
     computed: {
       ...mapGetters(['isAuthenticated']),
-      year() { return new Date().getFullYear() }
+      year() { return moment().format('YYYY') }
     },
 
     methods: mapActions(['showLoginLightbox', 'logout']),
