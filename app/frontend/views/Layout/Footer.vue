@@ -21,11 +21,18 @@
       year() { return moment().format('YYYY') }
     },
 
-    methods: mapActions(['showLoginLightbox', 'logout']),
+    methods: {
+        ...mapActions(['showLoginLightbox', 'logout']),
+
+      recalculateContentPadding() {
+        const height = this.$refs.footer.offsetHeight
+        document.querySelector('body>div').style = `padding-bottom: ${height + 20}px`
+      }
+    },
 
     mounted() {
-      const height = this.$refs.footer.offsetHeight
-      document.getElementsByTagName('body')[0].style = `padding-bottom: ${height + 20}px`
+      this.recalculateContentPadding()
+      window.addEventListener('resize', () => this.recalculateContentPadding())
     }
   }
 </script>
