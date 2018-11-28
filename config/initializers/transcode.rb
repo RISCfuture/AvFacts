@@ -124,16 +124,18 @@ module AddRangeQueriesToDiskController
 
   def show
     if (key = decode_verified_key)
-      response.headers['Accept-Ranges'] = 'bytes'
+      response.headers['Content-Type']        = key[:content_type] || DEFAULT_SEND_FILE_TYPE
+      response.headers['Content-Disposition'] = key[:disposition] || DEFAULT_SEND_FILE_DISPOSITION
+      response.headers['Accept-Ranges']       = 'bytes'
 
       if (ranges = parse_ranges(request.headers['Range']))
         units, (range, *rest) = ranges
         raise BadRangeError if units != 'bytes' || rest.any?
 
-        size = disk_service.byte_size(key)
+        size = disk_service.byte_size(key[:key])
         raise BadRangeError if range.first.negative? || range.last > size
 
-        data = disk_service.download_part(key, range)
+        data = disk_service.download_part(key[:key], range)
 
         response.headers['Content-Length'] = data.bytesize.to_s
         response.headers['Content-Range'] = "bytes #{range.first}-#{(range.last == -1) ? size : range.last}/#{size}"
@@ -147,10 +149,10 @@ module AddRangeQueriesToDiskController
                     content_type: params[:content_type]
         end
       else
-        size = disk_service.byte_size(key)
+        size = disk_service.byte_size(key[:key])
         response.headers['Content-Length'] = size.to_s
 
-        send_data disk_service.download(key),
+        send_data disk_service.download(key[:key]),
                   disposition:  params[:disposition],
                   content_type: params[:content_type]
       end
