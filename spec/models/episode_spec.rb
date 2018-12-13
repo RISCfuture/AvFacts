@@ -87,7 +87,7 @@ RSpec.describe Episode, type: :model do
       expect(episode.aac).to be_processed
       expect(episode.thumbnail_image.send(:processed?)).to be(true)
       expect(episode.mp3_size).to be(33_271)
-      expect(episode.aac_size).to be(22_088)
+      expect(episode.aac_size).to be(22_128)
     end
 
     it "should set processed and advance published_at if the episode is ready" do
