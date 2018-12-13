@@ -15,7 +15,7 @@ Rails.application.config.content_security_policy do |policy|
   if Rails.env.development?
     policy.connect_src :self, :https, 'ws://localhost:3035', 'http://localhost:3035'
     policy.script_src :self, :https, :unsafe_eval, :unsafe_inline
-    policy.style_src   :self, :https, :unsafe_inline
+    policy.style_src :self, :https, :unsafe_inline
   end
 
   # Specify URI for violation reports

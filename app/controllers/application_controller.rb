@@ -12,12 +12,10 @@ class ApplicationController < ActionController::Base
   # {#unauthorized_response} if there is not authenticated user session.
 
   def admin_required
-    if admin?
-      return true
-    else
-      unauthorized_response
-      return false
-    end
+    return true if admin?
+
+    unauthorized_response
+    return false
   end
 
   # Default behavior when an authenticated session is required but not present.

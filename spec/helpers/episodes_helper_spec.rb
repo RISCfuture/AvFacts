@@ -29,7 +29,7 @@ RSpec.describe EpisodesHelper, type: :helper do
     it "should convert a duration in seconds to a string" do
       expect(helper.duration_string(40)).to eql("0:00:40")
       expect(helper.duration_string(140)).to eql("0:02:20")
-      expect(helper.duration_string(14000)).to eql("3:53:20")
+      expect(helper.duration_string(14_000)).to eql("3:53:20")
     end
   end
 

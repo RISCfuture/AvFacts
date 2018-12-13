@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   end
 
   # front-end routes handled by Vue-Router (routes.js)
-  constraints(->(req) { req.format == '*/*' || req.format.html? }) do #TODO .all? doesn't work here
+  constraints(->(req) { req.format == '*/*' || req.format.html? }) do # TODO: .all? doesn't work here
     root 'home#index'
     get 'upload' => 'home#index'
     get 'episodes/:id' => 'home#index'

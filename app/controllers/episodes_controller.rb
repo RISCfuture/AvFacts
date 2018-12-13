@@ -46,13 +46,8 @@ class EpisodesController < ApplicationController
   def index
     @episodes = admin? ? Episode.all : Episode.published
 
-    if request.format.json? && !admin?
-      @episodes = @episodes.where(blocked: false)
-    end
-
-    if params[:before].present?
-      @episodes = @episodes.where('number < ?', params[:before])
-    end
+    @episodes = @episodes.where(blocked: false) if request.format.json? && !admin?
+    @episodes = @episodes.where('number < ?', params[:before]) if params[:before].present?
 
     if params[:filter].present?
       @episodes = @episodes.
@@ -77,9 +72,7 @@ class EpisodesController < ApplicationController
 
     if params[:filter].blank?
       @last_page = @episodes.empty? || @episodes.pluck(:number).include?(Episode.minimum(:number))
-      unless @last_page
-        response.headers['X-Next-Page'] = episodes_url(before: @episodes.last.number, filter: params[:filter].presence, format: params[:format])
-      end
+      response.headers['X-Next-Page'] = episodes_url(before: @episodes.last.number, filter: params[:filter].presence, format: params[:format]) unless @last_page
     end
 
     respond_with :episodes do |format|
@@ -111,18 +104,16 @@ class EpisodesController < ApplicationController
   # | `id` | The Episode number (not database ID). |
 
   def show
-    if !@episode.processed? && !admin?
-      return head(:not_found)
-    end
+    return head(:not_found) if !@episode.processed? && !admin?
 
     respond_with @episode do |format|
       format.mp3 do
-        #redirect_to @episode.mp3.public_cdn_url
+        # redirect_to @episode.mp3.public_cdn_url
         stream @episode.mp3.public_cdn_url
       end
 
       format.m4a do
-        #redirect_to @episode.aac.public_cdn_url
+        # redirect_to @episode.aac.public_cdn_url
         stream @episode.aac.public_cdn_url
       end
     end

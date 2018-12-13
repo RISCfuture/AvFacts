@@ -9,13 +9,8 @@ FactoryBot.define do
     description { FFaker::CheesyLingo.paragraph(5) }
 
     after :build do |episode, evaluator|
-      if evaluator.audio
-        episode.audio.attach io: evaluator.audio.open, filename: 'audio.aif', content_type: 'audio/aiff'
-      end
-
-      if evaluator.image
-        episode.image.attach io: evaluator.image.open, filename: 'image.png', content_type: 'image/png'
-      end
+      episode.audio.attach(io: evaluator.audio.open, filename: 'audio.aif', content_type: 'audio/aiff') if evaluator.audio
+      episode.image.attach(io: evaluator.image.open, filename: 'image.png', content_type: 'image/png') if evaluator.image
     end
   end
 end

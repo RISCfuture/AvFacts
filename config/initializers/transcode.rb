@@ -165,13 +165,14 @@ module AddRangeQueriesToDiskController
 
   private
 
-  RANGE_ELEMENT       = /\d+-\d*/
-  RANGE_ELEMENT_PARSE = /(\d+)-(\d*)/
-  RANGE_HEADER        = /^(\w+)=((?:#{RANGE_ELEMENT},\s*)*#{RANGE_ELEMENT})$/
+  RANGE_ELEMENT       = /\d+-\d*/.freeze
+  RANGE_ELEMENT_PARSE = /(\d+)-(\d*)/.freeze
+  RANGE_HEADER        = /^(\w+)=((?:#{RANGE_ELEMENT},\s*)*#{RANGE_ELEMENT})$/.freeze
   private_constant :RANGE_ELEMENT, :RANGE_ELEMENT_PARSE, :RANGE_HEADER
 
   def parse_ranges(header)
     return nil if header.blank?
+
     matches = header.match(RANGE_HEADER) or raise BadRangeError
     unit   = matches[1]
     ranges = matches[2]

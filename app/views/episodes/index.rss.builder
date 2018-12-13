@@ -4,9 +4,7 @@ xml.rss('xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd',
 
   xml.channel do
     xml.atom :link, href: episodes_url(format: 'rss'), rel: 'self', type: 'application/rss+xml'
-    unless @last_page
-      xml.atom :link, href: episodes_url(before: @episodes.last.number, format: 'rss'), rel: 'next', type: 'application/rss+xml'
-    end
+    xml.atom(:link, href: episodes_url(before: @episodes.last.number, format: 'rss'), rel: 'next', type: 'application/rss+xml') unless @last_page
     xml.link root_url
 
     xml.title channel.title
@@ -54,9 +52,7 @@ xml.rss('xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd',
         xml.enclosure url: episode_url(episode, format: :aac), type: episode.aac.content_type, length: episode.aac_size
 
         xml.itunes :image, href: polymorphic_url(episode.itunes_image, only_path: false)
-        if episode.audio.metadata[:duration]
-          xml.itunes :duration, duration_string(episode.audio.metadata[:duration])
-        end
+        xml.itunes(:duration, duration_string(episode.audio.metadata[:duration])) if episode.audio.metadata[:duration]
 
         xml.itunes :order, episode.number
         xml.itunes :explicit, (episode.explicit? ? 'yes' : 'no')

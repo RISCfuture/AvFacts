@@ -97,6 +97,7 @@ class Episode < ApplicationRecord
 
   def mp3
     return nil if audio.attachment.nil?
+
     audio.transcode 'mp3', MP3_OPTIONS
   end
 
@@ -105,6 +106,7 @@ class Episode < ApplicationRecord
 
   def aac
     return nil if audio.attachment.nil?
+
     audio.transcode 'aac', AAC_OPTIONS
   end
 
@@ -114,6 +116,7 @@ class Episode < ApplicationRecord
   def thumbnail_image
     return nil if image.attachment.nil?
     return nil unless image.metadata['width'] && image.metadata['height']
+
     image.thumbnail(200)
   end
 
@@ -123,6 +126,7 @@ class Episode < ApplicationRecord
   def itunes_image
     return nil if image.attachment.nil?
     return nil unless image.metadata['width'] && image.metadata['height']
+
     image.thumbnail(3000)
   end
 
@@ -167,11 +171,11 @@ class Episode < ApplicationRecord
 
     sleep(10) if include_delay
 
-    if was_not_ready && ready?
-      self.published_at = Time.current if published_at.past?
-      self.processed = true
-      save!
-    end
+    return unless was_not_ready && ready?
+
+    self.published_at = Time.current if published_at.past?
+    self.processed = true
+    save!
   end
 
   private

@@ -32,9 +32,7 @@ module EpisodesHelper
 
   def full_description(episode)
     result = episode.description.dup
-    if episode.credits?
-      result << "\n\n" << episode.credits
-    end
+    result << "\n\n" << episode.credits if episode.credits?
     return result
   end
 

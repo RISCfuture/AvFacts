@@ -71,9 +71,7 @@ class Transcode
 
   def public_cdn_url(**options)
     url = URI.parse(service.public_url(key))
-    if AvFacts::Configuration.storage.cloudfront_domain
-      url.host = AvFacts::Configuration.storage.cloudfront_domain
-    end
+    url.host = AvFacts::Configuration.storage.cloudfront_domain if AvFacts::Configuration.storage.cloudfront_domain
     return url.to_s
   rescue NotImplementedError
     # convert the path into a URL, if it's a path
