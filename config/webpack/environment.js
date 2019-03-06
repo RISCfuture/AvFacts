@@ -2,10 +2,16 @@ const path = require('path')
 
 const { environment } = require('@rails/webpacker')
 const erb =  require('./loaders/erb')
-const vue =  require('./loaders/vue')
+const { VueLoaderPlugin } = require('vue-loader')
+const vue = require('./loaders/vue')
+
+environment.plugins.prepend('VueLoaderPlugin', new VueLoaderPlugin())
+environment.loaders.prepend('vue', vue)
+environment.loaders.prepend('erb', erb)
+module.exports = environment
 
 const yaml =  require('./loaders/yaml')
-environment.loaders.append('yaml', yaml)
+environment.loaders.prepend('yaml', yaml)
 environment.config.merge({
   resolve: {
     alias: {
@@ -13,8 +19,3 @@ environment.config.merge({
     }
   }
 })
-
-environment.loaders.append('vue', vue)
-environment.loaders.append('erb', erb)
-
-module.exports = environment
