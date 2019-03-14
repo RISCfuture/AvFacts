@@ -11,10 +11,12 @@ module EpisodesHelper
   end
 
   # @return [Time] The date of the most recently-published episode, which serves
-  #   as the RSS feed's publication date.
+  #   as the RSS feed's publication date. Returns the current time if there are
+  #   no episodes yet.
 
   def publication_date
-    @publication_date ||= Episode.published.order(published_at: :desc).first.published_at
+    @publication_date ||= Episode.published.order(published_at: :desc).first&.published_at ||
+        Time.current
   end
 
   # Returns the full formatted title of the episode used in the episode list
