@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   new Vue({
     render: create => create(Layout),
     router, store
-  }).$mount('#app');
+  }).$mount('#app')
 })
 
 import 'normalize.css'
