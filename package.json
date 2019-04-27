@@ -4,6 +4,7 @@
     "@rails/webpacker": "^4.0.1",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "core-js": "3",
     "i18next": "^10.6.0",
     "js-yaml-loader": "^0.1.0",
     "lodash": "^4.17.5",
