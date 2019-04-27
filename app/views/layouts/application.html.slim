@@ -10,9 +10,9 @@ html lang=I18n.locale
     title AvFacts: A podcast about all things aviation
 
     = stylesheet_pack_tag 'application'
+    = javascript_pack_tag 'application', nonce: true, defer: true
 
     link rel="alternate" type="application/rss+xml" title= "Podcast feed" href=episodes_url(format: 'rss') /
 
   body
     = yield
-    = javascript_pack_tag 'application'

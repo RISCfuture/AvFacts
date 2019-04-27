@@ -3,7 +3,7 @@
     <div class="lightbox"
          v-if="shown"
          ref="lightbox"
-         :style="style">
+         :style="style"> <!-- TODO unsafe inline -->
       <slot />
     </div>
   </transition>
