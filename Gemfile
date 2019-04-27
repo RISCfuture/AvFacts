@@ -33,6 +33,9 @@ gem 'builder'
 gem 'json'
 gem 'nokogiri'
 
+# ERRORS
+gem 'bugsnag'
+
 group :development do
   gem 'listen'
   gem 'puma'

@@ -5,6 +5,7 @@
 class ApplicationController < ActionController::Base
   before_action :set_storage_host
   helper_method :admin?
+  before_bugsnag_notify :add_user_info_to_bugsnag
 
   protected
 
@@ -39,5 +40,11 @@ class ApplicationController < ActionController::Base
   def set_storage_host
     # really only needed for DiskService in dev/test
     ActiveStorage::Current.host = request.base_url
+  end
+
+  def add_user_info_to_bugsnag(report)
+    report.user = {
+        id: session[:user_id]
+    } if session[:user_id]
   end
 end

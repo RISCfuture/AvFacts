@@ -4,6 +4,8 @@
     "@rails/webpacker": "^4.0.1",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "bugsnag-js": "^4.4.0",
+    "bugsnag-vue": "^1.0.1",
     "core-js": "3",
     "i18next": "^10.6.0",
     "js-yaml-loader": "^0.1.0",
