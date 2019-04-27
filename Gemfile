@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.2'
+ruby '2.6.3'
 
 # FRAMEWORK
 gem 'bootsnap'
 gem 'configoro'
-gem 'rails', '5.2.2.1'
+gem 'rails', '5.2.3'
 gem 'sidekiq'
 
 # MODELS
@@ -65,6 +65,9 @@ group :production do
 
   # PAPERCLIP
   gem 'aws-sdk-s3'
+
+  # CONSOLE
+  gem 'irb', require: false
 end
 
 group :doc do
