@@ -14,7 +14,7 @@ RSpec.describe EpisodesHelper, type: :helper do
       FactoryBot.create :episode, processed: true, published_at: 5.minutes.ago, blocked: true # blocked episodes can be included
       FactoryBot.create :episode, processed: true, published_at: 2.days.from_now
 
-      expect(helper.publication_date).to eql(5.minutes.ago)
+      expect(helper.publication_date).to be_within(1.second).of(5.minutes.ago)
     end
   end
 

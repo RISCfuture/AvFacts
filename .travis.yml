@@ -1,0 +1,22 @@
+language: ruby
+rvm:
+- 2.6.3
+postgres:
+  adapter: postgresql
+  database: avfacts_test
+  username: avfacts
+before_install:
+- if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo add-apt-repository -y ppa:mc3man/trusty-media; fi
+- if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update; fi
+- if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y ffmpeg; fi
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install ffmpeg; fi
+- gem update --system
+- gem install bundler
+before_script:
+- createuser avfacts
+- createdb -O avfacts avfacts_test
+- yarn install
+- bundle exec rails db:migrate webpacker:compile
+env:
+  secure: n3uvuD16yPQpHAEWW1TgzgeuLeAKoV23Oi2/ZdPYzB04vqv3mcprbF6z1Ry2kFgusrGeGwc/BWQtQY+ikG9rknTtLoCM9imzmvxmMOuagTtFKDzA6mGmBOYYHhiHuleTmpYHXgaZiD3PjeXp1pRscTcnnSPMt/NS/VD5r78XXoAJ6N8fFea3iqD1ge1D0ZbzRvBKCi3XVSJ1k5M0S+Gnf4/XaVNwd1L2+areVb1vLg02kybjGjlVfp6OECsYd3MtjhskxD1gq/92BPiFrSlaNh5eb6pU0EkJM0nSOVQ0VW1JQ/fR8AwoBCX2Izp4vqNsb/Uc14/xlusUqJojhPOBQjtIK5kHKYEwsfu9un7GHm7rCKmQ96XMG3nOmu2U8i8kHjzUS7nHwRpeAGWgmkpTv1Fa62rnlLqI2yx0k4f0x5kmb47vgv7ydStiJaRuE6lzlpelTqmPtZuhM7Xnb/7FXTGUggcr9GUr7YEUxxJFDJuxjFRx3HHyER+sOkNSBatqhG/XY3V1LYmn9A37n8jsrzCMLJHT+8AbxhPlKbAiK1peXoDgOYTSNhQNFDz4mNuLK1pRZs3arpAh7UMd4UTG4bQULh0tCvRdd0KjAhTeGGk8OCONDT/JN9AE5uQlTsJ2SzFk27xDa0DwBvzLcGBg7d51M7Eo8RJvwll0RfyqJGE=
