@@ -43,6 +43,16 @@ group :development do
   # DEVELOPMENT
   gem 'better_errors'
   gem 'binding_of_caller'
+
+  # DEPLOYMENT
+  gem 'bugsnag-capistrano', require: false
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-nvm', require: false
+  gem 'capistrano-passenger', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-sidekiq', require: false
 end
 
 group :test do

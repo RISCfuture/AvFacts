@@ -32,3 +32,8 @@ module AvFacts
     config.active_storage.analyzers.append AudioAnalyzer
   end
 end
+
+if Rails.env.production?
+  FFMPEG.ffmpeg_binary  = '/var/www/www.avfacts.org/shared/bin/ffmpeg'
+  FFMPEG.ffprobe_binary = '/var/www/www.avfacts.org/shared/bin/ffprobe'
+end
