@@ -14,11 +14,13 @@
              v-model="username"
              placeholder="Username"
              v-focus="true"
+             autocomplete="username"
              :class="fieldClass" />
       <input type="password"
              required
              v-model="password"
              placeholder="Password"
+             autocomplete="current-password"
              :class="fieldClass" />
       <input type="submit"
              name="commit"
