@@ -1,4 +1,6 @@
 {
+  "name": "AvFacts",
+  "license": "MIT",
   "dependencies": {
     "@panter/vue-i18next": "^0.9.1",
     "@rails/webpacker": "^4.0.1",
