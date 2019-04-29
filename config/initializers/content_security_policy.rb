@@ -15,11 +15,16 @@
 # - img-src 'https://avfacts.s3.us-west-1.amazonaws.com'
 # - media-src <cloudfront url>
 #
+# SimpleMDE requires:
+# - style-src 'https://maxcdn.bootstrapcdn.com'
+# - font-src 'https://maxcdn.bootstrapcdn.com'
+#
 # Vue.js in development requires:
 # - connect-src 'ws://localhost:3035' 'http://localhost:3035'
 
 extra_font_sources = %w[
   https://fonts.gstatic.com
+  https://maxcdn.bootstrapcdn.com
 ]
 extra_image_sources = %w[
     https://avfacts.s3.us-west-1.amazonaws.com
@@ -29,6 +34,7 @@ extra_media_sources = [
 ]
 extra_style_sources = %w[
   https://fonts.googleapis.com
+  https://maxcdn.bootstrapcdn.com
 ]
 extra_script_sources = [
 ]
