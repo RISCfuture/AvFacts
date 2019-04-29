@@ -16,10 +16,9 @@ RSpec.describe TranscodingController, type: :controller do
     end
 
     it "should render a 404 for an unknown blob" do
-      pending "find_signed apparently raises RecordNotFound instead of returning nil"
       blob = ActiveStorage.verifier.generate('hello', purpose: :blob_id)
-      get :show, params: {signed_blob_id: blob, encoding_key: 'world', filename: 'foo.txt'}
-      expect(response.status).to be(404)
+      expect { get :show, params: {signed_blob_id: blob, encoding_key: 'world', filename: 'foo.txt'} }.
+          to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end
