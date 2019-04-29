@@ -65,7 +65,7 @@ class Transcode
   # the content delivery network. If no content delivery network is configured,
   # returns the {#service_url}.
   #
-  # @params options Options to pass to {#service_url} if no CDN is configured.
+  # @param options Options to pass to {#service_url} if no CDN is configured.
   # @return [String] The public, unsigned URL for the transcoded variant as
   #   hosted by the content delivery network.
 
