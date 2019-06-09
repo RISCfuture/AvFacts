@@ -27,37 +27,37 @@
   </div>
 </template>
 
-<script>
-  import {mapActions, mapGetters} from 'vuex'
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Action, Getter} from 'vuex-class'
 
+  import {Episode} from 'types'
+  import audioProcessed from 'utilities/audioProcessed'
   import PageLoading from 'components/PageLoading.vue'
   import Error404 from 'views/error/404'
   import EpisodeActions from 'components/EpisodeActions.vue'
 
-  export default {
-    components: {Error404, EpisodeActions, PageLoading},
+  @Component({
+    components: {Error404, EpisodeActions, PageLoading}
+  })
+  export default class Show extends Vue {
+    @Getter episode: Episode
+    @Getter episodeLoading: boolean
 
-    computed: {
-      ...mapGetters(['episode', 'episodeLoading']),
+    get audioProcessed(): boolean { return audioProcessed(this.episode) }
 
-      audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac }
-    },
+    @Action loadEpisode: (params: {number: number}) => Promise<boolean>
 
-    methods: {
-      ...mapActions(['loadEpisode']),
-
-      checkSlug() {
-        if (!this.episode) return
-        if (this.$route.params.slug !== this.episode.slug) {
-          this.$router.replace({name: 'episodes_show', params: {id: this.episode.number, slug: this.episode.slug}})
-        }
-      },
-
-      play() { this.playOpen = true },
-    },
+    private checkSlug() {
+      if (!this.episode) return
+      if (this.$route.params.slug !== this.episode.slug) {
+        this.$router.replace({name: 'episodes_show', params: {id: this.episode.number.toString(), slug: this.episode.slug}})
+      }
+    }
 
     mounted() {
-      this.loadEpisode({number: this.$route.params.id})
+      this.loadEpisode({number: Number(this.$route.params.id)})
           .then(() => this.checkSlug())
     }
   }

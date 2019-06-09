@@ -70,77 +70,79 @@
   </div>
 </template>
 
-<script>
-  import SimpleMDE from 'simplemde'
-  import {DateTime} from 'luxon'
+<script lang="ts">
+  import Vue from 'vue'
+  import * as SimpleMDE from 'simplemde'
+  import {DateTime, DateTimeFormatOptions} from 'luxon'
+  import Component from 'vue-class-component'
+  import {Prop, Watch} from 'vue-property-decorator'
 
   import SmartFormBus from './SmartFormBus'
+  import SmartForm from 'components/SmartForm/SmartForm.vue'
 
-  export default {
-    data() {
+  @Component
+  export default class SmartField extends Vue {
+    $parent!: SmartForm
+    $refs!: {
+      markdownField: HTMLTextAreaElement
+    }
+
+    object: object
+    buffer = ''
+    MDE?: SimpleMDE
+
+    @Prop({type: String, default: 'text'}) type: string
+    @Prop({type: String, required: true}) field: string
+    @Prop({type: Boolean, default: false}) required: boolean
+    @Prop({type: Number}) maxlength: number
+    @Prop({type: String}) placeholder: string
+    @Prop({type: String, default: 'America/Los_Angeles'}) timezone: string
+
+    private get name(): string { return `${this.$parent.objectName}[${this.field}]` }
+    private get id(): string { return `${this.$parent.objectName}_${this.field}` }
+    get errors(): string[] { return this.$parent.errors[this.field] || [] }
+    private get invalid(): boolean { return this.errors.length > 0 }
+    get datetimeFormat(): DateTimeFormatOptions { return DateTime.DATETIME_FULL }
+
+    get commonAttributes() {
       return {
-        object: null,
-        buffer: '',
-        MDE: null
+        name: this.name,
+        id: this.id,
+        class: {invalid: this.invalid},
+        'v-model': this.buffer
       }
-    },
+    }
 
-    props: {
-      type: {type: String, default: 'text'},
-      field: {type: String, required: true},
-      required: {type: Boolean, default: false},
-      maxlength: {type: Number},
-      placeholder: {type: String},
-      timezone: {type: String, default: 'America/Los_Angeles'}
-    },
+    onFocus() { SmartFormBus.$emit('field-focus', this.field) }
+    onBlur() { SmartFormBus.$emit('field-blur', this.field) }
+    onChange() { SmartFormBus.$emit('value-updated', this.field, this.buffer) }
 
-    computed: {
-      name() { return `${this.$parent.objectName}[${this.field}]` },
-      id() { return `${this.$parent.objectName}_${this.field}` },
-      errors() { return this.$parent.errors[this.field] || [] },
-      invalid() { return this.errors.length > 0 },
-      datetimeFormat() { return DateTime.DATETIME_FULL },
+    private createMDE() {
+      if (this.type !== 'markdown') return
+      if (this.MDE) return
+      this.MDE = new SimpleMDE({
+        element: this.$refs.markdownField,
+        blockStyles: {italic: '_'},
+        spellChecker: false,
+        status: false,
+        forceSync: true
+      })
+    }
 
-      commonAttributes() {
-        return {
-          name: this.name,
-          id: this.id,
-          class: {invalid: this.invalid},
-          'v-model': this.buffer
-        }
-      }
-    },
+    @Watch('object')
+    onObjectChanged() {
+      if (this.type === 'file') return
+      this.buffer = this.object[this.field]
+      this.createMDE()
+      // @ts-ignore: accessing a private `element` property
+      if (this.MDE) this.MDE.element = this.$refs.markdownField
+    }
 
-    methods: {
-      onFocus() {SmartFormBus.$emit('field-focus', this.field)},
-      onBlur() {SmartFormBus.$emit('field-blur', this.field)},
-      onChange() {SmartFormBus.$emit('value-updated', this.field, this.buffer)},
-
-      createMDE() {
-        if (this.type !== 'markdown') return
-        if (this.MDE) return
-        this.MDE = new SimpleMDE({
-          element: this.$refs.markdownField,
-          blockStyles: {italic: '_'},
-          spellChecker: false,
-          status: false,
-          forceSync: true
-        })
-      },
-    },
-
-    watch: {
-      object() {
-        if (this.type === 'file') return
-        this.buffer = this.object[this.field]
-        this.createMDE()
-        if (this.MDE) this.MDE.element = this.$refs.markdownField
-      },
-      buffer() {
-        if (this.MDE) this.MDE.value(this.buffer)
-        this.onChange()
-      }
-    },
+    @Watch('buffer')
+    onBufferChanged() {
+      if (this.MDE) this.MDE.value(this.buffer)
+      this.onChange()
+    }
 
     mounted() {
       this.createMDE()

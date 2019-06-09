@@ -11,24 +11,29 @@
   </footer>
 </template>
 
-<script>
-  import moment from 'moment'
-  import {mapGetters, mapActions} from 'vuex'
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Action, Getter} from 'vuex-class'
+  import * as moment from 'moment'
 
-  export default {
-    computed: {
-      ...mapGetters(['isAuthenticated']),
-      year() { return moment().format('YYYY') }
-    },
+  @Component
+  export default class Footer extends Vue {
+    $refs!: {
+      footer: HTMLElement
+    }
 
-    methods: {
-        ...mapActions(['showLoginLightbox', 'logout']),
+    @Getter isAuthenticated: boolean
 
-      recalculateContentPadding() {
-        const height = this.$refs.footer.offsetHeight
-        document.querySelector('body>div').style = `padding-bottom: ${height + 20}px`
-      }
-    },
+    get year(): string { return moment().format('YYYY') }
+
+    @Action showLoginLightbox: () => void
+    @Action logout: () => Promise<void>
+
+    private recalculateContentPadding() {
+      const height = this.$refs.footer.offsetHeight
+      document.querySelector<HTMLDivElement>('body>div').style.paddingBottom = `${height + 20}px`
+    }
 
     mounted() {
       this.recalculateContentPadding()

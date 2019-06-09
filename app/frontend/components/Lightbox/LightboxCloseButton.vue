@@ -4,20 +4,19 @@
   </a>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Prop} from 'vue-property-decorator'
+
   import CloseButton from 'images/CloseButton'
 
-  export default {
-    props: {onClose: Function},
+  @Component({
+    components: {CloseButton}
+  })
+  export default class LightboxCloseButton extends Vue {
+    @Prop({type: Function}) onClose: (e: Event) => void
 
-    components: {CloseButton},
-
-    data() {
-      return {closeActive: false}
-    }
+    closeActive = false
   }
 </script>
-
-<style scoped>
-
-</style>

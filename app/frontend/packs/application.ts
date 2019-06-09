@@ -10,16 +10,18 @@
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 
-import {RAILS_ENV, BUGSNAG_API_KEY} from 'config/constants.js.erb'
+import Secrets from 'config/secrets.js'
 
 import Vue from 'vue'
 
 import bugsnag from '@bugsnag/js'
 import bugsnagVue from '@bugsnag/plugin-vue'
-if (RAILS_ENV === 'production') {
-  const bugsnagClient = bugsnag(BUGSNAG_API_KEY)
-  bugsnag.releaseStage = RAILS_ENV
-  bugsnag.notifyReleaseStages = ['production']
+if (process.env.RAILS_ENV === 'production') {
+  const bugsnagClient = bugsnag({
+    apiKey: Secrets.bugsnagAPIKey,
+    releaseStage: process.env.RAILS_ENV,
+    notifyReleaseStages: ['production']
+  })
   bugsnagClient.use(bugsnagVue, Vue)
 }
 

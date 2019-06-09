@@ -8,9 +8,14 @@
   </svg>
 </template>
 
-<script>
-  export default {
-    props: {size: {type: Number, default: 25}}
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Prop} from 'vue-property-decorator'
+
+  @Component
+  export default class Permalink extends Vue {
+    @Prop({type: Number, default: 25}) size: number
   }
 </script>
 

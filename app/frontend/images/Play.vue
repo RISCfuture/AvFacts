@@ -5,16 +5,17 @@
   </svg>
 </template>
 
-<script>
-  export default {
-    props: {
-      fill: {type: String, default: '#fff'},
-      height: {type: Number, default: 28}
-    },
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Prop} from 'vue-property-decorator'
 
-    computed: {
-      width() { return (this.height/28) * 26 }
-    }
+  @Component
+  export default class Play extends Vue {
+    @Prop({type: String, default: '#fff'}) fill: string
+    @Prop({type: Number, default: 28}) height: number
+
+    get width(): number { return (this.height/28) * 26 }
   }
 </script>
 

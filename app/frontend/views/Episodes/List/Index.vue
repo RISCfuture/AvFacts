@@ -24,36 +24,42 @@
   </div>
 </template>
 
-<script>
-  import {mapActions, mapGetters} from 'vuex'
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Action, Getter} from 'vuex-class'
 
   import Episode from './Episode.vue'
   import PageLoading from 'components/PageLoading.vue'
 
-  export default {
-    data() {
-      return {
-        filter: null,
-        filterTimeout: null
+  @Component({
+    components: {Episode, PageLoading}
+  })
+  export default class Index extends Vue {
+    filter?: string = null
+    filterTimeout?: number = null
+
+    @Getter episodes: Episode[]
+    @Getter episodesLoading: boolean
+    @Getter episodesError?: Error
+    @Getter isAuthenticated: boolean
+
+    @Action loadEpisodes: (params: {restart: boolean}) => Promise<boolean>
+    @Action setFilter: (params: {filter?: string}) => void
+
+    updateFilter() {
+      if (this.filterTimeout) {
+        window.clearTimeout(this.filterTimeout)
+        this.filterTimeout = null
       }
-    },
 
-    components: {Episode, PageLoading},
+      this.filterTimeout = window.setTimeout(async () => {
+        await this.setFilter({filter: this.filter})
+        this.loadEpisodes({restart: true})
+      }, 250)
+    }
 
-    computed: mapGetters(['episodes', 'episodesLoading', 'episodesError', 'isAuthenticated']),
-
-    methods: {
-        ...mapActions(['loadEpisodes', 'setFilter']),
-      updateFilter() {
-        if (this.filterTimeout) clearTimeout(this.filterTimeout)
-        this.filterTimeout = setTimeout(async () => {
-          await this.setFilter({filter: this.filter})
-          this.loadEpisodes({restart: true})
-        }, 250)
-      }
-    },
-
-    mounted() { this.loadEpisodes() }
+    mounted() { this.loadEpisodes({restart: true}) }
   }
 </script>
 

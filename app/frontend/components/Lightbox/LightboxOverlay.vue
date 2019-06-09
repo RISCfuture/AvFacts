@@ -4,13 +4,15 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+
   import LightboxBus from './LightboxBus'
 
-  export default {
-    data() {
-      return {shown: false}
-    },
+  @Component
+  export default class LightboxOverlay extends Vue {
+    shown = false
 
     created() {
       LightboxBus.$on('lightbox:updated', shown => this.shown = shown)

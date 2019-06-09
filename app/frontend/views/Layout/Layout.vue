@@ -13,14 +13,18 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+
   import Banner from './Banner.vue'
   import Links from './Links.vue'
   import Footer from './Footer.vue'
 
-  export default {
+  @Component({
     components: {Links, Banner, FooterView: Footer}
-  }
+  })
+  export default class Layout extends Vue {}
 </script>
 
 <style lang="scss" scoped>

@@ -27,29 +27,29 @@
   </div>
 </template>
 
-<script>
-  import {mapGetters} from 'vuex'
+<script lang="ts">
+  import Vue from 'vue'
+  import {Prop} from 'vue-property-decorator'
+  import Component from 'vue-class-component'
+  import {Getter} from 'vuex-class'
+
+  import audioProcessed from 'utilities/audioProcessed'
+  import {Episode} from 'types'
   import Play from 'images/Play.vue'
 
-  export default {
-    props: ['episode'],
+  @Component({
+    components: {Play}
+  })
+  export default class EpisodeActions extends Vue {
+    @Prop({required: true}) episode: Episode
 
-    data() {
-      return {
-        playOpen: false
-      }
-    },
+    playOpen = false
 
-    components: {Play},
+    @Getter isAuthenticated: boolean
 
-    computed: {
-      ...mapGetters(['isAuthenticated']),
-      audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac },
-    },
+    get audioProcessed(): boolean { return audioProcessed(this.episode) }
 
-    methods: {
-      play() { this.playOpen = true }
-    }
+    play() { this.playOpen = true }
   }
 </script>
 

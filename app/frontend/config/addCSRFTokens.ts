@@ -2,7 +2,7 @@ import Axios from 'axios'
 
 const CSRF_TOKEN_HEADER = 'X-CSRF-Token'
 
-Axios.interceptors.request.use(function(config) {
+Axios.interceptors.request.use(config => {
   if (config.method !== 'get') {
     // const tokenName = document.querySelector('meta[name=csrf-param]')
     //                         .getAttribute('content')

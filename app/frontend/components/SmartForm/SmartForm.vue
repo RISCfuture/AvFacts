@@ -7,63 +7,61 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
   import Axios from 'axios'
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Prop, Watch} from 'vue-property-decorator'
 
   import SmartFormBus from './SmartFormBus'
+  import SmartField from 'components/SmartForm/SmartField.vue'
 
-  export default {
-    props: {
-      url: {type: String, required: true},
-      method: {type: String, default: 'post'},
-      object: {type: Object, required: true},
-      objectName: {type: String, required: true}
-    },
+  @Component
+  export default class SmartForm extends Vue {
+    $children!: SmartField[]
+    $refs!: {
+      form: HTMLFormElement
+    }
 
-    data() {
-      return {
-        errors: {},
-        focused: null
+    @Prop({type: String, required: true}) url: string
+    @Prop({type: String, default: 'post'}) method: string
+    @Prop({type: Object, required: true}) object: object
+    @Prop({type: String, required: true}) objectName: string
+
+    errors: {[field: string]: string[]} = {}
+
+    get formData(): FormData {
+      let formData = new FormData(this.$refs.form)
+      this.$children.forEach(child => {
+        if (child.type !== 'file') return
+        if (child.buffer === '') return
+        formData.append(child.field, child.buffer)
+      })
+      return formData
+    }
+
+    async save() {
+      SmartFormBus.$emit('submit')
+      try {
+        let response = await Axios.request({method: this.method, url: this.url, data: this.formData})
+        SmartFormBus.$emit('complete')
+        SmartFormBus.$emit('success', response)
+      } catch (error) {
+        SmartFormBus.$emit('complete')
+        SmartFormBus.$emit('error', error)
+        if (error.response.status === 422)
+          this.errors = error.response.data.errors
       }
-    },
-
-    computed: {
-      formData() {
-        let formData = new FormData(this.$refs.form)
-        this.$children.forEach(child => {
-          if (child.type !== 'file') return
-          if (child.buffer === '') return
-          formData.append(child.field, child.buffer)
-        })
-        return formData
-      }
-    },
-
-    methods: {
-      async save() {
-        SmartFormBus.$emit('submit')
-        try {
-          let response = await Axios.request({method: this.method, url: this.url, data: this.formData})
-          SmartFormBus.$emit('complete')
-          SmartFormBus.$emit('success', response)
-        } catch (error) {
-          SmartFormBus.$emit('complete')
-          SmartFormBus.$emit('error', error)
-          if (error.response.status === 422)
-            this.errors = error.response.data.errors
-        }
-      }
-    },
+    }
 
     mounted() {
       SmartFormBus.$on('value-updated', (field, value) => this.object[field] = value)
       this.$children.forEach(child => child.object = this.object)
-    },
+    }
 
-    watch: {
-      object() {
-        this.$children.forEach(child => child.object = this.object)
-      }
+    @Watch('object')
+    onObjectChanged() {
+      this.$children.forEach(child => child.object = this.object)
     }
   }
 </script>

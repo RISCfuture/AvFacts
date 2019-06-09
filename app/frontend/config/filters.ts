@@ -2,8 +2,8 @@ import Vue from 'vue'
 
 import numeral from 'numeral'
 
-import moment from 'moment'
-import momentDurationFormatSetup from 'moment-duration-format'
+import * as moment from 'moment'
+const momentDurationFormatSetup = require('moment-duration-format')
 momentDurationFormatSetup(moment)
 
 Vue.filter('integer', function(value) {

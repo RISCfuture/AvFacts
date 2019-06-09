@@ -1,3 +1,5 @@
+import {RouteConfig} from 'vue-router'
+
 import EpisodesList from 'views/Episodes/List/Index.vue'
 import EpisodesNew from 'views/Episodes/New.vue'
 import EpisodesShow from 'views/Episodes/Show.vue'
@@ -6,9 +8,9 @@ import EpisodesScript from 'views/Episodes/Script.vue'
 import About from 'views/About.vue'
 
 import Layout from 'views/Layout/Layout.vue'
-import PageNotFound from 'views/PageNotFound.vue'
+import FourOhFour from 'views/error/404.vue'
 
-export default [
+const routes: RouteConfig[] = [
   {
     path: '/', component: Layout, children: [
       {path: '', component: EpisodesList, name: 'episodes_list'},
@@ -21,5 +23,7 @@ export default [
     ]
   },
 
-  {path: "*", component: PageNotFound}
+  {path: "*", component: FourOhFour}
 ]
+
+export default routes

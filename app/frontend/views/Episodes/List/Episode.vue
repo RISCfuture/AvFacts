@@ -22,17 +22,24 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Prop} from 'vue-property-decorator'
+  import * as _ from 'lodash'
+
+  import * as Types from 'types'
+  import audioProcessed from 'utilities/audioProcessed'
   import EpisodeActions from 'components/EpisodeActions.vue'
   import Permalink from 'images/Permalink.vue'
 
-  export default {
-    props: ['episode'],
-    components: {EpisodeActions, Permalink},
+  @Component({
+    components: {EpisodeActions, Permalink}
+  })
+  export default class Episode extends Vue {
+    @Prop({required: true}) episode: Types.Episode
 
-    computed: {
-      audioProcessed() { return this.episode.audio && this.episode.audio.mp3 && this.episode.audio.aac }
-    }
+    get audioProcessed(): boolean { return audioProcessed(this.episode) }
   }
 </script>
 

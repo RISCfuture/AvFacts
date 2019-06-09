@@ -4,14 +4,17 @@
   </svg>
 </template>
 
-<script>
-  export default {
-    props: {active: Boolean},
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Prop} from 'vue-property-decorator'
 
-    computed: {
-      className() {
-        return this.active ? 'active' : null
-      }
+  @Component
+  export default class CloseButton extends Vue {
+    @Prop({type: Boolean}) active: boolean
+
+    get className(): string | null {
+      return this.active ? 'active' : null
     }
   }
 </script>

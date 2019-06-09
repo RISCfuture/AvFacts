@@ -80,12 +80,15 @@
   </smart-form>
 </template>
 
-<script>
-  import _ from 'lodash'
-  import {mapActions} from 'vuex'
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Prop, Watch} from 'vue-property-decorator'
+  import {Action} from 'vuex-class'
+  import * as _ from 'lodash'
 
+  import {Episode, ScratchEpisode} from 'types'
   import Channel from 'channel.yml'
-
   import SmartForm from 'components/SmartForm/SmartForm'
   import SmartField from 'components/SmartForm/SmartField'
   import SmartFormBus from 'components/SmartForm/SmartFormBus'
@@ -93,43 +96,36 @@
 
   const ITUNES_MIN_IMAGE_SIZE = 1400
 
-  export default {
-    props: ['episode'],
+  @Component({
+    components: {SmartForm, SmartField, PageLoading}
+  })
+  export default class Form extends Vue {
+    @Prop({required: true}) episode: Episode
 
-    data() {
-      return {
-        scratchEpisode: {},
-        channel: Channel,
-        saving: false
-      }
-    },
+    scratchEpisode: ScratchEpisode = {}
+    channel = Channel
+    saving = false
 
-    components: {SmartForm, SmartField, PageLoading},
+    get method(): string { return (this.episode.number ? 'patch' : 'post') }
 
-    computed: {
-      method() { return (this.episode.number ? 'patch' : 'post') },
+    get url(): string {
+      if (this.episode.number)
+        return `/episodes/${this.episode.number}.json`
+      else
+        return `/episodes.json`
+    }
 
-      url() {
-        if (this.episode.number)
-          return `/episodes/${this.episode.number}.json`
-        else
-          return `/episodes.json`
-      },
+    get imageTooSmall(): boolean {
+      return this.episode.image && (this.episode.image.width < ITUNES_MIN_IMAGE_SIZE || this.episode.image.height < ITUNES_MIN_IMAGE_SIZE)
+    }
 
-      imageTooSmall() {
-        return this.episode.image && (this.episode.image.width < ITUNES_MIN_IMAGE_SIZE || this.episode.image.height < ITUNES_MIN_IMAGE_SIZE)
-      }
-    },
+    @Action loadEpisodes: (params: {restart: boolean}) => Promise<boolean>
 
-    methods: {
-      ...mapActions(['loadEpisodes']),
-
-      refreshScratch() {
-        this.scratchEpisode = _.pick(this.episode,
-            ['title', 'subtitle', 'author', 'published_at', 'explicit',
-             'blocked', 'summary', 'description', 'script', 'credits'])
-      }
-    },
+    private refreshScratch() {
+      this.scratchEpisode = _.pick(this.episode,
+          ['title', 'subtitle', 'author', 'published_at', 'explicit',
+           'blocked', 'summary', 'description', 'script', 'credits']) as object
+    }
 
     mounted() {
       this.refreshScratch()
@@ -138,11 +134,10 @@
         this.saving = false
         this.loadEpisodes({restart: true})
       })
-    },
-
-    watch: {
-      episode() { this.refreshScratch() }
     }
+
+    @Watch('episode')
+    onEpisodeChanged() { this.refreshScratch() }
   }
 </script>
 

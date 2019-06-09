@@ -30,50 +30,51 @@
   </lightbox>
 </template>
 
-<script>
-  import {mapActions, mapGetters} from 'vuex'
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Watch} from 'vue-property-decorator'
+  import {Action, Getter} from 'vuex-class'
+  import {AxiosError} from 'axios'
+
   import Lightbox from 'components/Lightbox/Lightbox'
   import LightboxCloseButton from 'components/Lightbox/LightboxCloseButton'
 
-  export default {
-    data() {
-      return {
-        username: null,
-        password: null
-      }
-    },
+  @Component({
+    components: {Lightbox, LightboxCloseButton}
+  })
+  export default class LoginLightbox extends Vue {
+    username?: string = null
+    password?: string = null
 
-    components: {Lightbox, LightboxCloseButton},
+    @Getter loginLightboxShown: boolean
+    @Getter sessionError?: AxiosError
 
-    computed: {
-      ...mapGetters(['loginLightboxShown', 'sessionError']),
+    get fieldClass(): string | null { return this.sessionError ? 'invalid' : null }
 
-      fieldClass() { return this.sessionError ? 'invalid' : null },
+    get sessionErrorText(): string | null {
+      if (!this.sessionError) return null
+      if (this.sessionError.response.status === 401) return "Incorrect username or password."
+      else return this.sessionError.message
+    }
 
-      sessionErrorText() {
-        if (!this.sessionError) return null;
-        if (this.sessionError.response.status === 401) return "Incorrect username or password."
-        else return this.sessionError;
-      }
-    },
+    @Action hideLoginLightbox: () => void
+    @Action login: (fields: {[name: string]: string}) => Promise<boolean>
+    @Action resetSessionError: () => void
+    @Action loadEpisodes: (params: {restart: boolean}) => Promise<boolean>
 
-    methods: {
-      ...mapActions(['hideLoginLightbox', 'login', 'resetSessionError', 'loadEpisodes']),
+    async submitCredentials() {
+      await this.login({username: this.username, password: this.password})
+      this.hideLoginLightbox()
+      this.loadEpisodes({restart: true})
+    }
 
-      async submitCredentials() {
-        await this.login({username: this.username, password: this.password})
-        this.hideLoginLightbox()
-        this.loadEpisodes({restart: true})
-      }
-    },
-
-    watch: {
-      loginLightboxShown(newShown, oldShown) {
-        if (newShown && !oldShown) {
-          this.username = null
-          this.password = null
-          this.resetSessionError()
-        }
+    @Watch('loginLightboxShown')
+    onLoginLightboxShownChanged(newShown: boolean, oldShown: boolean) {
+      if (newShown && !oldShown) {
+        this.username = null
+        this.password = null
+        this.resetSessionError()
       }
     }
   }

@@ -44,19 +44,19 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+
   import Image1 from 'images/about1.jpg'
   import Image2 from 'images/about2.jpg'
   import Image3 from 'images/about3.jpg'
 
-  export default {
-    data() {
-      return {
-        image1: Image1,
-        image2: Image2,
-        image3: Image3
-      }
-    }
+  @Component
+  export default class About extends Vue {
+    image1 = Image1
+    image2 = Image2
+    image3 = Image3
   }
 </script>
 

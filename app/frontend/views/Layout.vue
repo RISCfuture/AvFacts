@@ -6,15 +6,20 @@
   </div>
 </template>
 
-<script>
-  import {mapActions} from 'vuex'
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Action} from 'vuex-class'
 
   import LoginLightbox from 'views/Layout/LoginLightbox'
   import LightboxOverlay from 'components/Lightbox/LightboxOverlay'
 
-  export default {
-    components: {LightboxOverlay, LoginLightbox},
-    methods: mapActions(['loadSession']),
-    mounted() { this.loadSession() }
+  @Component({
+    components: {LightboxOverlay, LoginLightbox}
+  })
+  export default class Layout extends Vue {
+    @Action loadSession: (params: {skipIfAlreadyLoaded: boolean}) => Promise<boolean>
+
+    mounted() { this.loadSession({skipIfAlreadyLoaded: false}) }
   }
 </script>

@@ -9,34 +9,36 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Prop} from 'vue-property-decorator'
+
   import LightboxBus from './LightboxBus'
 
-  export default {
-    props: {shown: Boolean},
+  @Component
+  export default class Lightbox extends Vue {
+    @Prop({type: Boolean}) shown: boolean
 
-    data() {
-      return {
-        width: null,
-        height: null
-      }
-    },
+    $refs!: {
+      lightbox: HTMLElement
+    }
 
-    computed: {
-      style() {
-        return `transform: translate(-${this.width/2.0}px, -${this.height/2.0}px)`
-      }
-    },
+    width: number
+    height: number
 
-    methods: {
-      resize() {
-        if (!this.$refs.lightbox) return
-        this.width = this.$refs.lightbox.offsetWidth
-        this.height = this.$refs.lightbox.offsetHeight
-      }
-    },
+    get style(): string {
+      return `transform: translate(-${this.width/2.0}px, -${this.height/2.0}px)`
+    }
 
-    mounted() { this.resize() },
+    private resize() {
+      if (!this.$refs.lightbox) return
+      this.width = this.$refs.lightbox.offsetWidth
+      this.height = this.$refs.lightbox.offsetHeight
+    }
+
+    mounted() { this.resize() }
+
     updated() {
       this.resize()
       LightboxBus.$emit('lightbox:updated', this.shown)

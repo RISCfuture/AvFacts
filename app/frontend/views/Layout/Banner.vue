@@ -11,15 +11,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
   import BannerImage from 'images/banner-image.png'
 
-  export default {
-    data() {
-      return {
-        bannerImage: BannerImage
-      }
-    },
+  @Component
+  export default class Banner extends Vue {
+    bannerImage = BannerImage
   }
 </script>
 

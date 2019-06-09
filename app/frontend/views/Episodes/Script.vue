@@ -27,12 +27,15 @@
   </div>
 </template>
 
-<script>
-  import marked from 'marked'
-  import {mapActions, mapGetters} from 'vuex'
+<script lang="ts">
+  import * as marked from 'marked'
 
   import Error404 from 'views/error/404'
   import PageLoading from 'components/PageLoading.vue'
+  import Vue from 'vue';
+  import Component from "vue-class-component";
+  import {Action, Getter} from "vuex-class";
+  import {Episode} from "types";
 
   marked.setOptions({
     gfm: true,
@@ -44,28 +47,28 @@
     smartypants: true
   })
 
-  export default {
-    components: {Error404, PageLoading},
+  @Component({
+    components: {Error404, PageLoading}
+  })
+  export default class Script extends Vue {
+    @Getter episode: Episode
+    @Getter isAuthenticated: boolean
+    @Getter episodeLoading: boolean
 
-    computed: {
-      ...mapGetters(['episode', 'isAuthenticated', 'episodeLoading']),
+    get renderedScript(): string { return marked(this.episode.script) }
 
-      renderedScript() { return marked(this.episode.script) },
+    get estimatedRunningTime(): number {
+      const wordCount = this.episode.script.split(/\s+/).length
+      return Math.round(0.3472*wordCount + 69.6)
+    }
 
-      estimatedRunningTime() {
-        const wordCount = this.episode.script.split(/\s+/).length
-        return Math.round(0.3472*wordCount + 69.6)
-      }
-    },
+    @Action loadEpisode: (params: {number: number}) => Promise<boolean>
+    @Action loadSession: (params: {skipIfAlreadyLoaded: boolean}) => Promise<boolean>
 
-    methods: {
-      ...mapActions(['loadEpisode', 'loadSession']),
-
-      async refresh() {
-        await this.loadSession({skipIfAlreadyLoaded: true})
-        this.loadEpisode({number: this.$route.params.id})
-      }
-    },
+    private async refresh() {
+      await this.loadSession({skipIfAlreadyLoaded: true})
+      this.loadEpisode({number: Number(this.$route.params.id)})
+    }
 
     mounted() {
       this.refresh()

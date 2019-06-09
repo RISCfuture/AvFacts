@@ -9,25 +9,23 @@
   </div>
 </template>
 
-<script>
-  import {mapGetters} from 'vuex'
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import {Getter} from 'vuex-class'
 
+  import {ScratchEpisode} from 'types'
+  import SmartFormBus from 'components/SmartForm/SmartFormBus'
   import Error404 from 'views/error/404'
   import EpisodeForm from './Form'
-  import SmartFormBus from 'components/SmartForm/SmartFormBus'
 
-  export default {
-    data() {
-      return {
-        episode: {}
-      }
-    },
+  @Component({
+    components: {Error404, EpisodeForm}
+  })
+  export default class New extends Vue {
+    episode: ScratchEpisode = {}
 
-    components: {Error404, EpisodeForm},
-
-    computed: {
-      ...mapGetters(['isAuthenticated']),
-    },
+    @Getter isAuthenticated: boolean
 
     mounted() {
       SmartFormBus.$on('success', () => this.$router.push({name: 'episodes_list'}))
