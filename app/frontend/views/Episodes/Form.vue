@@ -120,6 +120,8 @@
     }
 
     @Action loadEpisodes: (params: {restart: boolean}) => Promise<boolean>
+    @Action setEpisode: (params: {episode: Episode}) => void
+    @Action setEpisodeInEpisodes: (params: {episode: Episode}) => void
 
     private refreshScratch() {
       this.scratchEpisode = _.pick(this.episode,
@@ -130,9 +132,11 @@
     mounted() {
       this.refreshScratch()
       SmartFormBus.$on('submit', () => this.saving = true)
-      SmartFormBus.$on('success', () => {
-        this.saving = false
-        this.loadEpisodes({restart: true})
+      SmartFormBus.$on('complete', () => this.saving = false)
+
+      SmartFormBus.$on('success', response => {
+        this.setEpisode({episode: response.data})
+        this.setEpisodeInEpisodes({episode: response.data})
       })
     }
 

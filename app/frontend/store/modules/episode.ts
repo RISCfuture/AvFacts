@@ -42,6 +42,10 @@ const mutations = {
 }
 
 const actions = {
+  setEpisode({commit}: ActionContext<EpisodeState, RootState>, {episode}: {episode: Episode}) {
+    commit('SET_EPISODE', {episode})
+  },
+
   loadEpisode({commit, state}: ActionContext<EpisodeState, RootState>, {number}: {number: number}): Promise<boolean> {
     if (state.episode && state.episode.number === number)
       return Promise.resolve(false)

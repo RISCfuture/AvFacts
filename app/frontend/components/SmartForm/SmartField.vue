@@ -81,15 +81,15 @@
   import SmartForm from 'components/SmartForm/SmartForm.vue'
 
   @Component
-  export default class SmartField extends Vue {
-    $parent!: SmartForm
+  export default class SmartField<FormObject> extends Vue {
+    $parent!: SmartForm<FormObject>
     $refs!: {
       markdownField: HTMLTextAreaElement
     }
 
-    object: object
+    object?: FormObject = null
     buffer = ''
-    MDE?: SimpleMDE
+    MDE?: SimpleMDE = null
 
     @Prop({type: String, default: 'text'}) type: string
     @Prop({type: String, required: true}) field: string

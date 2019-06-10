@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-  import Axios from 'axios'
+  import Axios, {Method} from 'axios'
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import {Prop, Watch} from 'vue-property-decorator'
@@ -17,15 +17,15 @@
   import SmartField from 'components/SmartForm/SmartField.vue'
 
   @Component
-  export default class SmartForm extends Vue {
-    $children!: SmartField[]
+  export default class SmartForm<FormObject> extends Vue {
+    $children!: SmartField<FormObject>[]
     $refs!: {
       form: HTMLFormElement
     }
 
     @Prop({type: String, required: true}) url: string
-    @Prop({type: String, default: 'post'}) method: string
-    @Prop({type: Object, required: true}) object: object
+    @Prop({type: String, default: 'post'}) method: Method
+    @Prop({type: Object, required: true}) object: FormObject
     @Prop({type: String, required: true}) objectName: string
 
     errors: {[field: string]: string[]} = {}
@@ -43,7 +43,7 @@
     async save() {
       SmartFormBus.$emit('submit')
       try {
-        let response = await Axios.request({method: this.method, url: this.url, data: this.formData})
+        let response = await Axios.request<FormObject>({method: this.method, url: this.url, data: this.formData})
         SmartFormBus.$emit('complete')
         SmartFormBus.$emit('success', response)
       } catch (error) {

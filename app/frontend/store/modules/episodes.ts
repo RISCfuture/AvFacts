@@ -63,12 +63,28 @@ const mutations = {
     state.nextURL = `/episodes.json?filter=${state.episodesFilter || ''}`
   },
 
-  SET_NEXT_PAGE_URL(state: EpisodesState, {url}) {
+  SET_NEXT_PAGE_URL(state: EpisodesState, {url}: {url: string}) {
     state.nextURL = url
+  },
+
+  SET_EPISODE_IN_EPISODES(state: EpisodesState, {episode}: {episode: Episode}) {
+    let newEpisodes: Episode[] = []
+    state.episodes.forEach((existingEpisode, index) => {
+      if (existingEpisode.id === episode.id)
+        newEpisodes.push(episode)
+      else
+        newEpisodes.push(existingEpisode)
+    })
+
+    state.episodes = newEpisodes
   }
 }
 
 const actions = {
+  setEpisodeInEpisodes({commit, state}: ActionContext<EpisodesState, RootState>, {episode}: {episode: Episode}) {
+    commit('SET_EPISODE_IN_EPISODES', {episode})
+  },
+
   loadEpisodes({commit, state}: ActionContext<EpisodesState, RootState>, {restart}: {restart: boolean} = {restart: false}): Promise<boolean> {
     return new Promise<boolean>(async (resolve, reject) => {
       if (restart) commit('RESET_EPISODES')

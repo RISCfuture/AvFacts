@@ -219,7 +219,7 @@ RSpec.describe EpisodesController, type: :controller do
 
     it "should update an episode" do
       patch :update, params: {id: @episode.to_param, episode: {title: "New Title"}, format: 'json'}
-      expect(response.status).to be(204)
+      expect(response.status).to be(200)
       expect(@episode.reload.title).to eql("New Title")
     end
 

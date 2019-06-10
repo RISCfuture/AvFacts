@@ -1,8 +1,12 @@
+require 'application_responder'
+
 # @abstract
 #
 # Abstract superclass for all controllers in AvFacts.
 
 class ApplicationController < ActionController::Base
+  self.responder = ApplicationResponder
+
   before_action :set_storage_host
   helper_method :admin?
   before_bugsnag_notify :add_user_info_to_bugsnag
