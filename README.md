@@ -46,9 +46,6 @@ transcoded variants of audio files, and (b) an internal controller, similar to
 other Active Storage controllers, that streams transcoded files to the user,
 and supports Range queries for podcasting software.
 
-The `config/initializers/thumbnails.rb` file adds an image variant that produces
-scaled and cropped thumbnail images.
-
 ### Controllers and authentication
 
 The RESTful controllers provide JSON views that power the Vue.js front-end, and

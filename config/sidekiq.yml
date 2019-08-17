@@ -5,3 +5,5 @@ production:
   :concurrency: 20
 :queues:
 - avfacts_development_default
+- avfacts_development_active_storage_analysis
+- avfacts_development_active_storage_purge

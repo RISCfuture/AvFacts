@@ -57,7 +57,7 @@ Rails.application.config.content_security_policy do |policy|
   policy.img_src     :self, :data, *extra_image_sources
   policy.object_src  :none
   policy.script_src  :self, *extra_script_sources
-  policy.style_src   :self, :unsafe_inline, *extra_style_sources
+  policy.style_src   :self, *extra_style_sources
   policy.media_src   :self, *extra_media_sources
 
   policy.child_src :blob

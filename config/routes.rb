@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   get '/rails/active_storage/transcoded/:signed_blob_id/:encoding_key/*filename' =>
           'transcoding#show',

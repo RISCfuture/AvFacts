@@ -1,4 +1,4 @@
-class CreateEpisodes < ActiveRecord::Migration[5.1]
+class CreateEpisodes < ActiveRecord::Migration[6.0]
   def change
     create_table :episodes do |t|
       t.integer :number, null: false

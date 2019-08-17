@@ -1,16 +1,17 @@
 source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.3'
 
 # FRAMEWORK
 gem 'bootsnap'
 gem 'configoro'
-gem 'rails', '5.2.3'
+gem 'rails', '6.0.0'
 gem 'sidekiq'
 
 # MODELS
+gem 'active_storage_validations'
 gem 'bcrypt'
+gem 'image_processing'
 gem 'mini_magick'
 gem 'pg'
 gem 'streamio-ffmpeg'
@@ -58,7 +59,8 @@ end
 group :test do
   # SPECS
   gem 'rails-controller-testing'
-  gem 'rspec-rails'
+  gem 'rspec-rails', github: 'rspec/rspec-rails', branch: '4-0-dev'
+
 
   # ISOLATION
   gem 'database_cleaner'
@@ -73,11 +75,10 @@ end
 
 group :production do
   # CACHE
-  gem 'redis-rack-cache'
-  gem 'redis-rails'
+  gem 'redis'
 
-  # PAPERCLIP
-  gem 'aws-sdk-s3'
+  # ACTIVE STORAGE
+  gem 'aws-sdk-s3', require: false
 
   # CONSOLE
   gem 'irb', require: false

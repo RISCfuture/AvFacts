@@ -64,16 +64,11 @@ RSpec.describe Episode, type: :model do
       episode.image.analyze
       expect(episode.thumbnail_image).to be_kind_of(ActiveStorage::Variant)
       expect(episode.thumbnail_image.blob).to eql(episode.image.blob)
-      expect(episode.thumbnail_image.variation.transformations).to eql(thumbnail: '200x200', crop: '200x200+0+0')
+      expect(episode.thumbnail_image.variation.transformations).to eql(resize_to_fill: [200, 200])
     end
 
     it "should return nil if the image is nil" do
       episode = FactoryBot.create(:episode, image: nil)
-      expect(episode.thumbnail_image).to be_nil
-    end
-
-    it "should return nil if the image is not yet analyzed" do
-      episode = FactoryBot.create(:episode)
       expect(episode.thumbnail_image).to be_nil
     end
   end

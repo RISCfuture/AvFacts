@@ -9,10 +9,10 @@ html lang=I18n.locale
 
     title AvFacts: A podcast about all things aviation
 
-    = stylesheet_pack_tag 'application'
+    = stylesheet_pack_tag 'application', nonce: content_security_policy_nonce
     = javascript_pack_tag 'application', nonce: true, defer: true
 
-    link rel="alternate" type="application/rss+xml" title= "Podcast feed" href=episodes_url(format: 'rss') /
+    link rel="alternate" type="application/rss+xml" title="Podcast feed" href=episodes_url(format: 'rss') /
 
   body
     = yield

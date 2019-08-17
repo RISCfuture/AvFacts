@@ -1,4 +1,4 @@
-class AddFileSizesToEpisodes < ActiveRecord::Migration[5.2]
+class AddFileSizesToEpisodes < ActiveRecord::Migration[6.0]
   def change
     change_table :episodes do |t|
       t.bigint :mp3_size, :aac_size

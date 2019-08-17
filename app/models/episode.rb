@@ -72,6 +72,9 @@ class Episode < ApplicationRecord
   validates :published_at,
             presence:   {strict: true},
             timeliness: {type: :datetime}
+  # validates :audio,
+  #           attached:     true,
+  #           content_type: {in: /^audio\/.*$/}
 
   has_one_attached :audio
   has_one_attached :image
@@ -114,20 +117,24 @@ class Episode < ApplicationRecord
   #   image.
 
   def thumbnail_image
-    return nil if image.attachment.nil?
-    return nil unless image.metadata['width'] && image.metadata['height']
-
-    image.thumbnail(200)
+    return nil unless image.attached?
+    variant = image.variant(resize_to_fill: [200, 200])
+    class << variant
+      public :processed?
+    end
+    return variant
   end
 
   # @return [ActiveStorage::Variant, nil] The version of this image for use with
   #   the iTunes RSS feed.
 
   def itunes_image
-    return nil if image.attachment.nil?
-    return nil unless image.metadata['width'] && image.metadata['height']
-
-    image.thumbnail(3000)
+    return nil unless image.attached?
+    variant = image.variant(resize_to_fill: [3000, 3000])
+    class << variant
+      public :processed?
+    end
+    return variant
   end
 
   # @private
@@ -165,8 +172,8 @@ class Episode < ApplicationRecord
 
     if image.attachment
       image.analyze
-      thumbnail_image.processed if thumbnail_image.kind_of?(ActiveStorage::Variant)
-      itunes_image.processed if itunes_image.kind_of?(ActiveStorage::Variant)
+      thumbnail_image.processed if thumbnail_image
+      itunes_image.processed if itunes_image
     end
 
     sleep(10) if include_delay
@@ -182,7 +189,7 @@ class Episode < ApplicationRecord
 
   def ready?
     audio.attachment && image.attachment &&
-        mp3.processed? && aac.processed? && thumbnail_image.send(:processed?)
+        mp3.processed? && aac.processed? && thumbnail_image&.processed?
   end
 
   def schedule_preprocess

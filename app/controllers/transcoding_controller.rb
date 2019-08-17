@@ -14,7 +14,7 @@ class TranscodingController < ApplicationController
 
   def show
     if (blob = ActiveStorage::Blob.find_signed(params[:signed_blob_id]))
-      expires_in ActiveStorage::Blob.service.url_expires_in
+      expires_in ActiveStorage.service_urls_expire_in
       transcode = Transcode.new(blob, key: params[:encoding_key])
       redirect_to transcode.processed.service_url(disposition: params[:disposition])
     else

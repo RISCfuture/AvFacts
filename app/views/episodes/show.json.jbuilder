@@ -8,7 +8,7 @@ json.image do
   json.width @episode.image.metadata['width']
   json.height @episode.image.metadata['height']
   json.size @episode.image.byte_size
-end if @episode.thumbnail_image&.send(:processed?)
+end if @episode.thumbnail_image&.processed?
 
 json.audio do
   json.duration @episode.audio.metadata['duration']
