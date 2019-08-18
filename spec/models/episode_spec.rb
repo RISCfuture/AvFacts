@@ -14,18 +14,16 @@ RSpec.describe Episode, type: :model do
     end
   end
 
-  context 'published_at' do
-    it "should default to the current time" do
-      expect(FactoryBot.create(:episode, published_at: nil).published_at).to eql(Time.current)
-    end
-  end
-
   describe '#published?' do
     it "should return true for a published episode" do
       expect(FactoryBot.create(:episode, published_at: 1.day.ago)).to be_published
     end
 
     it "should return false for an unpublished episode" do
+      expect(FactoryBot.create(:episode, published_at: nil)).not_to be_published
+    end
+
+    it "should return false for a future-dated episode" do
       expect(FactoryBot.create(:episode, published_at: 1.day.from_now)).not_to be_published
     end
   end
@@ -85,8 +83,8 @@ RSpec.describe Episode, type: :model do
       expect(episode.aac_size).to be_within(128).of(22_128) # different ffmpeg versions on travis/local
     end
 
-    it "should set processed and advance published_at if the episode is ready" do
-      episode = FactoryBot.create(:episode, published_at: 1.day.ago)
+    it "should set processed and set published_at if the episode is ready" do
+      episode = FactoryBot.create(:episode, published_at: nil)
       episode.preprocess!
       expect(episode).to be_processed
       expect(episode.published_at).to eql(Time.current)
@@ -104,6 +102,13 @@ RSpec.describe Episode, type: :model do
       episode.preprocess!
       expect(episode).to be_processed
       expect(episode.published_at).to eql(1.day.from_now)
+    end
+
+    it "should not change published_at if the episode has already been published" do
+      episode = FactoryBot.create(:episode, published_at: 1.day.ago)
+      episode.preprocess!
+      expect(episode).to be_processed
+      expect(episode.published_at).to eql(1.day.ago)
     end
   end
 

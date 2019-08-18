@@ -106,7 +106,7 @@ CREATE TABLE public.episodes (
     summary character varying,
     description text NOT NULL,
     script text,
-    published_at timestamp without time zone NOT NULL,
+    published_at timestamp without time zone,
     processed boolean DEFAULT false NOT NULL,
     explicit boolean DEFAULT false NOT NULL,
     blocked boolean DEFAULT false NOT NULL,
@@ -324,6 +324,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180321031708'),
 ('20180830221109'),
 ('20190428011119'),
+('20190818001150'),
 ('3');
 
 

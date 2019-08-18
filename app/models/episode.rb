@@ -70,8 +70,8 @@ class Episode < ApplicationRecord
             length:    {maximum: 1000},
             allow_nil: true
   validates :published_at,
-            presence:   {strict: true},
-            timeliness: {type: :datetime}
+            timeliness: {type: :datetime},
+            allow_nil:  true
   # validates :audio,
   #           attached:     true,
   #           content_type: {in: /^audio\/.*$/}
@@ -80,19 +80,23 @@ class Episode < ApplicationRecord
   has_one_attached :image
 
   before_validation :set_number, on: :create
-  before_validation :set_published_at
   after_commit :schedule_preprocess
 
-  scope :published, -> { where 'episodes.published_at <= ? AND episodes.processed IS TRUE', Time.current }
+  scope :published, -> {
+    where(arel_attribute(:published_at).not_eq(nil).
+        and(arel_attribute(:published_at).lteq(Time.current)).
+        and(arel_attribute(:processed).eq(true)))
+  }
 
   extend SetNilIfBlank
-  set_nil_if_blank :subtitle, :summary, :author, :credits
+  set_nil_if_blank :subtitle, :summary, :author, :credits, :published_at
 
   # @return [true, false] Whether or not the episode should be public on the
   #   website and RSS feed.
 
   def published?
-    Time.current >= published_at
+    return false unless published_at?
+    return Time.current >= published_at
   end
 
   # @return [Transcode, nil] The MP3 version of the `audio` file (processed
@@ -150,7 +154,7 @@ class Episode < ApplicationRecord
   # If the episode is now ready for publication (all assets included and
   # processed), the following occurs:
   #
-  # * `published_at` date is advanced if it's in the past
+  # * `published_at` date is set if it's null
   # * `processed` field is set to true
   #
   # @param [true, false] include_delay If `true`, waits 10 seconds after
@@ -180,7 +184,7 @@ class Episode < ApplicationRecord
 
     return unless was_not_ready && ready?
 
-    self.published_at = Time.current if published_at.past?
+    self.published_at ||= Time.current
     self.processed = true
     save!
   end
@@ -198,9 +202,5 @@ class Episode < ApplicationRecord
 
   def set_number
     self.number ||= (self.class.maximum(:number) || 0) + 1
-  end
-
-  def set_published_at
-    self.published_at ||= Time.current
   end
 end
