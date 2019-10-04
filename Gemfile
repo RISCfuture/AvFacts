@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby '2.6.4'
+ruby '2.6.5'
 
 # FRAMEWORK
 gem 'bootsnap'
 gem 'configoro'
 gem 'rails', '6.0.0'
-gem 'sidekiq'
+gem 'sidekiq', '< 6'
 
 # MODELS
 gem 'active_storage_validations'

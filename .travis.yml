@@ -1,8 +1,8 @@
 language: ruby
 rvm:
-- 2.6.4
+- 2.6.5
 node_js:
-- 12.4.0
+- 12.11.1
 services:
 - postgresql
 addons:
