@@ -5,7 +5,7 @@ ruby '2.6.5'
 # FRAMEWORK
 gem 'bootsnap'
 gem 'configoro'
-gem 'rails', '6.0.0'
+gem 'rails', '6.0.1'
 gem 'sidekiq', '< 6'
 
 # MODELS
