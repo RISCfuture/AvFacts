@@ -96,6 +96,7 @@ class Episode < ApplicationRecord
 
   def published?
     return false unless published_at?
+
     return Time.current >= published_at
   end
 
@@ -122,6 +123,7 @@ class Episode < ApplicationRecord
 
   def thumbnail_image
     return nil unless image.attached?
+
     variant = image.variant(resize_to_fill: [200, 200])
     class << variant
       public :processed?
@@ -134,6 +136,7 @@ class Episode < ApplicationRecord
 
   def itunes_image
     return nil unless image.attached?
+
     variant = image.variant(resize_to_fill: [3000, 3000])
     class << variant
       public :processed?
@@ -176,8 +179,8 @@ class Episode < ApplicationRecord
 
     if image.attachment
       image.analyze
-      thumbnail_image.processed if thumbnail_image
-      itunes_image.processed if itunes_image
+      thumbnail_image&.processed
+      itunes_image&.processed
     end
 
     sleep(10) if include_delay

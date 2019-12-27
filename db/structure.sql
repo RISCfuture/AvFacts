@@ -11,7 +11,7 @@ SET row_security = off;
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
@@ -301,7 +301,7 @@ CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_b
 -- Name: episodes episodes_fulltext_update_trigger; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER episodes_fulltext_update_trigger BEFORE INSERT OR UPDATE ON public.episodes FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('fulltext_search', 'pg_catalog.english', 'title', 'description', 'script');
+CREATE TRIGGER episodes_fulltext_update_trigger BEFORE INSERT OR UPDATE ON public.episodes FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('fulltext_search', 'pg_catalog.english', 'title', 'description', 'script');
 
 
 --

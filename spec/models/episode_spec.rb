@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.describe Episode, type: :model do
   context 'number' do
     it "should start at 1" do
-      Episode.destroy_all
+      described_class.destroy_all
       expect(FactoryBot.create(:episode).number).to be(1)
     end
 
     it "should increment" do
-      Episode.destroy_all
+      described_class.destroy_all
       FactoryBot.create :episode, number: 3
       expect(FactoryBot.create(:episode).number).to be(4)
     end

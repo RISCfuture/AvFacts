@@ -1,7 +1,6 @@
 xml.rss('xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd',
         'xmlns:atom'   => 'http://www.w3.org/2005/Atom',
         version:       '2.0') do
-
   xml.channel do
     xml.atom :link, href: episodes_url(format: 'rss'), rel: 'self', type: 'application/rss+xml'
     xml.atom(:link, href: episodes_url(before: @episodes.last.number, format: 'rss'), rel: 'next', type: 'application/rss+xml') unless @last_page

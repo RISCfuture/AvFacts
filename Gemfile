@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.7.0'
 
 # FRAMEWORK
 gem 'bootsnap'
@@ -59,8 +59,7 @@ end
 group :test do
   # SPECS
   gem 'rails-controller-testing'
-  gem 'rspec-rails', github: 'rspec/rspec-rails', branch: '4-0-dev'
-
+  gem 'rspec-rails', '4.0.0.beta.3'
 
   # ISOLATION
   gem 'database_cleaner'
