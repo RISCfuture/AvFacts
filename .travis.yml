@@ -8,24 +8,73 @@ services:
 addons:
   postgresql: '12.1'
 before_install:
-- sudo add-apt-repository -y ppa:mc3man/trusty-media
-- sudo apt-get update
-- sudo apt-get install -y ffmpeg
+# FFMPEG
+- |-
+  sudo apt-get update -qq && sudo apt-get -y install \
+  autoconf \
+  automake \
+  build-essential \
+  cmake \
+  git-core \
+  libass-dev \
+  libfreetype6-dev \
+  libsdl2-dev \
+  libtool \
+  libva-dev \
+  libvdpau-dev \
+  libvorbis-dev \
+  libxcb1-dev \
+  libxcb-shm0-dev \
+  libxcb-xfixes0-dev \
+  pkg-config \
+  texinfo \
+  wget \
+  zlib1g-dev
+- mkdir -p ~/ffmpeg_sources ~/bin
+- sudo apt-get install nasm
+- sudo apt-get install yasm
+- sudo apt-get install libfdk-aac-dev
+- sudo apt-get install libmp3lame-dev
+- |-
+  pushd ~/ffmpeg_sources && \
+  wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
+  tar xjvf ffmpeg-snapshot.tar.bz2 && \
+  cd ffmpeg && \
+  PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
+    --prefix="$HOME/ffmpeg_build" \
+    --pkg-config-flags="--static" \
+    --extra-cflags="-I$HOME/ffmpeg_build/include" \
+    --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
+    --extra-libs="-lpthread -lm" \
+    --bindir="$HOME/bin" \
+    --enable-gpl \
+    --enable-libfdk-aac \
+    --enable-libmp3lame \
+    --enable-nonfree && \
+  make && \
+  make install
+- popd
+# POSTGRESQL
 - sudo apt-get --yes remove postgresql\*
 - sudo apt-get install -y postgresql-12 postgresql-client-12
 - sudo cp /etc/postgresql/{9.6,12}/main/pg_hba.conf
 - sudo service postgresql restart 12
+# RUBYGEMS
 - gem update --system
 - gem install bundler
 before_script:
+# POSTGRESQL
 - createuser avfacts
 - createdb -O avfacts avfacts_test
+# NODEJS
 - nvm install 12.14.1
 - nvm use
 - yarn install
+# SEED
 - bundle exec rails db:migrate webpacker:compile
 env:
   global:
     - secure: Ov0wRhQoS0DJIXtH2WVu4ePyLecwYdjyI9+1S5b64yGmFXUyxWgBVOcH7awOFM3J482PN6PLcsXXtC8gh+ZPTS8AzyWEnld0004tu9VMNUCtgtT6bwq5D3hSvZXUL8TvqTkvmJ+DdxJCse/k2SE+UVqbPt+qlPmvRlDeLGY5u17GoqWrc/21j1QnYiipKY55a73zIQwOoeWSKA/wfoiuPS1o4s4vl7ODBW6n3W8G2pF2s8bF8lUtkNwA+8HEK1Gn8rDVajMsTx07tKx5y18O5QKqpNyWFcmyqkChwfTqqD2b2ZOTYATFarJVPYI+Neqht+dKW2ZTLlpkM2PA9vsiCt6j63+Y15UvLVeyAPwEuYz/e1qoPMg4sjYSt8AmXPOVcViY7sOK4j9StuZcyCYdiUzdeUicAdslCIcg8O3UMM2frQ63KV8yD5RCLErSH7Pya3nbG7I6GwOOXb7LDWRgrpzrEPRS7LTpr80+QJBR8QrvG30DsvPwYiHeEGIMWN6h7BR6jFbMtq632W0pvCtjLgBKmzwwvAjOvvDZLdbvlgND1uyGjQJUZ9JAlmpWq7SKVJqHkh3J1p6n1Czuyr4Sq3ruTLTvCZik5tUDItKAm/ufh9D7gZhatTr2cOYsSQ//5Qp95+pvQaYhlVL2tNoRSXuJn5ebf0sK/w6loy8ssCc=
     - RAILS_TEST_DB_USERNAME=postgres
     - PGUSER=postgres
+    - PATH="$HOME/bin:$PATH"
