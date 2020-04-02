@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-ruby '2.7.0'
+ruby '2.7.1'
 
 # FRAMEWORK
 gem 'bootsnap'
 gem 'configoro'
-gem 'rails', '6.0.1'
+gem 'rails', '6.0.2.2'
 gem 'sidekiq', '< 6'
 
 # MODELS
