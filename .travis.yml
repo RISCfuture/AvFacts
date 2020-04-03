@@ -6,7 +6,11 @@ node_js:
 services:
 - postgresql
 addons:
-  postgresql: '12.1'
+  postgresql: "12"
+  apt:
+    packages:
+    - postgresql-12
+    - postgresql-client-12
 before_install:
 # FFMPEG
 - |-
@@ -54,11 +58,6 @@ before_install:
   make && \
   make install
 - popd
-# POSTGRESQL
-- sudo apt-get --yes remove postgresql\*
-- sudo apt-get install -y postgresql-12 postgresql-client-12
-- sudo cp /etc/postgresql/{9.6,12}/main/pg_hba.conf
-- sudo service postgresql restart 12
 # RUBYGEMS
 - gem update --system
 - gem install bundler
@@ -74,7 +73,8 @@ before_script:
 - bundle exec rails db:migrate webpacker:compile
 env:
   global:
-    - secure: Ov0wRhQoS0DJIXtH2WVu4ePyLecwYdjyI9+1S5b64yGmFXUyxWgBVOcH7awOFM3J482PN6PLcsXXtC8gh+ZPTS8AzyWEnld0004tu9VMNUCtgtT6bwq5D3hSvZXUL8TvqTkvmJ+DdxJCse/k2SE+UVqbPt+qlPmvRlDeLGY5u17GoqWrc/21j1QnYiipKY55a73zIQwOoeWSKA/wfoiuPS1o4s4vl7ODBW6n3W8G2pF2s8bF8lUtkNwA+8HEK1Gn8rDVajMsTx07tKx5y18O5QKqpNyWFcmyqkChwfTqqD2b2ZOTYATFarJVPYI+Neqht+dKW2ZTLlpkM2PA9vsiCt6j63+Y15UvLVeyAPwEuYz/e1qoPMg4sjYSt8AmXPOVcViY7sOK4j9StuZcyCYdiUzdeUicAdslCIcg8O3UMM2frQ63KV8yD5RCLErSH7Pya3nbG7I6GwOOXb7LDWRgrpzrEPRS7LTpr80+QJBR8QrvG30DsvPwYiHeEGIMWN6h7BR6jFbMtq632W0pvCtjLgBKmzwwvAjOvvDZLdbvlgND1uyGjQJUZ9JAlmpWq7SKVJqHkh3J1p6n1Czuyr4Sq3ruTLTvCZik5tUDItKAm/ufh9D7gZhatTr2cOYsSQ//5Qp95+pvQaYhlVL2tNoRSXuJn5ebf0sK/w6loy8ssCc=
-    - RAILS_TEST_DB_USERNAME=postgres
-    - PGUSER=postgres
-    - PATH="$HOME/bin:$PATH"
+  - secure: Ov0wRhQoS0DJIXtH2WVu4ePyLecwYdjyI9+1S5b64yGmFXUyxWgBVOcH7awOFM3J482PN6PLcsXXtC8gh+ZPTS8AzyWEnld0004tu9VMNUCtgtT6bwq5D3hSvZXUL8TvqTkvmJ+DdxJCse/k2SE+UVqbPt+qlPmvRlDeLGY5u17GoqWrc/21j1QnYiipKY55a73zIQwOoeWSKA/wfoiuPS1o4s4vl7ODBW6n3W8G2pF2s8bF8lUtkNwA+8HEK1Gn8rDVajMsTx07tKx5y18O5QKqpNyWFcmyqkChwfTqqD2b2ZOTYATFarJVPYI+Neqht+dKW2ZTLlpkM2PA9vsiCt6j63+Y15UvLVeyAPwEuYz/e1qoPMg4sjYSt8AmXPOVcViY7sOK4j9StuZcyCYdiUzdeUicAdslCIcg8O3UMM2frQ63KV8yD5RCLErSH7Pya3nbG7I6GwOOXb7LDWRgrpzrEPRS7LTpr80+QJBR8QrvG30DsvPwYiHeEGIMWN6h7BR6jFbMtq632W0pvCtjLgBKmzwwvAjOvvDZLdbvlgND1uyGjQJUZ9JAlmpWq7SKVJqHkh3J1p6n1Czuyr4Sq3ruTLTvCZik5tUDItKAm/ufh9D7gZhatTr2cOYsSQ//5Qp95+pvQaYhlVL2tNoRSXuJn5ebf0sK/w6loy8ssCc=
+  - RAILS_TEST_DB_USERNAME=travis
+  - PGUSER=travis
+  - PGPORT=5433
+  - PATH="$HOME/bin:$PATH"
