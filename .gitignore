@@ -1,7 +1,7 @@
-storage
 /public/packs
 /public/packs-test
 /node_modules
+/tmp/development_secret.txt
 yarn-debug.log*
 .yarn-integrity
 

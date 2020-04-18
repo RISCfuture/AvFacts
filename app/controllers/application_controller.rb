@@ -4,7 +4,9 @@ require 'application_responder'
 #
 # Abstract superclass for all controllers in AvFacts.
 
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::API
+  include ActionController::MimeResponds
+
   self.responder = ApplicationResponder
 
   before_action :set_storage_host
@@ -36,7 +38,7 @@ class ApplicationController < ActionController::Base
   # @return [true, false] Whether or not an authenticated session is present.
 
   def admin?
-    return session[:user_id].present?
+    session[:user_id].present?
   end
 
   private

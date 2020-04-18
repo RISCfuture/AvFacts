@@ -15,17 +15,20 @@
              placeholder="Username"
              v-focus="true"
              autocomplete="username"
-             :class="fieldClass" />
+             :class="fieldClass"
+             data-cy="usernameField" />
       <input type="password"
              required
              v-model="password"
              placeholder="Password"
              autocomplete="current-password"
-             :class="fieldClass" />
+             :class="fieldClass"
+             data-cy="passwordField" />
       <input type="submit"
              name="commit"
              value="Log In"
-             @click.prevent="submitCredentials" />
+             @click.prevent="submitCredentials"
+             data-cy="loginSubmit" />
     </form>
   </lightbox>
 </template>
@@ -50,7 +53,9 @@
     @Getter loginLightboxShown: boolean
     @Getter sessionError?: AxiosError
 
-    get fieldClass(): string | null { return this.sessionError ? 'invalid' : null }
+    get fieldClass(): string | null {
+      return this.sessionError ? 'invalid' : null
+    }
 
     get sessionErrorText(): string | null {
       if (!this.sessionError) return null
@@ -59,9 +64,9 @@
     }
 
     @Action hideLoginLightbox: () => void
-    @Action login: (fields: {[name: string]: string}) => Promise<boolean>
+    @Action login: (fields: { [name: string]: string }) => Promise<boolean>
     @Action resetSessionError: () => void
-    @Action loadEpisodes: (params: {restart: boolean}) => Promise<boolean>
+    @Action loadEpisodes: (params: { restart: boolean }) => Promise<boolean>
 
     async submitCredentials() {
       await this.login({username: this.username, password: this.password})

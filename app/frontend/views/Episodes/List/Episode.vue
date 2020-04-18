@@ -1,11 +1,11 @@
 <template>
-  <div class="episode">
+  <div class="episode" data-cy="episode">
     <div class="image">
-      <img v-if="episode.image" :src="episode.image.preview_url" />
-      <div v-else class="image-placeholder" />
+      <img v-if="episode.image" :src="episode.image.preview_url" data-cy="episode-image" />
+      <div v-else class="image-placeholder" data-cy="image-placeholder" />
     </div>
     <div class="player">
-      <h1>#{{episode.number | integer}}: {{episode.title}}</h1>
+      <h1>#{{episode.number | integer}}: <span data-cy="episodeTitle">{{episode.title}}</span></h1>
 
       <p class="published-at">
         {{episode.published_at | date}}

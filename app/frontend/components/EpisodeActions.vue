@@ -1,5 +1,5 @@
 <template>
-  <div v-if="playOpen">
+  <div v-if="playOpen" data-cy="player">
     <audio controls v-if="audioProcessed">
       <source :src="episode.audio.aac.url"
               :type="episode.audio.aac.content_type" />
@@ -10,7 +10,11 @@
 
   <div v-else class="actions">
     <div class="left-actions">
-      <a v-if="audioProcessed" href="#" @click.prevent="play" class="play-button">
+      <a v-if="audioProcessed"
+         href="#"
+         @click.prevent="play"
+         class="play-button"
+         data-cy="playButton">
         <play :height="16" />
       </a>
       <span v-if="audioProcessed" class="duration">{{episode.audio.duration | duration}}</span>

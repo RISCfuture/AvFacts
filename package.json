@@ -10,15 +10,15 @@
     "@types/luxon": "^1.22.0",
     "@types/marked": "^0.7.3",
     "@types/moment-duration-format": "^2.2.2",
-    "@types/node": "^13.9.8",
+    "@types/node": "^13.11.1",
     "@types/simplemde": "^1.11.7",
     "axios": "^0.19.2",
     "babel-polyfill": "^6.26.0",
-    "core-js": "3.6.4",
-    "i18next": "^19.3.4",
+    "core-js": "3.6.5",
+    "i18next": "^19.4.1",
     "js-yaml-loader": "^1.2.2",
     "lodash": "^4.17.15",
-    "luxon": "^1.22.2",
+    "luxon": "^1.23.0",
     "marked": "^0.8.2",
     "moment": "^2.22.0",
     "moment-duration-format": "^2.2.2",
@@ -46,6 +46,8 @@
   "devDependencies": {
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-minify": "^0.5.1",
+    "cypress": "^4.3.0",
+    "cypress-file-upload": "^4.0.6",
     "webpack-dev-server": "^3.10.3"
   }
 }

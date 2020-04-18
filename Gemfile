@@ -37,6 +37,9 @@ gem 'nokogiri'
 # ERRORS
 gem 'bugsnag'
 
+# TESTS
+gem 'cypress-rails', groups: %i[development test]
+
 group :development do
   gem 'listen'
   gem 'puma'

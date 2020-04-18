@@ -57,7 +57,7 @@ module AddStreamingMethodsToService
 
   module S3
     def byte_size(key)
-      object_for(key).content_length
+      object_for(key)&.content_length
     end
 
     def download_part(key, range)
@@ -85,6 +85,8 @@ module AddStreamingMethodsToService
   module Disk
     def byte_size(key)
       File.stat(path_for(key)).size
+    rescue Errno::ENOTDIR
+      return nil
     end
 
     def download_part(key, range)
@@ -123,7 +125,7 @@ module AddRangeQueriesToDiskController
   # Currently only one single range, expressed in bytes, is supported.
 
   def show
-    if (key = decode_verified_key)
+    if (key = decode_verified_key) && (size = disk_service.byte_size(key[:key]))
       response.headers['Content-Type']        = key[:content_type] || DEFAULT_SEND_FILE_TYPE
       response.headers['Content-Disposition'] = key[:disposition] || DEFAULT_SEND_FILE_DISPOSITION
       response.headers['Accept-Ranges']       = 'bytes'
@@ -132,7 +134,6 @@ module AddRangeQueriesToDiskController
         units, (range, *rest) = ranges
         raise BadRangeError if units != 'bytes' || rest.any?
 
-        size = disk_service.byte_size(key[:key])
         raise BadRangeError if range.first.negative? || range.last > size
 
         data = disk_service.download_part(key[:key], range)

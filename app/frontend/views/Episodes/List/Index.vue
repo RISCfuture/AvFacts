@@ -3,7 +3,10 @@
     <div class="title-search">
       <h1>
         All Episodes
-        <router-link :to="{name: 'episodes_new'}" v-if="isAuthenticated">Upload New</router-link>
+        <router-link :to="{name: 'episodes_new'}"
+                     v-if="isAuthenticated"
+                     data-cy="uploadNewLink">Upload New
+        </router-link>
       </h1>
       <div class="spacer" />
       <input type="search" placeholder="Find an episode" v-model.trim="filter" @keyup="updateFilter" />

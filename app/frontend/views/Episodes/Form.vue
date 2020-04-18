@@ -9,7 +9,10 @@
     <div class="fieldset">
       <div class="field-pair">
         <label for="episode_title">Title</label>
-        <smart-field field="title" :required="true" :maxlength="255" />
+        <smart-field field="title"
+                     :required="true"
+                     :maxlength="255"
+                     data-cy="titleField" />
 
         <label for="episode_title">Subtitle</label>
         <smart-field field="subtitle" :maxlength="255" />
@@ -32,19 +35,19 @@
       <div class="field-pair">
         <label for="episode_audio">Audio file</label>
         <div class="file-pair">
-          <smart-field type="file" field="audio" />
-          <p v-if="episode.audio">{{episode.audio.size |
-            bytes}} &middot;
+          <smart-field type="file" field="audio" data-cy="audioField" />
+          <p v-if="episode.audio">{{episode.audio.size | bytes}} &middot;
             {{episode.audio.duration | duration}}</p>
           <p v-else>&nbsp;</p>
         </div>
 
         <label for="episode_image">Image file</label>
         <div class="file-pair">
-          <smart-field type="file" field="image" />
+          <smart-field type="file" field="image" data-cy="imageField" />
           <p v-if="episode.image">{{episode.image.size |
             bytes}} &middot;
-            <span :class="{'too-small': imageTooSmall}">{{episode.image.width}}&times;{{episode.image.height}}</span></p>
+            <span :class="{'too-small': imageTooSmall}">{{episode.image.width}}&times;{{episode.image.height}}</span>
+          </p>
           <p v-else>&nbsp;</p>
         </div>
       </div>
@@ -63,7 +66,11 @@
     <smart-field type="text" field="summary" :maxlength="255" />
 
     <label for="episode_description" class="below-textarea">Description</label>
-    <smart-field type="textarea" field="description" :required="true" :maxlength="4000" />
+    <smart-field type="textarea"
+                 field="description"
+                 :required="true"
+                 :maxlength="4000"
+                 data-cy="descriptionField" />
 
     <label for="episode_credits" class="below-textarea">Credits</label>
     <smart-field type="textarea" field="credits" :maxlength="1000" />
@@ -74,7 +81,10 @@
     <div class="form-actions">
       <div class="left"></div>
       <div class="right">
-        <input type="submit" name="commit" value="Save" />
+        <input type="submit"
+               name="commit"
+               value="Save"
+               data-cy="podcastSubmitButton" />
       </div>
     </div>
   </smart-form>
@@ -106,7 +116,9 @@
     channel = Channel
     saving = false
 
-    get method(): string { return (this.episode.number ? 'patch' : 'post') }
+    get method(): string {
+      return (this.episode.number ? 'patch' : 'post')
+    }
 
     get url(): string {
       if (this.episode.number)
@@ -119,14 +131,14 @@
       return this.episode.image && (this.episode.image.width < ITUNES_MIN_IMAGE_SIZE || this.episode.image.height < ITUNES_MIN_IMAGE_SIZE)
     }
 
-    @Action loadEpisodes: (params: {restart: boolean}) => Promise<boolean>
-    @Action setEpisode: (params: {episode: Episode}) => void
-    @Action setEpisodeInEpisodes: (params: {episode: Episode}) => void
+    @Action loadEpisodes: (params: { restart: boolean }) => Promise<boolean>
+    @Action setEpisode: (params: { episode: Episode }) => void
+    @Action setEpisodeInEpisodes: (params: { episode: Episode }) => void
 
     private refreshScratch() {
       this.scratchEpisode = _.pick(this.episode,
           ['title', 'subtitle', 'author', 'published_at', 'explicit',
-           'blocked', 'summary', 'description', 'script', 'credits']) as object
+            'blocked', 'summary', 'description', 'script', 'credits']) as object
     }
 
     mounted() {
@@ -141,7 +153,9 @@
     }
 
     @Watch('episode')
-    onEpisodeChanged() { this.refreshScratch() }
+    onEpisodeChanged() {
+      this.refreshScratch()
+    }
   }
 </script>
 

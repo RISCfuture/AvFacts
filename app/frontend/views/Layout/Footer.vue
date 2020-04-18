@@ -5,8 +5,14 @@
       rights reserved.
     </p>
     <p class="login">
-      <a href="#" @click.prevent="showLoginLightbox" v-if="!isAuthenticated">Log in</a>
-      <a href="#" @click.prevent="logout" v-if="isAuthenticated">Log out</a>
+      <a href="#"
+         @click.prevent="showLoginLightbox"
+         v-if="!isAuthenticated"
+         data-cy="login">Log in</a>
+      <a href="#"
+         @click.prevent="logout"
+         v-if="isAuthenticated"
+         data-cy="logout">Log out</a>
     </p>
   </footer>
 </template>

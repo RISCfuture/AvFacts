@@ -78,3 +78,6 @@ env:
   - PGUSER=travis
   - PGPORT=5433
   - PATH="$HOME/bin:$PATH"
+script:
+- rspec spec
+- bin/rails cypress:run
