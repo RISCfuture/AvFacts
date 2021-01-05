@@ -12,7 +12,7 @@
     "@types/moment-duration-format": "^2.2.2",
     "@types/node": "^13.11.1",
     "@types/simplemde": "^1.11.7",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "core-js": "3.6.5",
     "i18next": "^19.4.1",
